@@ -389,4 +389,168 @@ function spawn(){
   hide('poster');hide('mic-area');$('slot').style.display='none';hide('dlg');
   $('levbtn').className='off';leverRdy=false;
   var cw=$('cw');
-  cw.style.transition='none';cw.style.left='-
+  cw.style.transition='none';cw.style.left='-160px';
+  $('cs').classList.remove('walking');
+  void cw.offsetWidth;
+  $('cs').classList.add('walking');
+  cw.style.transition='left 0.7s cubic-bezier(0.4,0,0.2,1)';
+  cw.style.left=Math.round(window.innerWidth*.12)+'px';
+  setTimeout(function(){$('cs').classList.remove('walking');cw.style.transition='none';
+    show('poster');showf('mic-area');phase='listening';},800);
+}
+
+function endRound(item){
+  phase='ending';stopListen();clearInterval(slotTmr);
+  $('reel').textContent=item;
+  var fl=$('flash');fl.textContent=item;fl.classList.remove('show');void fl.offsetWidth;fl.classList.add('show');
+  if(item==='🪙'){score++;save();updScore();sfx('coin');
+    var p=document.createElement('div');p.className='spop';p.textContent='+1 🪙';
+    p.style.cssText='right:10%;top:15%;';$('stage').appendChild(p);setTimeout(function(){p.remove();},1000);
+    if(score%10===0){playFanfare();}
+  }
+  setTimeout(function(){
+    $('slot').style.display='none';hide('poster');hide('mic-area');hide('dlg');
+    $('cs').classList.add('walking');
+    var cw=$('cw');cw.style.transition='left 0.8s ease-in';cw.style.left='-180px';
+    setTimeout(function(){$('cs').classList.remove('walking');cw.style.transition='none';
+      cw.style.left='-160px';
+      phase='idle';
+      setTimeout(spawn,350);
+    },850);
+  },1500);
+}
+
+function toggleMic(){
+  if(phase!=='listening')return;resume();
+  if(listening){rec&&rec.abort();return;}
+  var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){showDlg('Open in Safari!');return;}
+  rec=new SR();rec.lang='en-US';rec.continuous=false;rec.interimResults=false;rec.maxAlternatives=5;
+  rec.onstart=function(){listening=true;setMicUI(true);};
+  rec.onend=function(){listening=false;setMicUI(false);};
+  rec.onerror=function(){listening=false;setMicUI(false);};
+  rec.onresult=function(e){
+    listening=false;setMicUI(false);
+    var alts=[];for(var i=0;i<e.results[0].length;i++)alts.push(e.results[0][i].transcript.trim().toLowerCase());
+    doCheck(alts);
+  };
+  rec.start();
+}
+function stopListen(){if(rec){try{rec.abort();}catch(e){}}rec=null;listening=false;setMicUI(false);}
+function setMicUI(live){
+  var b=$('micbtn');
+  if(live){b.className='live';b.textContent='🔴';$('mic-lbl').textContent='LISTENING...';
+    $('waves').style.display='flex';clearInterval(waveTmr);
+    waveTmr=setInterval(function(){$('waves').querySelectorAll('.wb').forEach(function(wb){wb.style.height=(6+Math.floor(Math.random()*16))+'px';});},150);
+  }else{b.className='idle';b.textContent='🎤';$('mic-lbl').textContent='TAP TO SPEAK';
+    $('waves').style.display='none';clearInterval(waveTmr);}
+}
+function lev(a,b){
+  if(a===b)return 0;
+  if(!a.length)return b.length;
+  if(!b.length)return a.length;
+  var m=[];
+  for(var i=0;i<=b.length;i++){m[i]=[i];}
+  for(var j=0;j<=a.length;j++){m[0][j]=j;}
+  for(i=1;i<=b.length;i++){
+    for(j=1;j<=a.length;j++){
+      if(b.charAt(i-1)===a.charAt(j-1)){m[i][j]=m[i-1][j-1];}
+      else{m[i][j]=Math.min(m[i-1][j-1]+1,m[i][j-1]+1,m[i-1][j]+1);}
+    }
+  }
+  return m[b.length][a.length];
+}
+function lenientMatch(target, heard){
+  if(heard===target) return true;
+  var words = heard.split(/\s+/);
+  if(words.indexOf(target)>-1) return true;
+  for(var i=0;i<words.length;i++){
+    var w = words[i];
+    if(!w) continue;
+    if(lev(w, target) <= 1) return true;
+    if(w.charAt(0)===target.charAt(0) && Math.abs(w.length-target.length)<=1 && lev(w,target)<=2) return true;
+  }
+  return false;
+}
+function doCheck(alts){
+  var t=word.toLowerCase();
+  if(alts.some(function(a){return lenientMatch(t,a);})){correct();return;}
+  fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:10,
+      messages:[{role:'user',content:'Child saying "'+t+'". Heard:'+JSON.stringify(alts)+'. Lenient. YES or NO only.'}]})
+  }).then(function(r){return r.json();}).then(function(d){
+    ((d.content&&d.content[0]&&d.content[0].text||'').trim().toUpperCase().indexOf('YES')===0)?correct():wrong();
+  }).catch(function(){wrong();});
+}
+function correct(){
+  if(phase!=='listening')return;phase='slot-ready';stopListen();sfx('powerup');
+  showDlg('Great job! 🌟');hide('mic-area');
+  $('slot').style.display='flex';$('reel').textContent='🪙';startSpin();
+  setTimeout(function(){leverRdy=true;$('levbtn').className='';},1000);
+}
+function wrong(){if(phase!=='listening')return;sfx('error');showDlg('Try again! 😊');setTimeout(hideDlg,2200);}
+function showDlg(t){$('dlg').textContent=t;show('dlg');}
+function hideDlg(){hide('dlg');}
+
+function startSpin(){phase='spinning';var i=0;
+  slotTmr=setInterval(function(){i=(i+1)%3;$('reel').textContent=ITEMS[i];},110);}
+function pullLev(){
+  if(!leverRdy||phase!=='spinning')return;
+  leverRdy=false;$('levbtn').className='off';clearInterval(slotTmr);
+  var r=Math.random(),item=r<.45?'🪙':r<.72?'🍄':'🍌';
+  $('reel').textContent=item;setTimeout(function(){endRound(item);},300);
+}
+
+function openMenu(from){fromTitle=(from==='title');stopListen();
+  $('resumebtn').style.display=fromTitle?'none':'block';
+  showSec('main');$('menu').classList.add('on');}
+function closeMenu(){$('menu').classList.remove('on');}
+function showSec(s){
+  $('mmain').style.display=s==='main'?'block':'none';
+  $('mwords').style.display=s==='words'?'block':'none';
+  if(s==='words')renderWords();
+}
+function renderWords(){
+  var all=[],seen={};ALL.concat(active).forEach(function(w){if(!seen[w]){seen[w]=true;all.push(w);}});all.sort();
+  $('wlist').innerHTML=all.map(function(w){var on=active.indexOf(w)>-1;
+    return '<div class="wr '+(on?'on':'off')+'"><span>'+w+'</span>'
+      +'<button class="wtog '+(on?'on':'off')+'" onclick="togW(\''+w+'\',this)">'+(on?'ON':'OFF')+'</button></div>';
+  }).join('');
+}
+function togW(w,b){var i=active.indexOf(w);
+  if(i>-1){if(active.length<=3){alert('Need 3+');return;}active.splice(i,1);b.className='wtog off';b.textContent='OFF';b.parentElement.className='wr off';}
+  else{active.push(w);b.className='wtog on';b.textContent='ON';b.parentElement.className='wr on';}
+  save();buildQ();
+}
+
+$('tap').addEventListener('click',function(){
+  unlockAudio();
+  this.style.transition='opacity .4s';this.style.opacity='0';
+  var el=this;setTimeout(function(){el.style.display='none';},400);
+  $('title').classList.add('on');
+  if(musicOn)setTimeout(startMusic,150);
+},{once:true});
+
+$('startbtn').addEventListener('click',function(){resume();startGame();});
+$('settingsbtn').addEventListener('click',function(){openMenu('title');});
+$('music-btn').addEventListener('click',function(){musicOn=!musicOn;save();
+  this.textContent=musicOn?'🎵 ON':'🔇 OFF';if(musicOn)startMusic();else stopMusic();});
+$('mbtn').addEventListener('click',function(){openMenu('game');});
+$('micbtn').addEventListener('click',toggleMic);
+$('levbtn').addEventListener('click',pullLev);
+$('resumebtn').addEventListener('click',closeMenu);
+$('restartbtn').addEventListener('click',function(){
+  if(!confirm('Reset score?'))return;score=0;save();buildQ();closeMenu();phase='idle';updScore();
+  $('cw').style.left='-160px';hide('poster');hide('mic-area');hide('dlg');$('slot').style.display='none';
+  setTimeout(spawn,400);});
+$('wordsbtn').addEventListener('click',function(){showSec('words');});
+$('titlebtn').addEventListener('click',function(){closeMenu();stopMusic();setScr('title');updScore();if(musicOn)setTimeout(startMusic,300);});
+$('backbtn').addEventListener('click',function(){showSec('main');});
+$('addbtn').addEventListener('click',function(){var w=$('winput').value.trim().toLowerCase();
+  if(w.length>=2&&w.length<=6&&active.indexOf(w)===-1){active.push(w);save();buildQ();}
+  $('winput').value='';renderWords();});
+
+load();updScore();$('music-btn').textContent=musicOn?'🎵 ON':'🔇 OFF';
+</script>
+</body>
+</html>
