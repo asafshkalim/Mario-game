@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -16,10 +15,10 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'An
 body{height:100dvh}
 img,svg{image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-rendering:crisp-edges;display:block}
 
-#rotate-prompt{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:9999;color:#fff;text-align:center;padding:20px;font-family:‘Press Start 2P’,monospace;font-size:14px;line-height:1.6}
+#rotate-prompt{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:9999;color:#fff;text-align:center;padding:20px;font-family:'Press Start 2P',monospace;font-size:14px;line-height:1.6}
 @media (orientation:portrait){
-#rotate-prompt{display:flex}
-#app{display:none !important}
+  #rotate-prompt{display:flex}
+  #app{display:none !important}
 }
 #rotate-icon{font-size:80px;margin-bottom:20px;animation:rotateBounce 1s ease-in-out infinite alternate}
 @keyframes rotateBounce{from{transform:rotate(0deg)}to{transform:rotate(90deg)}}
@@ -31,19 +30,19 @@ img,svg{image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-renderi
 .title-mario{width:130px;height:auto;margin-bottom:14px;animation:bounce 0.5s ease-in-out infinite alternate;filter:drop-shadow(4px 4px 0 #000)}
 @keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-12px)}}
 .title-card{background:#000;border:4px solid #fbd000;border-radius:8px;padding:18px 36px;text-align:center;box-shadow:6px 6px 0 #d82800,12px 12px 0 #fbd000}
-.title-card h1{font-family:‘Press Start 2P’,monospace;font-size:24px;color:#fbd000;text-shadow:3px 3px 0 #d82800;margin-bottom:6px;letter-spacing:2px}
-.title-card p{font-family:‘Andika’,sans-serif;font-weight:700;font-size:18px;color:#fff;margin-top:8px}
+.title-card h1{font-family:'Press Start 2P',monospace;font-size:24px;color:#fbd000;text-shadow:3px 3px 0 #d82800;margin-bottom:6px;letter-spacing:2px}
+.title-card p{font-family:'Andika',sans-serif;font-weight:700;font-size:18px;color:#fff;margin-top:8px}
 .title-buttons{display:flex;gap:14px;margin-top:18px;align-items:center;justify-content:center}
-.btn-primary{background:#fbd000;color:#000;border:3px solid #000;border-radius:6px;padding:10px 22px;font-family:‘Press Start 2P’,monospace;font-size:14px;cursor:pointer;box-shadow:3px 3px 0 #000;font-weight:bold;transition:transform 0.1s}
+.btn-primary{background:#fbd000;color:#000;border:3px solid #000;border-radius:6px;padding:10px 22px;font-family:'Press Start 2P',monospace;font-size:14px;cursor:pointer;box-shadow:3px 3px 0 #000;font-weight:bold;transition:transform 0.1s}
 .btn-primary:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
-.btn-secondary{background:#aaa;color:#000;border:3px solid #000;border-radius:6px;padding:8px 16px;font-family:‘Press Start 2P’,monospace;font-size:11px;cursor:pointer;box-shadow:3px 3px 0 #000}
+.btn-secondary{background:#aaa;color:#000;border:3px solid #000;border-radius:6px;padding:8px 16px;font-family:'Press Start 2P',monospace;font-size:11px;cursor:pointer;box-shadow:3px 3px 0 #000}
 .btn-secondary:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
 
-#hud{position:absolute;top:0;left:0;right:0;height:40px;background:rgba(0,0,0,0.65);color:#fff;font-family:‘Press Start 2P’,monospace;font-size:11px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:5;border-bottom:2px solid #fbd000}
+#hud{position:absolute;top:0;left:0;right:0;height:40px;background:rgba(0,0,0,0.65);color:#fff;font-family:'Press Start 2P',monospace;font-size:11px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:5;border-bottom:2px solid #fbd000}
 #coins-hud{display:flex;align-items:center;gap:6px}
 #coins-icon{width:18px;height:18px}
 #world-label{color:#fbd000}
-#menu-btn{background:#fbd000;color:#000;border:2px solid #000;padding:4px 10px;font-family:‘Press Start 2P’,monospace;font-size:10px;border-radius:3px;cursor:pointer}
+#menu-btn{background:#fbd000;color:#000;border:2px solid #000;padding:4px 10px;font-family:'Press Start 2P',monospace;font-size:10px;border-radius:3px;cursor:pointer}
 
 #stage{position:absolute;top:40px;left:0;right:0;bottom:0;overflow:hidden;background:#5c94fc}
 #stage.world-w0{background:linear-gradient(180deg,#5c94fc 0%,#5c94fc 100%)}
@@ -75,21 +74,21 @@ img,svg{image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-renderi
 
 #poster{position:absolute;left:36%;top:18%;background:#fff;border:5px solid #000;border-radius:8px;padding:14px 28px;box-shadow:5px 5px 0 #000;z-index:5;display:flex;align-items:center;justify-content:center;min-width:140px;min-height:60px}
 #poster.flash-context{background:#fffbe0}
-#poster .word{font-family:‘Andika’,sans-serif;font-weight:700;color:#000;font-size:48px;line-height:1;letter-spacing:1px}
-#poster .sentence{font-family:‘Andika’,sans-serif;font-weight:400;color:#000;font-size:22px;line-height:1.2;text-align:center}
+#poster .word{font-family:'Andika',sans-serif;font-weight:700;color:#000;font-size:48px;line-height:1;letter-spacing:1px}
+#poster .sentence{font-family:'Andika',sans-serif;font-weight:400;color:#000;font-size:22px;line-height:1.2;text-align:center}
 
 .goomba{position:absolute;width:64px;height:auto;z-index:6}
 .goomba.walking{animation:goombaWalk 0.5s steps(2) infinite}
 @keyframes goombaWalk{from{transform:scaleX(1)}to{transform:scaleX(-1)}}
 
 #mic-wrap{position:absolute;right:5%;bottom:90px;z-index:7;display:flex;flex-direction:column;align-items:center;gap:8px}
-#mic-btn{width:90px;height:90px;border-radius:50%;border:5px solid #000;background:radial-gradient(circle,#fbd000 0%,#f8b800 70%,#d09000 100%);color:#000;font-size:42px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(251,208,0,0.7),5px 5px 0 #000;animation:micPulse 1.5s ease-in-out infinite;font-family:‘Press Start 2P’,monospace}
+#mic-btn{width:90px;height:90px;border-radius:50%;border:5px solid #000;background:radial-gradient(circle,#fbd000 0%,#f8b800 70%,#d09000 100%);color:#000;font-size:42px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(251,208,0,0.7),5px 5px 0 #000;animation:micPulse 1.5s ease-in-out infinite;font-family:'Press Start 2P',monospace}
 #mic-btn:active{transform:translate(2px,2px);box-shadow:0 0 30px rgba(251,208,0,0.7),3px 3px 0 #000}
 #mic-btn.listening{background:radial-gradient(circle,#ff4040 0%,#c00000 70%,#700000 100%);animation:micListen 0.6s ease-in-out infinite}
 @keyframes micPulse{0%,100%{box-shadow:0 0 30px rgba(251,208,0,0.7),5px 5px 0 #000}50%{box-shadow:0 0 50px rgba(251,208,0,1),5px 5px 0 #000}}
 @keyframes micListen{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-#mic-label{font-family:‘Press Start 2P’,monospace;font-size:10px;background:rgba(0,0,0,0.7);padding:4px 8px;border-radius:3px;border:2px solid #fbd000;color:#fff}
-#mic-countdown{font-family:‘Press Start 2P’,monospace;font-size:14px;color:#fbd000;text-shadow:2px 2px 0 #000;margin-top:4px;display:none}
+#mic-label{font-family:'Press Start 2P',monospace;font-size:10px;background:rgba(0,0,0,0.7);padding:4px 8px;border-radius:3px;border:2px solid #fbd000;color:#fff}
+#mic-countdown{font-family:'Press Start 2P',monospace;font-size:14px;color:#fbd000;text-shadow:2px 2px 0 #000;margin-top:4px;display:none}
 #mic-countdown.show{display:block}
 
 #flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:9}
@@ -99,43 +98,42 @@ img,svg{image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-renderi
 @keyframes shake{0%,100%{transform:translate(0,0)}20%{transform:translate(-4px,2px)}40%{transform:translate(4px,-2px)}60%{transform:translate(-3px,3px)}80%{transform:translate(3px,-3px)}}
 
 .coin-particle{position:absolute;width:24px;height:24px;z-index:9;animation:coinFly 1.2s ease-out forwards}
-@keyframes coinFly{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-180px) translateX(var(–dx,0)) scale(0.5) rotate(720deg)}}
+@keyframes coinFly{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-180px) translateX(var(--dx,0)) scale(0.5) rotate(720deg)}}
 
-.score-pop{position:absolute;font-family:‘Press Start 2P’,monospace;font-size:24px;color:#fbd000;text-shadow:3px 3px 0 #000;z-index:9;pointer-events:none;animation:scorePop 1.2s ease-out forwards}
+.score-pop{position:absolute;font-family:'Press Start 2P',monospace;font-size:24px;color:#fbd000;text-shadow:3px 3px 0 #000;z-index:9;pointer-events:none;animation:scorePop 1.2s ease-out forwards}
 @keyframes scorePop{0%{opacity:0;transform:translateY(0) scale(0.5)}30%{opacity:1;transform:translateY(-30px) scale(1.2)}100%{opacity:0;transform:translateY(-100px) scale(1)}}
 
-#dialog{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.9);border:4px solid #fbd000;border-radius:10px;padding:18px 30px;font-family:‘Andika’,sans-serif;font-weight:700;font-size:22px;text-align:center;color:#fff;z-index:10;display:none;max-width:80%}
+#dialog{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.9);border:4px solid #fbd000;border-radius:10px;padding:18px 30px;font-family:'Andika',sans-serif;font-weight:700;font-size:22px;text-align:center;color:#fff;z-index:10;display:none;max-width:80%}
 #dialog.show{display:block;animation:dialogPop 0.3s}
 @keyframes dialogPop{from{transform:translate(-50%,-50%) scale(0.7);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
 
 #menu-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.85);z-index:50;display:none;align-items:center;justify-content:center;padding:20px}
 #menu-overlay.show{display:flex}
 .menu-panel{background:#000;border:4px solid #fbd000;border-radius:10px;padding:20px;max-width:90%;max-height:90%;overflow-y:auto;width:600px}
-.menu-panel h2{font-family:‘Press Start 2P’,monospace;font-size:18px;color:#fbd000;text-align:center;margin-bottom:14px}
+.menu-panel h2{font-family:'Press Start 2P',monospace;font-size:18px;color:#fbd000;text-align:center;margin-bottom:14px}
 .menu-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:10px 0}
-.menu-back{background:#aaa;color:#000;border:3px solid #000;padding:8px 14px;font-family:‘Press Start 2P’,monospace;font-size:11px;cursor:pointer;border-radius:3px;display:block;margin:14px auto 0;box-shadow:3px 3px 0 #000}
+.menu-back{background:#aaa;color:#000;border:3px solid #000;padding:8px 14px;font-family:'Press Start 2P',monospace;font-size:11px;cursor:pointer;border-radius:3px;display:block;margin:14px auto 0;box-shadow:3px 3px 0 #000}
 
 .costume-card{background:#222;border:3px solid #444;border-radius:6px;padding:8px;cursor:pointer;text-align:center;width:120px}
 .costume-card.selected{border-color:#fbd000;background:#3a2c00;box-shadow:0 0 12px rgba(251,208,0,0.6)}
 .costume-card svg{width:80px;height:auto;margin:0 auto}
-.costume-card .name{font-family:‘Andika’,sans-serif;font-weight:700;font-size:13px;color:#fff;margin-top:4px}
+.costume-card .name{font-family:'Andika',sans-serif;font-weight:700;font-size:13px;color:#fff;margin-top:4px}
 
-.summary-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;font-family:‘Andika’,sans-serif;font-weight:700;font-size:16px;color:#fff}
+.summary-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;font-family:'Andika',sans-serif;font-weight:700;font-size:16px;color:#fff}
 .summary-stats div{background:#1a1a1a;padding:8px;border-radius:4px;text-align:center;border:2px solid #444}
-.summary-stats .num{display:block;font-size:28px;color:#fbd000;font-family:‘Press Start 2P’,monospace}
+.summary-stats .num{display:block;font-size:28px;color:#fbd000;font-family:'Press Start 2P',monospace}
 .word-grid{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0;max-height:120px;overflow-y:auto;padding:4px}
-.word-pill{padding:4px 10px;border-radius:14px;font-family:‘Andika’,sans-serif;font-weight:700;font-size:14px;border:2px solid #000}
+.word-pill{padding:4px 10px;border-radius:14px;font-family:'Andika',sans-serif;font-weight:700;font-size:14px;border:2px solid #000}
 .word-pill.correct{background:#00a800;color:#fff}
 .word-pill.missed{background:#d82800;color:#fff}
 
-#start-listen-tap{position:absolute;inset:0;background:rgba(0,0,0,0.85);z-index:100;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;font-family:‘Press Start 2P’,monospace;font-size:13px;text-align:center;padding:30px}
+#start-listen-tap{position:absolute;inset:0;background:rgba(0,0,0,0.85);z-index:100;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;font-family:'Press Start 2P',monospace;font-size:13px;text-align:center;padding:30px}
 #start-listen-tap.hide{display:none}
 #start-listen-tap p{margin:8px 0;line-height:1.5}
 #start-listen-tap .pulse{font-size:32px;animation:bounce 0.5s ease-in-out infinite alternate;color:#fbd000;text-shadow:3px 3px 0 #d82800;margin-bottom:14px}
 
-#music-toggle{position:absolute;top:8px;right:130px;background:rgba(0,0,0,0.7);color:#fff;border:2px solid #fbd000;padding:4px 8px;font-family:‘Press Start 2P’,monospace;font-size:10px;border-radius:3px;cursor:pointer;z-index:6}
+#music-toggle{position:absolute;top:8px;right:130px;background:rgba(0,0,0,0.7);color:#fff;border:2px solid #fbd000;padding:4px 8px;font-family:'Press Start 2P',monospace;font-size:10px;border-radius:3px;cursor:pointer;z-index:6}
 </style>
-
 </head>
 <body>
 
@@ -191,16 +189,13 @@ img,svg{image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-renderi
       <div id="flash"></div>
     </div>
 
-```
-<div id="mic-wrap">
-  <button id="mic-btn">🎤</button>
-  <span id="mic-label">TAP TO SPEAK</span>
-  <div id="mic-countdown">2.0s</div>
-</div>
+    <div id="mic-wrap">
+      <button id="mic-btn">🎤</button>
+      <span id="mic-label">TAP TO SPEAK</span>
+      <div id="mic-countdown">2.0s</div>
+    </div>
 
-<div id="dialog"></div>
-```
-
+    <div id="dialog"></div>
   </div>
 
   <div id="menu-overlay">
@@ -1079,6 +1074,5 @@ document.getElementById('music-toggle').addEventListener('click', function(){
 });
 
 </script>
-
 </body>
 </html>
