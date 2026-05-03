@@ -79,10 +79,20 @@ button{font-family:inherit}
 .bush-sprite{position:absolute;width:64px;height:auto}
 
 /* Mario sized to fit small landscape — 56px tall sprite. Feet sit on top of ground (entities-layer bottom is at ground top). */
-#mario{position:absolute;left:14%;bottom:0;width:56px;height:56px;z-index:6;transition:transform .15s}
+#mario{position:absolute;left:14%;bottom:0;width:56px;height:56px;z-index:6;transition:transform .15s,height .25s,width .25s}
 #mario.big{transform:scale(1.45);transform-origin:bottom center}
+#mario.big-power{height:96px;width:55px}
 #mario.invinc{filter:drop-shadow(0 0 6px #fbd000)}
 #mario.fire-power{filter:drop-shadow(0 0 5px rgba(255,255,255,.9))}
+#mario.star-power{animation:starFlash .12s steps(1) infinite}
+@keyframes starFlash{
+0%{filter:hue-rotate(0deg) saturate(1.5) drop-shadow(0 0 8px #fbd000)}
+20%{filter:hue-rotate(72deg) saturate(1.5) drop-shadow(0 0 8px #ff5fbf)}
+40%{filter:hue-rotate(144deg) saturate(1.5) drop-shadow(0 0 8px #5fffd0)}
+60%{filter:hue-rotate(216deg) saturate(1.5) drop-shadow(0 0 8px #5f8fff)}
+80%{filter:hue-rotate(288deg) saturate(1.5) drop-shadow(0 0 8px #ff8f5f)}
+100%{filter:hue-rotate(360deg) saturate(1.5) drop-shadow(0 0 8px #fbd000)}
+}
 
 #qblock{position:absolute;left:24%;top:18%;width:42px;height:42px;z-index:5;animation:qbounce 1.4s ease-in-out infinite}
 @keyframes qbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
@@ -95,9 +105,27 @@ button{font-family:inherit}
 #poster .word{font-family:‘Andika’,sans-serif;font-weight:700;color:#000;font-size:34px;line-height:1;letter-spacing:1px}
 #poster .sentence{font-family:‘Andika’,sans-serif;font-weight:700;color:#000;font-size:16px;line-height:1.2;text-align:center}
 
-.goomba{position:absolute;width:42px;height:42px;z-index:6}
-.goomba.walking{animation:goombaWalk .5s steps(2) infinite}
+.goomba,.enemy{position:absolute;width:42px;height:42px;z-index:6}
+.enemy-piranha{width:48px;height:80px;bottom:0}
+.goomba.walking,.enemy.walking{animation:goombaWalk .5s steps(2) infinite}
 @keyframes goombaWalk{from{transform:scaleX(1)}to{transform:scaleX(-1)}}
+
+.fireball{position:absolute;font-size:24px;z-index:7;text-shadow:0 0 8px #ff5f00,0 0 14px #ff8f00;animation:fireballSpin .15s linear infinite}
+@keyframes fireballSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+.pickup{position:absolute;width:34px;height:34px;z-index:7;filter:drop-shadow(0 0 6px #fff) drop-shadow(2px 2px 0 #000);transition:transform .1s;will-change:transform}
+.pickup-mushroom{filter:drop-shadow(0 0 8px #ff8f00) drop-shadow(2px 2px 0 #000)}
+.pickup-fire{filter:drop-shadow(0 0 8px #ff5f00) drop-shadow(2px 2px 0 #000)}
+.pickup-star{animation:starWobble .35s steps(2) infinite alternate;filter:drop-shadow(0 0 10px #fbd000) drop-shadow(0 0 16px #ffd000)}
+@keyframes starWobble{from{filter:drop-shadow(0 0 10px #fbd000) drop-shadow(0 0 16px #ffd000) hue-rotate(0deg)}to{filter:drop-shadow(0 0 10px #fbd000) drop-shadow(0 0 16px #ffd000) hue-rotate(60deg)}}
+.pickup:active{transform:scale(.85)}
+
+.sparkle{position:absolute;font-size:18px;pointer-events:none;animation:sparkleFly .65s ease-out forwards;will-change:transform,opacity}
+@keyframes sparkleFly{
+0%{opacity:1;transform:translate(-50%,-50%) scale(.5)}
+60%{opacity:1}
+100%{opacity:0;transform:translate(calc(-50% + var(–dx, 0)),calc(-50% + var(–dy, 0))) scale(1.4)}
+}
 
 #mic-wrap{position:absolute;right:3%;bottom:50px;z-index:7;display:flex;flex-direction:column;align-items:center;gap:4px}
 #mic-btn{width:64px;height:64px;border-radius:50%;border:3px solid #000;background:radial-gradient(circle,#fbd000 0%,#f8b800 70%,#d09000 100%);color:#000;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(251,208,0,.7),3px 3px 0 #000;animation:micPulse 1.5s ease-in-out infinite;font-family:‘Press Start 2P’,monospace}
@@ -139,6 +167,20 @@ button{font-family:inherit}
 .costume-card svg{width:54px;height:auto;margin:0 auto}
 .costume-thumb{width:54px;height:54px;margin:0 auto}
 .costume-card .name{font-family:‘Andika’,sans-serif;font-weight:700;font-size:11px;color:#fff;margin-top:3px}
+
+/* Stickers */
+.sticker-progress{font-family:‘Press Start 2P’,monospace;font-size:10px;color:#fbd000;text-align:center;margin:4px 0 8px}
+.sticker-empty{font-family:‘Andika’,sans-serif;font-size:14px;color:#fff;text-align:center;padding:20px 10px;font-weight:700}
+.sticker-grid{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-height:200px;overflow-y:auto;padding:4px}
+.sticker{width:62px;height:62px;border:3px solid #000;border-radius:50%;box-shadow:2px 2px 0 #000,inset 0 -4px 0 rgba(0,0,0,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;flex:0 0 auto}
+.sticker-emoji{font-size:18px;line-height:1}
+.sticker-word{font-family:‘Andika’,sans-serif;font-weight:700;font-size:10px;color:#000;text-shadow:1px 1px 0 rgba(255,255,255,.4);margin-top:2px;text-align:center;line-height:1;word-break:break-all;padding:0 2px}
+.sticker-stats{font-family:‘Press Start 2P’,monospace;font-size:10px;color:#fff;text-align:center;margin-top:10px;padding:6px;background:rgba(0,0,0,.4);border-radius:4px;border:1px solid #fbd000}
+
+.sticker-earned{position:absolute;top:18%;left:50%;transform:translateX(-50%);background:#fbd000;border:3px solid #000;border-radius:8px;padding:8px 18px;box-shadow:4px 4px 0 #000;text-align:center;z-index:9;animation:stickerPop 1.7s ease-out forwards;pointer-events:none}
+.sticker-earned .se-line1{font-family:‘Press Start 2P’,monospace;font-size:10px;color:#000}
+.sticker-earned .se-line2{font-family:‘Andika’,sans-serif;font-weight:700;font-size:18px;color:#000;margin-top:4px;text-transform:uppercase}
+@keyframes stickerPop{0%{opacity:0;transform:translateX(-50%) scale(.5) translateY(20px)}20%{opacity:1;transform:translateX(-50%) scale(1.1) translateY(0)}30%{transform:translateX(-50%) scale(1) translateY(0)}80%{opacity:1;transform:translateX(-50%) scale(1) translateY(0)}100%{opacity:0;transform:translateX(-50%) scale(1) translateY(-20px)}}
 
 .summary-stats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin:8px 0;font-family:‘Andika’,sans-serif;font-weight:700;font-size:11px;color:#fff}
 .summary-stats div{background:#1a1a1a;padding:6px;border-radius:4px;text-align:center;border:2px solid #444}
@@ -338,6 +380,19 @@ var SPRITES = {
   'qblock': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAl0lEQVR42mNkYGD4z0ABYGFgYGD4v2sVWZoZ3cIgBsA4/9f5EKcxaAtcLdwAuGaeONw6vyxCVcvAwMCEogCfZhzyTPj8B8PozscIRGQnIisgJkxY0AXwhQW6a7AagMs7uFzFgi/EifEOC74Q/78rDiX6sAEmYhMO0YGIywsEXYBN8f91PnCMy0VMpMQ5NrWMlGTns1pajADEhDfzjuvFtgAAAABJRU5ErkJggg==',
   'goomba': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAs0lEQVR42pVTMRLEIAiEaJkX+CCrVCks8wQfkydcaWGVygflBddmuCJjJnrEIJXAsCywojIeJHbsK919ZTwCAGhpIcWpiON8xgdpV5w34N5NgEyTUvjL5Zh+Y5CpUwqA1hXFFCcegJsbrbt8tO6Zwb2rxLA+Yy9A+4zjcs0tZlCwGBeA76cfgFNeN0BxDUYHaB0o43F46/C0UEoBjn0lLZEwxXOhNYOmDmrtU+zQQetf1PYDptlrRRZFD08AAAAASUVORK5CYII=',
   'coin': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAmElEQVR42s2SIRaAIBBEWR7Rk2z1DiSTgejhiAaTyTtQPYl9TSgsiwYKG+cxs8u8DwFRtYxWjdMcYCRxPE+S9IAIXIPYATfRsb6PrKuGQUB8zKlJXb4wwbwXISbbmJqGJbuAtknRNhVBpvbf2hW8Ky1u/5l4SR8cdEBiQASwjniREjych4wDsO4F6fJZ0zWQvlFOAiRjRPkGlD9H+6Yog0NAVE++AAAAAElFTkSuQmCC',
+// Additional SMB3 sprites for power-ups + variety enemies
+  'big_idle': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAcCAYAAABoMT8aAAABBUlEQVR42qVUOw7DIAy1EQNjj9KRY/SoHCMjR8nI5g6FxPhDUgUJiUCejR/vGeDhQAAAIHJOcT4gQnEOcQVsed5OiCSDRAssgasRr8Bpc8rqNzk5EGAFdFgyORjgvZZp//X+zIQiQuDXSpsNVkBGZBiLvRaV0X0h9rwjEg0wz7YK2P/DIA8GyAq4ViIirUhTnHQSZyn32pbsc0lPAYTurfqPzMwLppBcEblmEips2dGDYaawYliWsdeiSg1PG0rwzNOyZv/4lo0GAGjMls/J98fca/mt+9NH5iyybnKlSFcHl2Oy87/DsvPjV1Aqg3tqVC3N6shp8xPcKqFlcEk27Xz3+oAIX58logjTUIt8AAAAAElFTkSuQmCC',
+  'big_walk1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAcCAYAAABoMT8aAAABDklEQVR42qVVMRKEIAwkGQpKn2LJM3yqz7D0KZZ2ueIAQ1iU82ycIW6yu0nQuT8fciI3UaqDImQ/8XfAM9bHgUhsEo/AFjguAYDD1kEmJlcCA+4CTRLoQQYf+9rEpnmpGLA2LWwYnEEWfCVIAFTxqb1fD4gkg0uVjoSKlQixDWQQSnjfRsWiMcwk1+fNHCDqkAWaA1QN6W4ljA4RWCZ+6tgZ1VJlloqtR9U1/TAvJUnYLrOntJlsR9hqP/a1SEJbym9uIW0ma9PO2LZsmpfCAjH0ToQckWjnR8e5auPPOqp1Bv0d3Uh+cw+W2SASHqWqwd02NiwyOL2bcS93ogiFJKP6CPwHNLi7zl0JOa7OPu5Gushz36/vAAAAAElFTkSuQmCC',
+  'big_walk2': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAcCAYAAABoMT8aAAABB0lEQVR42sWUPRKEIAyFE4aC0qNs6TE8xh7PY1h6FEu7t8UaDCHIUm1mLATelx+eEv07mICHXS43Af4NcAnP+V5Kmw+pAczQQh1p6wGMOGe1oSBhWGxmE90yiejYV1c7vZbiPWiiJxZBIfRaaGXs+4AIItZZnoDTa8lVBL0hIg/47ERm2IxW7EIBvn1wDbIHskOsjPQ0A917DRhxoSQCOLb8f843RPbSRsW8JmYEL7M8HtTOJVob697TdVDDdGXZSLLYHBw5reQZAJzsn8eEgKWiY18zOOh7tXfecmJ6L99qmJGdWJXXCDvwoM3TE3sRLHU0YveEtq5TbeyKzHpxY/lrVN4ebeED0DasI5+8TMMAAAAASUVORK5CYII=',
+  'big_jump': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAcCAYAAABoMT8aAAABEklEQVR42qVUMZLDQAiTGBdb+ikp/Yw8756RZ7i8p6R0xxUXHIxhs0lobO8YIYQWQhWnII+HqkQRPAGQui3Pz7b2Qf4BXEWfPAJCAJohR6C2VgCBQQ8oA5l2aqTef2+H5PlyRVvztizEhIvJAGBnpsG2nCcksaJ/ZiAxJrwID7b93HAHMJNqWhBASj8C+H92UFXKSGJWwPTYfWA/ecqZoPPluk+lrS98kNE+FFLlFL1vyL2x2vtMquDLEKgym7HXIvOHtfC8zkUrZTx8MPmD1rlU8XK1h5ne0sAzNB/I6OqqbuTHU7DdIJU45VoLi4XpVs42c1FERkWrdOgyqITzLUiPZtdIQ1NIQOJmrluoBA1T+gOLqqtLErhBpAAAAABJRU5ErkJggg==',
+  'big_celebrate': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAcCAYAAABoMT8aAAAA+klEQVR42u1UuxWDMAw8+VG4zCgpGYMxMlLGYAxKRqGkuxTYRhbilzIveo8HRqfzWZYE/O0HTEA6f4UumhT7q/EC53ZZzu8eABBf3fLOxIpoVSDCHAgAcah32vgKCYlEwrkFgeOnYFJcpeBW9pKChSAFT2Nf/I9nV9b6O68zSYAItfOqTWMPiDB4TrvjNPbrrsZCxajl7RDbo5YcuGf0ZGsMKZtbOMtHRV4IVBHZArJW4UiRVCAVIA515eUA64tD6gUtOx4kMavTKpsz8Fkiw9412TrYS24DUh43+sAW2ffNlK6xuYLzbqTuRjWRXPDBaNvORHsUZw5q+wC1l6VBmfdtLwAAAABJRU5ErkJggg==',
+  'koopa_walk1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAYCAYAAADzoH0MAAABGklEQVR42p1UsQ3DIBC8h0zBHB7BcuUqhcdgGEZI6cJVKssjZA4mSGt9igTyxuDgvGQhMH8c98eTNhYhVu8YALSxhMpQMpnnETyPEegUwL+h5OkyallEBtQNmx889VUgh1eoAVGlxNMiphpUA6zeMU/9V4Pn7RQAAeASZbreo6mkFtJolzQhp8HqHfu2iXOzOJYgzFPPAPhj6zjneWQA7NsmO2pj3yJKqqXwbQOzPCCZAIDSxpK8Z0mPkGyWRwRcvWME2oH6Ef3wyXX1yzw52pKJCmWh6z1WobQ5B6pytT0CSRlt3kJgcqoK6caNQeZxd7Kca2OpqiPJJDkCAMmmmnajXy+UumF/BWkm6oZdp9qBpG099UNJ1KDXC/gp0wJf9A5AAAAAAElFTkSuQmCC',
+  'koopa_walk2': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAYCAYAAADzoH0MAAABF0lEQVR42p2UsRGDMAxFv0ym8ByMwFFRUTAGwzBCSgoqKi4jZA5PkJZTiiBHYJuY6I7z2Ubfz5IsKmwPsdUNDACF7QmZZrQzLyN4Gb3QJYF/zejTteVSeAKqu90GT02WyOkVckRMyvFyEI8xyBZY3cA8NcDr/lmRMdNuPojtDJ72m9TOvqh0LHSh3XLuvbqBXVX6uX0MLCJBEKmdv0RbVbqqhH08N+cnXFV6IhNzjpmIaJIoQeoq4iwknmJ7jcxTw7txGRkAu6r0o3x63UhUU/gxbE1ifuHrn2OiRuc2RRHLwuV+kJWFIwUvY3Cynhe2p4Ag1g+1kx4BgHRTPXajXy+U6i4eA6Ggugs6VSCSIpCUnpV3YXt6A574wJ5HfWK8AAAAAElFTkSuQmCC',
+  'piranha_open': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAeCAYAAAAhDE4sAAABj0lEQVR42s1VwW3DMAwkbS0RdYU81Q1UoAkyi/vKFH7FsxhJgXiD5JkVoi5hg30kdCiJdou2j/IlSMfjiaQogP9mCABQ2gqG0BBvEhGYpzfUHPrrjhAfR6WtcAgN4MP3xsOg0lYqEQdM8FikQAb01x1paiRGWqFFJSKQ8sc8IKokI1FpK9QcpSpNISKOKTAyaYg45opV8UaqRpJEVxtCQ8G76EpMppEE76JKZznSyDSSKaPgHRERBe8oeEf3loiMcRILADQ25B2QsdvunKmdwDz6aHE8qW0QvIPgnVp26TNb/o+XZ3WtVa6YizJlGqaQfWS7c9bRi+Mpc0REsN056iMjAXxgu0bWO4uuPWiTvmoJHEJDG9oCAECLdbSfYgt5sKEtbGgbAbUxwjjpO+aID3itkUmFqU9WtRbrDJQ6MkYdI5JAA8pAWt7UwTZFJkkmh3+a9DnjIKKKeh+1WKuEKUGmiEfBb741852rfGUt1jdFZr8kAIDX1QreD4dZJ8b06wuY/RL69UX/135qf0b0CbXeE47Mm+HMAAAAAElFTkSuQmCC',
+  'piranha_closed': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAeCAYAAAAhDE4sAAABW0lEQVR42rVVQW7CMBCcTfIJ/IYezQ+MVKq8Jbe8IjfeEjVI5Afk2DeYT4DcQ9nIXtuBtmElJMPODrO7kxhYKYgPpWoAADd7cD6gVA09+D1kvBM5PwAEH5njPweAYknuDz4+p6JYa0aF7JuIHg+WaJ7RaxXd7MFZo7GkiohgjY62uJqiYEnW6Hm1ueCcNZptkVZ02W2Ra4/buuy2yzPanM5Py5dYEq0FSTVOwfdMngJFpWpIFjrnYI2GNTpythqnwEvFkmx/FnzOtR85W41TMOjN6RwUE1GkBgAqycwANd4NJ7YnCZLDTr2DatcCAHrqcu8milqrXYvatZH95WPEuOSM/ESOzFcoa6Kt9dRFIFnImKQinyAF9HEpwqSPcmQ+yeItwnPJgaX6UjXEt0iV8khPXZLQJ3jKR3+5G6vUKn8TrHImOg4D3vd7HIdhsZAx148vVJ9vL75F/hPfEzntTOhJxpYAAAAASUVORK5CYII=',
+  'pu_mushroom': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAxUlEQVR42qVTwQ3DMAgEq0s0I/CNu4E7dbtB469HcMe4PloSm+I0Uk+yZMEBB8acRchiLgXkIIuwtQUbqME1RQJAAKim+OVXnGxVJVuofbovNJcCVRPaYGBLfr493LtyViWfGaCmiKOoKYKIkEWIiaiTrtWe10vXgrVP92Ubou3bBns2jQn0J4Incw+Ww+/B4qdkLzkzb3ughiEaX1twfQXrZObhvZtBu99eKxYtJ4twGH2Slugl7lb50AwGnGAzMvPusYpf51yeCSgAEvMAAAAASUVORK5CYII=',
+  'pu_leaf': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAmklEQVR42sWTsREEIQhFv45VWALpWoJlW4KmlmAbbqTDcug5e8GRCfPk8weAf4cpRK/Aq9ZeiIx9C7cYcNXa7a8juNOO/N1igE8Zhci4E7DFMHM+ZfiU9wpWoJLrbmWQBCWsKhiwBvEcDytl+5QnpHXkygqRcdzhFcA//dhEAF0WdwDvPldZc/0EftzCt1GGiRxeHpPcPA0ccQP2dWOWKplcZQAAAABJRU5ErkJggg==',
+  'pu_star': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAqElEQVR42q2TvRHDIAyFJc5VNiAjuPYInokh3m5ZQ9qAlhQ5+4SN5PgSVYD+QN+DX/NMnuXnoxERqVT2YqYoOZfy2QDNK5LoR0uX3Ykol7I/5/QEzxHNxBrLunTd7pgClFQqKzB0jtb2TKVy2jCNgqLOG5V9iN8WsckhxiOFS4xHdFFhS+M/QvK6KzAkYG8xeYPqPhHQvFl0QjolOkq08Szr0izKu5J+AwQYYrhKnqa9AAAAAElFTkSuQmCC',
 };
 
 
@@ -628,7 +683,11 @@ var state = {
   sessionWords:[],
   customWords:null, // null = use defaults; otherwise array
   audioReady:false,
-  phase:'idle' // idle, listening, celebrating, summary, levelup
+  phase:'idle', // idle, listening, celebrating, summary, levelup
+  powerLevel:'small', // 'small' | 'big' | 'fire' | 'star'
+  starUntil:0, // timestamp when star invincibility ends
+  stickers:{}, // word -> earnedAt timestamp
+  enemyKills:{goomba:0, koopa:0, piranha:0}
 };
 
 var word = '';
@@ -649,7 +708,8 @@ function save(){
       score:state.score, totalCorrect:state.totalCorrect, totalSeen:state.totalSeen,
       bestStreak:state.bestStreak, worldIdx:state.worldIdx, worldProgress:state.worldProgress,
       costumeId:state.costumeId, musicOn:state.musicOn,
-      weights:state.weights, customWords:state.customWords
+      weights:state.weights, customWords:state.customWords,
+      powerLevel:state.powerLevel, stickers:state.stickers, enemyKills:state.enemyKills
     }));
   } catch(e){}
 }
@@ -735,9 +795,29 @@ function getCostumePalette(){ return PALETTE; } // legacy, scenery uses default 
 
 function marioSprite(frame, costume){
   costume = costume || getCostume();
-  var set = costume.spriteSet || 'mario';
-  var key = set + '_' + frame; // e.g. mario_idle, luigi_walk1
-  return key;
+  // Power-up overrides costume sprite-set:
+  //   small / star / fire → use small mario sprites (with filter overlay)
+  //   big                → use Big Mario sprites
+  // Costume only matters when in 'small' state for sprite-set (Mario vs Luigi base).
+  var set;
+  if(state.powerLevel === 'big' || state.powerLevel === 'fire'){
+    set = 'big'; // use big_idle, big_walk1, etc.
+  } else {
+    set = costume.spriteSet || 'mario';
+  }
+  return set + '_' + frame; // big_idle / mario_idle / luigi_walk1
+}
+
+function getMarioFilter(){
+  // Combine costume filter + power-state filter
+  var costume = getCostume();
+  var f = costume.filter || '';
+  // Star: rainbow flicker (handled via class instead of filter)
+  if(state.powerLevel === 'fire'){
+    // Fire Mario tint: brighten + slight white-shift
+    f = (f ? f + ' ' : '') + 'brightness(1.2) saturate(1.5) drop-shadow(0 0 5px rgba(255,200,80,.9))';
+  }
+  return f;
 }
 
 function setMarioFrame(frameId){
@@ -746,10 +826,20 @@ function setMarioFrame(frameId){
   else if(frameId===2) frameName = 'walk2';
   else if(frameId==='jump') frameName = 'jump';
   else if(frameId==='celebrate') frameName = 'celebrate';
-  var costume = getCostume();
   var el = document.getElementById('mario');
-  el.innerHTML = spriteImg(marioSprite(frameName, costume));
-  el.style.filter = costume.filter || '';
+  el.innerHTML = spriteImg(marioSprite(frameName));
+  el.style.filter = getMarioFilter();
+  // Update Big Mario class for sizing
+  if(state.powerLevel === 'big' || state.powerLevel === 'fire'){
+    el.classList.add('big-power');
+  } else {
+    el.classList.remove('big-power');
+  }
+  if(state.powerLevel === 'star' && Date.now() < state.starUntil){
+    el.classList.add('star-power');
+  } else {
+    el.classList.remove('star-power');
+  }
 }
 
 function startMarioWalkAnimation(){
@@ -811,10 +901,65 @@ function blip(freq, dur, type, vol){
   osc.stop(ctx.currentTime + dur);
 }
 
-function playCoinSound(){
-  blip(988, 0.07, 'square', 0.18);
-  setTimeout(function(){blip(1319, 0.18, 'square', 0.18);}, 55);
+// ---- HTML5 AUDIO (real SMB3 sounds, embedded as base64) ----
+var audioPool = {}; // key -> Audio element pool for fast replay
+var bgMusicEl = null;
+
+function makeAudio(key, vol){
+  if(!AUDIO[key]) return null;
+  var a = new Audio(AUDIO[key]);
+  a.volume = vol == null ? 0.6 : vol;
+  return a;
 }
+
+function playSfx(key, vol){
+  try {
+    var a = makeAudio(key, vol);
+    if(!a) return;
+    var p = a.play();
+    if(p && typeof p.catch === 'function') p.catch(function(){});
+  } catch(e){ /* JSDOM/older browsers may throw */ }
+}
+
+function startBgMusic(){
+  if(!state.musicOn) return;
+  if(musicTimer){ clearTimeout(musicTimer); musicTimer = null; }
+  if(bassTimer){ clearTimeout(bassTimer); bassTimer = null; }
+  if(bgMusicEl){
+    try {
+      var p = bgMusicEl.play();
+      if(p && typeof p.catch === 'function') p.catch(function(){});
+    } catch(e){}
+    return;
+  }
+  if(!AUDIO || !AUDIO.music_loop) return;
+  try {
+    bgMusicEl = new Audio(AUDIO.music_loop);
+    bgMusicEl.loop = true;
+    bgMusicEl.volume = 0.35;
+    var p = bgMusicEl.play();
+    if(p && typeof p.catch === 'function') p.catch(function(){});
+  } catch(e){
+    bgMusicEl = null;
+  }
+}
+
+function stopBgMusic(){
+  if(musicTimer){ clearTimeout(musicTimer); musicTimer = null; }
+  if(bassTimer){ clearTimeout(bassTimer); bassTimer = null; }
+  if(bgMusicEl){
+    try { bgMusicEl.pause(); bgMusicEl.currentTime = 0; } catch(e){}
+    bgMusicEl = null;
+  }
+}
+
+function playCoinSound(){ playSfx('sfx_coin', 0.55); }
+function playJumpSound(){ playSfx('sfx_jump', 0.5); }
+function playStompSound(){ playSfx('sfx_stomp', 0.65); }
+function playPowerUp(){ playSfx('sfx_1up', 0.6); }
+function playLevelStart(){ playSfx('sfx_levelstart', 0.7); }
+
+// Keep synth-based feedback for correct/wrong (snappier UX)
 function playCorrectSound(){
   blip(523, 0.09, 'square');
   setTimeout(function(){blip(659, 0.09, 'square');},90);
@@ -825,90 +970,16 @@ function playWrongSound(){
   blip(220, 0.12, 'sawtooth', 0.12);
   setTimeout(function(){blip(196, 0.18, 'sawtooth', 0.12);},100);
 }
-function playJumpSound(){
-  blip(523, 0.05, 'square');
-  setTimeout(function(){blip(784, 0.07, 'square');},35);
-}
-function playStompSound(){
-  blip(110, 0.10, 'square', 0.20);
-  setTimeout(function(){blip(82, 0.13, 'square', 0.20);},55);
-}
-function playPowerUp(){
-  var notes = [392, 494, 587, 698, 784, 932, 1047];
-  notes.forEach(function(n,i){
-    setTimeout(function(){blip(n, 0.08, 'square', 0.18);}, i*55);
-  });
-}
 function playFanfare(){
-  // SMB1 stage clear / level complete fanfare-ish
-  var melody = [
-    [659,160],[784,160],[1047,160],[784,160],[659,160],[523,160],
-    [659,160],[784,320],[1047,160],[1175,160],[1397,400]
-  ];
-  var t = 0;
-  melody.forEach(function(n){
-    setTimeout(function(){blip(n[0], (n[1]-20)/1000, 'square', 0.18);}, t);
-    t += n[1];
-  });
+  // Use level start as a quick fanfare
+  playSfx('sfx_levelstart', 0.7);
 }
 
-// ---- SMB1 OVERWORLD MELODY (the iconic Mario theme) ----
-// Notes are [Hz, durationMs]; 0 = rest. This is the famous opening bars.
-var MUSIC_MELODY = [
-  // Bar 1
-  [659,140],[659,140],[0,140],[659,140],[0,140],[523,140],[659,140],[0,140],
-  [784,140],[0,420],[392,140],[0,420],
-  // Bar 2 (sub-melody / response)
-  [523,180],[0,200],[392,180],[0,260],[330,180],[0,260],
-  [440,140],[0,140],[494,180],[0,140],[466,180],[440,200],
-  // Bar 3
-  [392,140],[659,140],[784,140],[880,180],[698,140],[784,140],[0,140],
-  [659,140],[523,140],[587,140],[494,180],
-  // Bar 4 — short transition
-  [523,180],[0,200],[392,180],[0,260],[330,180],[0,260],
-  [440,140],[0,140],[494,180],[0,140],[466,180],[440,200]
-];
-
-// Bass line (square wave low notes, optional second voice — kept simple)
-var MUSIC_BASS = [
-  [165,280],[131,280],[165,280],[131,280],
-  [196,280],[165,280],[131,280],[110,280],
-  [165,280],[131,280],[165,280],[131,280],
-  [196,280],[165,280],[131,280],[110,280]
-];
-
+// (Synth music removed — HTML5 Audio now plays real SMB3 Level Music Loop above.)
+var MUSIC_MELODY = []; // legacy, unused
+var MUSIC_BASS = [];
 var bassTimer = null;
 var bassIdx = 0;
-
-function startBgMusic(){
-  if(!state.musicOn) return;
-  if(musicTimer) return;
-  var ctx = ensureAudio(); if(!ctx) return;
-  musicNoteIdx = 0;
-  function tick(){
-    if(!state.musicOn || !musicTimer) return;
-    var n = MUSIC_MELODY[musicNoteIdx];
-    var freq = n[0], dur = n[1];
-    if(freq>0) blip(freq, (dur-15)/1000, 'square', 0.06);
-    musicNoteIdx = (musicNoteIdx + 1) % MUSIC_MELODY.length;
-    musicTimer = setTimeout(tick, dur);
-  }
-  musicTimer = setTimeout(tick, 60);
-
-  bassIdx = 0;
-  function bassTick(){
-    if(!state.musicOn || !bassTimer) return;
-    var n = MUSIC_BASS[bassIdx];
-    if(n[0]>0) blip(n[0], (n[1]-30)/1000, 'triangle', 0.05);
-    bassIdx = (bassIdx + 1) % MUSIC_BASS.length;
-    bassTimer = setTimeout(bassTick, n[1]);
-  }
-  bassTimer = setTimeout(bassTick, 120);
-}
-function stopBgMusic(){
-  if(musicTimer){ clearTimeout(musicTimer); musicTimer = null; }
-  if(bassTimer){ clearTimeout(bassTimer); bassTimer = null; }
-}
 
 // ---- WORD POOL ----
 function pickWord(){
@@ -1166,6 +1237,9 @@ function correct(){
   state.bestStreak = Math.max(state.bestStreak, state.combo);
   state.sessionWords.push({word:word, correct:true});
   state.weights[word] = 1;
+  // Sticker: first time mastering this word
+  var newSticker = !state.stickers[word];
+  state.stickers[word] = Date.now();
   playCorrectSound();
 
   document.getElementById('qblock').classList.add('bumped');
@@ -1174,7 +1248,11 @@ function correct(){
     drawQBlock(true);
   }, 400);
 
-  setTimeout(spawnGoomba, 600);
+  if(newSticker){
+    setTimeout(function(){ showStickerEarned(word); }, 200);
+  }
+
+  setTimeout(spawnEnemy, 600);
 }
 
 function miss(){
@@ -1237,36 +1315,164 @@ function showHeardOverride(transcripts){
   }
 }
 
-// ---- GOOMBA STOMP SEQUENCE ----
-function spawnGoomba(){
+// ---- ENEMY SPAWN (rotates Goomba / Koopa / Piranha) ----
+var enemyRotation = 0; // counter to rotate
+
+function pickEnemyType(){
+  // World-based rotation: world 0 mostly Goomba, escalating variety
+  var roll = Math.random();
+  if(state.worldIdx === 0){
+    if(roll < 0.7) return 'goomba';
+    return 'koopa';
+  } else if(state.worldIdx === 1){
+    if(roll < 0.4) return 'goomba';
+    if(roll < 0.75) return 'koopa';
+    return 'piranha';
+  } else {
+    if(roll < 0.3) return 'goomba';
+    if(roll < 0.6) return 'koopa';
+    return 'piranha';
+  }
+}
+
+function spawnEnemy(){
   if(goombaActive) { afterStomp(); return; }
   goombaActive = true;
+  var type = pickEnemyType();
   var entLayer = document.getElementById('entities-layer');
   var stage = document.getElementById('stage').getBoundingClientRect();
 
+  if(type === 'piranha'){
+    // Piranha emerges from a "pipe" position on the right
+    var p = document.createElement('div');
+    p.className = 'enemy enemy-piranha';
+    p.style.right = '8%';
+    p.style.bottom = '0';
+    p.innerHTML = spriteImg('piranha_closed');
+    entLayer.appendChild(p);
+    // Open-mouth animation cycle (chomp)
+    var chompTimer = setInterval(function(){
+      if(!p.parentNode){ clearInterval(chompTimer); return; }
+      var open = p.querySelector('img').src.indexOf('Mn7Y') !== -1; // toggle by checking known unique substr
+      // simpler: just toggle a class flag
+      if(p.dataset.open === '1'){
+        p.innerHTML = spriteImg('piranha_closed'); p.dataset.open = '0';
+      } else {
+        p.innerHTML = spriteImg('piranha_open'); p.dataset.open = '1';
+      }
+    }, 400);
+    p._chompTimer = chompTimer;
+    // After short pause, Mario fireball or jump-over to defeat
+    setTimeout(function(){
+      defeatPiranha(p);
+    }, 1100);
+    return;
+  }
+
+  // Goomba or Koopa: walks in from right
   var g = document.createElement('div');
-  g.className = 'goomba walking';
+  g.className = 'enemy enemy-' + type + ' walking';
   g.style.right = '-50px';
   g.style.bottom = '0';
-  g.innerHTML = spriteImg('goomba');
+  if(type === 'koopa'){
+    g.innerHTML = spriteImg('koopa_walk1');
+    // alternate koopa walking frames
+    var kFrame = 1;
+    var kTimer = setInterval(function(){
+      if(!g.parentNode){ clearInterval(kTimer); return; }
+      kFrame = kFrame===1?2:1;
+      g.innerHTML = spriteImg('koopa_walk'+kFrame);
+    }, 220);
+    g._frameTimer = kTimer;
+  } else {
+    g.innerHTML = spriteImg('goomba');
+  }
   entLayer.appendChild(g);
 
-  // Walk goomba in from right toward Mario
   var pos = -50;
-  var marioLeftPx = stage.width * 0.14 + 28; // mario center
-  var targetPx = stage.width - marioLeftPx - 120; // distance from right edge to mario
+  var marioLeftPx = stage.width * 0.14 + 28;
+  var targetPx = stage.width - marioLeftPx - 120;
   var walkTimer = setInterval(function(){
     pos += 4;
     g.style.right = pos + 'px';
     if(pos >= targetPx){
       clearInterval(walkTimer);
-      // Mario jumps
-      marioJumpAndStomp(g);
+      if(g._frameTimer) clearInterval(g._frameTimer);
+      marioJumpAndStomp(g, type);
     }
   }, 30);
 }
 
-function marioJumpAndStomp(goomba){
+// Backwards-compat shim — older code paths may call spawnGoomba
+function spawnGoomba(){ spawnEnemy(); }
+
+function defeatPiranha(p){
+  // If Mario has fire power, throw a fireball; otherwise jump over and Mario "kicks" it down
+  if(state.powerLevel === 'fire'){
+    fireballAttack(p);
+  } else {
+    // Star power = stomp anyway, otherwise side-jump kick
+    sideKick(p);
+  }
+}
+
+function fireballAttack(p){
+  var m = document.getElementById('mario');
+  setMarioFrame('jump');
+  // Spawn fireball flying to piranha
+  var stage = document.getElementById('stage').getBoundingClientRect();
+  var fb = document.createElement('div');
+  fb.className = 'fireball';
+  fb.style.left = (stage.width * 0.14 + 32) + 'px';
+  fb.style.bottom = '40px';
+  fb.innerHTML = '🔥';
+  document.getElementById('entities-layer').appendChild(fb);
+  playJumpSound();
+  // Animate
+  var fbPos = stage.width * 0.14 + 32;
+  var targetX = stage.width - 100;
+  var fbTimer = setInterval(function(){
+    fbPos += 12;
+    fb.style.left = fbPos + 'px';
+    if(fbPos >= targetX){
+      clearInterval(fbTimer);
+      if(fb.parentNode) fb.parentNode.removeChild(fb);
+      // Burn the piranha
+      if(p._chompTimer) clearInterval(p._chompTimer);
+      p.style.transition = 'transform .4s, opacity .4s';
+      p.style.transform = 'scale(.3) rotate(180deg)';
+      p.style.opacity = '0';
+      playStompSound();
+      setTimeout(function(){
+        if(p.parentNode) p.parentNode.removeChild(p);
+        coinPop();
+        state.enemyKills.piranha++;
+        afterStomp();
+      }, 380);
+    }
+  }, 30);
+}
+
+function sideKick(p){
+  // Mario doesn't actually approach — piranha just retracts and disappears
+  // We'll just have Mario "wave" and the plant sinks back
+  setMarioFrame('celebrate');
+  setTimeout(function(){ setMarioFrame(0); }, 400);
+  if(p._chompTimer) clearInterval(p._chompTimer);
+  p.style.transition = 'transform .5s ease-in, opacity .5s';
+  p.style.transform = 'translateY(40px)';
+  p.style.opacity = '0';
+  playStompSound();
+  setTimeout(function(){
+    if(p.parentNode) p.parentNode.removeChild(p);
+    coinPop();
+    state.enemyKills.piranha++;
+    afterStomp();
+  }, 480);
+}
+
+function marioJumpAndStomp(enemy, type){
+  type = type || 'goomba';
   var m = document.getElementById('mario');
   setMarioFrame('jump');
   playJumpSound();
@@ -1276,24 +1482,38 @@ function marioJumpAndStomp(goomba){
     m.style.transition = 'bottom .25s ease-in';
     m.style.bottom = '0px';
     setTimeout(function(){
-      stompGoomba(goomba);
+      stompEnemy(enemy, type);
       setMarioFrame(0);
       m.style.transition = 'transform .15s';
     }, 250);
   }, 350);
 }
 
-function stompGoomba(g){
+function stompEnemy(g, type){
+  type = type || 'goomba';
   if(!g) { afterStomp(); return; }
   playStompSound();
-  g.style.transition = 'transform .25s';
-  g.style.transform = 'scaleY(0.3) translateY(20px)';
+  if(type === 'koopa'){
+    // Koopa: shell-pop animation — flip and slide
+    g.style.transition = 'transform .35s, opacity .35s';
+    g.style.transform = 'scaleY(0.4) translateY(15px) rotate(180deg)';
+    g.style.opacity = '0.4';
+    state.enemyKills.koopa++;
+  } else {
+    // Goomba: classic squish
+    g.style.transition = 'transform .25s';
+    g.style.transform = 'scaleY(0.3) translateY(20px)';
+    state.enemyKills.goomba++;
+  }
   setTimeout(function(){
     if(g && g.parentNode) g.parentNode.removeChild(g);
     coinPop();
     afterStomp();
-  }, 280);
+  }, 320);
 }
+
+// Backwards-compat
+function stompGoomba(g){ stompEnemy(g, 'goomba'); }
 
 function afterStomp(){
   goombaActive = false;
@@ -1352,21 +1572,159 @@ function coinPop(){
   }, 1300);
 }
 
+// ---- POWER-UP PICKUPS ----
+// At combo 3 → mushroom (small → big)
+// At combo 5 → fire flower (big/small → fire)
+// At combo 7 → super star (10sec invincibility, sparkles, 1-shot enemies)
 function checkPowerUps(){
-  var m = document.getElementById('mario');
-  if(state.combo === 3){
-    m.classList.add('big');
-    showDialog('🍄 SUPER MUSHROOM!', 1500);
-    playPowerUp();
+  if(state.combo === 3 && state.powerLevel === 'small'){
+    setTimeout(function(){ spawnPickup('mushroom'); }, 100);
   } else if(state.combo === 5){
-    m.classList.add('fire-power');
-    showDialog('🌸 FIRE FLOWER!', 1500);
-    playPowerUp();
+    setTimeout(function(){ spawnPickup('fire'); }, 100);
+  } else if(state.combo === 7){
+    setTimeout(function(){ spawnPickup('star'); }, 100);
   } else if(state.combo === 10){
-    m.classList.add('invinc');
-    showDialog('⭐ STAR POWER!', 1700);
-    playPowerUp();
     coinShower();
+  }
+}
+
+function spawnPickup(kind){
+  var qblock = document.getElementById('qblock');
+  var stage = document.getElementById('stage');
+  var entLayer = document.getElementById('entities-layer');
+  if(!qblock || !stage || !entLayer) return;
+  var qbRect = qblock.getBoundingClientRect();
+  var stageRect = stage.getBoundingClientRect();
+
+  // Bump the q-block
+  qblock.classList.add('bumped');
+  setTimeout(function(){ qblock.classList.remove('bumped'); }, 400);
+
+  var sprite = kind === 'mushroom' ? 'pu_mushroom'
+             : kind === 'fire'     ? 'pu_leaf'    // Use leaf graphic for fire (red leaf reads as fire flower at small size)
+             : kind === 'star'     ? 'pu_star'
+             : 'pu_mushroom';
+
+  // Create pickup element
+  var p = document.createElement('div');
+  p.className = 'pickup pickup-' + kind;
+  p.dataset.kind = kind;
+  var startLeft = qbRect.left - stageRect.left + 4;
+  var startTop = qbRect.top - stageRect.top - 8;
+  p.style.left = startLeft + 'px';
+  p.style.top = startTop + 'px';
+  p.innerHTML = spriteImg(sprite);
+  entLayer.appendChild(p);
+
+  playPowerUp();
+  showDialog(
+    kind === 'mushroom' ? '🍄 GRAB THE MUSHROOM!'
+    : kind === 'fire'   ? '🌸 GRAB THE FIRE FLOWER!'
+    : kind === 'star'   ? '⭐ GRAB THE STAR!'
+    : 'POWER-UP!',
+    1400
+  );
+
+  // Float-up animation: rises 50px, then drifts down/right slowly
+  var phase = 0; // 0=rising, 1=drifting
+  var t0 = Date.now();
+  var floatTimer = setInterval(function(){
+    if(!p.parentNode){ clearInterval(floatTimer); return; }
+    var t = (Date.now() - t0) / 1000;
+    if(phase === 0){
+      var rise = Math.min(50, t * 60);
+      p.style.transform = 'translateY(' + (-rise) + 'px)';
+      if(rise >= 50){ phase = 1; t0 = Date.now(); }
+    } else {
+      // Drift gently in a small arc around the q-block
+      var drift = Math.sin(t * 2) * 12;
+      p.style.transform = 'translateY(-50px) translateX(' + drift + 'px)';
+    }
+  }, 30);
+  p._floatTimer = floatTimer;
+
+  // Tappable
+  p.style.pointerEvents = 'auto';
+  p.style.cursor = 'pointer';
+  p.addEventListener('click', function ev(e){
+    e.stopPropagation();
+    p.removeEventListener('click', ev);
+    pickupGrabbed(p, kind);
+  });
+
+  // Auto-collect after 8 seconds if not tapped (so the game doesn't stall)
+  setTimeout(function(){
+    if(p.parentNode){
+      pickupGrabbed(p, kind);
+    }
+  }, 8000);
+}
+
+function pickupGrabbed(p, kind){
+  if(p._floatTimer) clearInterval(p._floatTimer);
+  // Sparkle + remove
+  p.style.transition = 'transform .3s, opacity .3s';
+  p.style.transform = (p.style.transform || '') + ' scale(2)';
+  p.style.opacity = '0';
+  setTimeout(function(){
+    if(p.parentNode) p.parentNode.removeChild(p);
+  }, 300);
+
+  // Apply effect
+  applyPowerUp(kind);
+}
+
+function applyPowerUp(kind){
+  var m = document.getElementById('mario');
+  if(kind === 'mushroom'){
+    state.powerLevel = 'big';
+    showDialog('🍄 SUPER MARIO!', 1300);
+  } else if(kind === 'fire'){
+    state.powerLevel = 'fire';
+    showDialog('🌸 FIRE MARIO!', 1300);
+  } else if(kind === 'star'){
+    state.powerLevel = 'star';
+    state.starUntil = Date.now() + 10000; // 10 sec
+    showDialog('⭐ STAR POWER!', 1500);
+    // Auto-revert after 10s
+    setTimeout(function(){
+      if(state.powerLevel === 'star' && Date.now() >= state.starUntil){
+        state.powerLevel = 'big'; // drop down to big after star
+        setMarioFrame(0);
+      }
+    }, 10000);
+  }
+  // Burst effect
+  burstSparkle(m);
+  // Update sprite immediately
+  setMarioFrame(0);
+  playPowerUp();
+  save();
+}
+
+function burstSparkle(target){
+  var stage = document.getElementById('stage');
+  var fx = document.getElementById('fx-layer');
+  if(!stage || !fx) return;
+  var rect = target.getBoundingClientRect();
+  var stageRect = stage.getBoundingClientRect();
+  var cx = rect.left - stageRect.left + rect.width/2;
+  var cy = rect.top - stageRect.top + rect.height/2;
+  for(var i=0;i<10;i++){
+    (function(idx){
+      var s = document.createElement('div');
+      s.className = 'sparkle';
+      s.style.left = cx + 'px';
+      s.style.top = cy + 'px';
+      var ang = (idx / 10) * Math.PI * 2;
+      var dx = Math.cos(ang) * 60;
+      var dy = Math.sin(ang) * 60;
+      s.style.setProperty('--dx', dx + 'px');
+      s.style.setProperty('--dy', dy + 'px');
+      s.textContent = '✨';
+      fx.appendChild(s);
+      setTimeout(function(){ if(s.parentNode) s.parentNode.removeChild(s); }, 700);
+    })(i);
   }
 }
 
@@ -1493,9 +1851,11 @@ function showSummary(){
 
 // ---- MENU ----
 function showMenu(){
+  var stickerCount = Object.keys(state.stickers || {}).length;
   var html = '<h2>★ MENU ★</h2>';
   html += '<div class="menu-row column">';
   html += '<button class="btn-secondary" id="menu-resume">▶ RESUME</button>';
+  html += '<button class="btn-secondary" id="menu-stickers">🏆 STICKERS ('+stickerCount+')</button>';
   html += '<button class="btn-secondary" id="menu-restart">🔄 RESTART LEVEL</button>';
   html += '<button class="btn-secondary" id="menu-costumes">👕 COSTUMES</button>';
   html += '<button class="btn-secondary" id="menu-words">📖 WORD LIST</button>';
@@ -1506,12 +1866,15 @@ function showMenu(){
   document.getElementById('menu-overlay').classList.add('show');
 
   document.getElementById('menu-resume').onclick = closeMenu;
+  document.getElementById('menu-stickers').onclick = showStickers;
   document.getElementById('menu-restart').onclick = function(){
     if(confirm('Restart this level? (current progress on this world resets)')){
       state.worldProgress = 0;
       state.combo = 0;
+      state.powerLevel = 'small';
       var m = document.getElementById('mario');
-      m.classList.remove('big','fire-power','invinc');
+      m.classList.remove('big','big-power','fire-power','invinc','star-power');
+      setMarioFrame(0);
       updateProgressBar();
       save();
       closeMenu();
@@ -1529,7 +1892,7 @@ function showMenu(){
     showMenu();
   };
   document.getElementById('menu-reset').onclick = function(){
-    if(confirm('Reset ALL progress? (coins, streak, words)')){
+    if(confirm('Reset ALL progress? (coins, streak, words, stickers)')){
       try { localStorage.removeItem(SAVE_KEY); } catch(e){}
       location.reload();
     }
@@ -1543,6 +1906,65 @@ function closeMenu(){
     state.phase = 'idle';
     if(!word) setTimeout(spawn, 200);
   }
+}
+
+// ---- STICKER BOOK ----
+// Shows all words the kid has mastered, as colorful badges.
+// Each sticker uses a deterministic background color/emoji based on the word.
+function stickerBadge(w, earnedAt){
+  // Deterministic hue from word
+  var h = 0;
+  for(var i=0;i<w.length;i++) h = (h * 31 + w.charCodeAt(i)) % 360;
+  var emojis = ['⭐','🍄','🌟','💎','🪙','🌸','🦋','🌈','🍓','🐢','🐱','🚀','🎈','🎉','🏆','✨'];
+  var emoji = emojis[Math.abs(h) % emojis.length];
+  var bg = 'hsl(' + h + ',75%,55%)';
+  return '<div class="sticker" style="background:'+bg+'">' +
+    '<div class="sticker-emoji">'+emoji+'</div>' +
+    '<div class="sticker-word">'+w+'</div>' +
+    '</div>';
+}
+
+function showStickers(){
+  var earned = Object.keys(state.stickers || {}).sort();
+  var allWords = getWordList();
+  var total = allWords.length;
+  var got = earned.length;
+
+  var html = '<h2>🏆 STICKER BOOK</h2>';
+  html += '<div class="sticker-progress">' + got + ' / ' + total + ' words mastered</div>';
+  if(got === 0){
+    html += '<div class="sticker-empty">Say words right and earn stickers! 🎤</div>';
+  } else {
+    html += '<div class="sticker-grid">';
+    earned.forEach(function(w){
+      html += stickerBadge(w, state.stickers[w]);
+    });
+    html += '</div>';
+  }
+  // Stats footer
+  if(state.enemyKills){
+    var ek = state.enemyKills;
+    html += '<div class="sticker-stats">' +
+      '👾 ' + (ek.goomba||0) + ' &nbsp; ' +
+      '🐢 ' + (ek.koopa||0) + ' &nbsp; ' +
+      '🌱 ' + (ek.piranha||0) +
+      '</div>';
+  }
+  html += '<button class="menu-back" id="back-btn">← BACK</button>';
+  document.getElementById('menu-content').innerHTML = html;
+  document.getElementById('back-btn').onclick = showMenu;
+}
+
+// Shown briefly on a new sticker earn during gameplay
+function showStickerEarned(w){
+  var fx = document.getElementById('fx-layer');
+  if(!fx) return;
+  var pop = document.createElement('div');
+  pop.className = 'sticker-earned';
+  pop.innerHTML = '<div class="se-line1">🏆 NEW STICKER!</div>' +
+                  '<div class="se-line2">' + w + '</div>';
+  fx.appendChild(pop);
+  setTimeout(function(){ if(pop.parentNode) pop.parentNode.removeChild(pop); }, 1700);
 }
 
 function showCostumes(){
