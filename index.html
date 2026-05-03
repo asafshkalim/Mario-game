@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -14,153 +15,208 @@
 html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Andika',system-ui,sans-serif;color:#fff;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
 body{height:100dvh}
 img,svg{image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-rendering:crisp-edges;display:block}
+img.sprite-img{width:100%;height:100%;-webkit-user-drag:none;user-select:none;pointer-events:none}
+button{font-family:inherit}
 
-#rotate-prompt{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:9999;color:#fff;text-align:center;padding:20px;font-family:'Press Start 2P',monospace;font-size:14px;line-height:1.6}
+#rotate-prompt{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:9999;color:#fff;text-align:center;padding:20px;font-family:‘Press Start 2P’,monospace;font-size:13px;line-height:1.6}
 @media (orientation:portrait){
-  #rotate-prompt{display:flex}
-  #app{display:none !important}
+#rotate-prompt{display:flex}
+#app{display:none !important}
+#start-listen-tap{display:none !important}
 }
-#rotate-icon{font-size:80px;margin-bottom:20px;animation:rotateBounce 1s ease-in-out infinite alternate}
+#rotate-icon{font-size:64px;margin-bottom:18px;animation:rotateBounce 1s ease-in-out infinite alternate}
 @keyframes rotateBounce{from{transform:rotate(0deg)}to{transform:rotate(90deg)}}
 
 #app{position:fixed;inset:0;display:flex;flex-direction:column;background:#5c94fc}
 
-#title{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(180deg,#5c94fc 0%,#5c94fc 75%,#00a800 75%,#00a800 100%);z-index:10}
+/* –– TITLE SCREEN –– */
+#title{position:absolute;inset:0;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:20px;background:linear-gradient(180deg,#5c94fc 0%,#5c94fc 78%,#00a800 78%,#00a800 100%);z-index:30;padding:0 6vw}
 #title.hide{display:none}
-.title-mario{width:130px;height:auto;margin-bottom:14px;animation:bounce 0.5s ease-in-out infinite alternate;filter:drop-shadow(4px 4px 0 #000)}
-@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-12px)}}
-.title-card{background:#000;border:4px solid #fbd000;border-radius:8px;padding:18px 36px;text-align:center;box-shadow:6px 6px 0 #d82800,12px 12px 0 #fbd000}
-.title-card h1{font-family:'Press Start 2P',monospace;font-size:24px;color:#fbd000;text-shadow:3px 3px 0 #d82800;margin-bottom:6px;letter-spacing:2px}
-.title-card p{font-family:'Andika',sans-serif;font-weight:700;font-size:18px;color:#fff;margin-top:8px}
-.title-buttons{display:flex;gap:14px;margin-top:18px;align-items:center;justify-content:center}
-.btn-primary{background:#fbd000;color:#000;border:3px solid #000;border-radius:6px;padding:10px 22px;font-family:'Press Start 2P',monospace;font-size:14px;cursor:pointer;box-shadow:3px 3px 0 #000;font-weight:bold;transition:transform 0.1s}
+.title-mario{width:80px;height:80px;animation:bounce .55s ease-in-out infinite alternate;filter:drop-shadow(3px 3px 0 #000);flex:0 0 auto}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-10px)}}
+.title-card-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;flex:0 1 auto}
+.title-card{background:#000;border:3px solid #fbd000;border-radius:6px;padding:10px 22px;text-align:center;box-shadow:4px 4px 0 #d82800,8px 8px 0 #fbd000}
+.title-card h1{font-family:‘Press Start 2P’,monospace;font-size:18px;color:#fbd000;text-shadow:2px 2px 0 #d82800;letter-spacing:2px;line-height:1.3}
+.title-card p{font-family:‘Andika’,sans-serif;font-weight:700;font-size:14px;color:#fff;margin-top:6px}
+.title-buttons{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:#fbd000;color:#000;border:2px solid #000;border-radius:5px;padding:8px 16px;font-family:‘Press Start 2P’,monospace;font-size:11px;cursor:pointer;box-shadow:3px 3px 0 #000;font-weight:bold}
 .btn-primary:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
-.btn-secondary{background:#aaa;color:#000;border:3px solid #000;border-radius:6px;padding:8px 16px;font-family:'Press Start 2P',monospace;font-size:11px;cursor:pointer;box-shadow:3px 3px 0 #000}
-.btn-secondary:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
+.btn-secondary{background:#aaa;color:#000;border:2px solid #000;border-radius:5px;padding:7px 12px;font-family:‘Press Start 2P’,monospace;font-size:9px;cursor:pointer;box-shadow:2px 2px 0 #000}
+.btn-secondary:active{transform:translate(2px,2px);box-shadow:0 0 0 #000}
 
-#hud{position:absolute;top:0;left:0;right:0;height:40px;background:rgba(0,0,0,0.65);color:#fff;font-family:'Press Start 2P',monospace;font-size:11px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;z-index:5;border-bottom:2px solid #fbd000}
-#coins-hud{display:flex;align-items:center;gap:6px}
-#coins-icon{width:18px;height:18px}
-#world-label{color:#fbd000}
-#menu-btn{background:#fbd000;color:#000;border:2px solid #000;padding:4px 10px;font-family:'Press Start 2P',monospace;font-size:10px;border-radius:3px;cursor:pointer}
+/* –– HUD –– */
+#hud{position:absolute;top:0;left:0;right:0;height:32px;background:rgba(0,0,0,.72);color:#fff;font-family:‘Press Start 2P’,monospace;font-size:9px;display:flex;align-items:center;justify-content:space-between;padding:0 8px;z-index:5;border-bottom:2px solid #fbd000;gap:8px}
+#coins-hud{display:flex;align-items:center;gap:5px;flex:0 0 auto}
+#coins-icon{width:14px;height:14px}
+#world-label{color:#fbd000;flex:1 1 auto;text-align:center;font-size:9px;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#progress-bar{display:flex;align-items:center;gap:3px;flex:0 0 auto;font-size:8px;color:#fff}
+#progress-bar .pip{width:8px;height:8px;background:#444;border:1px solid #000;border-radius:1px}
+#progress-bar .pip.fill{background:#fbd000;box-shadow:0 0 4px #fbd000}
+#menu-btn{background:#fbd000;color:#000;border:2px solid #000;padding:3px 7px;font-family:‘Press Start 2P’,monospace;font-size:9px;border-radius:3px;cursor:pointer;flex:0 0 auto}
+#music-toggle{background:rgba(0,0,0,.7);color:#fff;border:2px solid #fbd000;padding:3px 6px;font-family:‘Press Start 2P’,monospace;font-size:8px;border-radius:3px;cursor:pointer;flex:0 0 auto}
 
-#stage{position:absolute;top:40px;left:0;right:0;bottom:0;overflow:hidden;background:#5c94fc}
+/* –– STAGE –– */
+#stage{position:absolute;top:32px;left:0;right:0;bottom:0;overflow:hidden;background:#5c94fc}
 #stage.world-w0{background:linear-gradient(180deg,#5c94fc 0%,#5c94fc 100%)}
 #stage.world-w1{background:linear-gradient(180deg,#fcae66 0%,#fbd000 100%)}
 #stage.world-w2{background:linear-gradient(180deg,#0078a8 0%,#003478 100%)}
 #stage.world-w3{background:linear-gradient(180deg,#202020 0%,#480000 100%)}
 
+#shake{position:absolute;inset:0}
+#shake.shake{animation:shake .35s}
+@keyframes shake{0%,100%{transform:translate(0,0)}25%{transform:translate(-3px,2px)}50%{transform:translate(3px,-2px)}75%{transform:translate(-2px,2px)}}
+
 #clouds-layer,#hills-layer,#bushes-layer,#ground-layer,#entities-layer,#fx-layer{position:absolute;left:0;right:0}
-#clouds-layer{top:10px;height:80px;pointer-events:none}
-#hills-layer{bottom:60px;height:80px;pointer-events:none}
-#bushes-layer{bottom:60px;height:40px;pointer-events:none}
-#ground-layer{bottom:0;height:60px;background-repeat:repeat-x}
-#entities-layer{top:0;bottom:60px;pointer-events:none}
+#clouds-layer{top:6px;height:48px;pointer-events:none}
+#hills-layer{bottom:38px;height:54px;pointer-events:none}
+#bushes-layer{bottom:38px;height:24px;pointer-events:none}
+#ground-layer{bottom:0;height:40px;background-repeat:repeat-x;background-size:40px 40px}
+#entities-layer{top:0;bottom:38px;pointer-events:none}
 #fx-layer{top:0;bottom:0;pointer-events:none;z-index:8}
 
-.cloud-sprite{position:absolute;width:96px;height:auto}
-.hill-sprite{position:absolute;width:144px;height:auto}
-.bush-sprite{position:absolute;width:96px;height:auto}
+.cloud-sprite{position:absolute;width:64px;height:auto;opacity:.95}
+.hill-sprite{position:absolute;width:96px;height:auto}
+.bush-sprite{position:absolute;width:64px;height:auto}
 
-#mario{position:absolute;left:18%;bottom:60px;width:96px;height:auto;z-index:6;transition:transform 0.15s}
-#mario.big{transform:scale(1.4);transform-origin:bottom center}
-#mario.invinc{filter:drop-shadow(0 0 8px #fbd000)}
-#mario.fire-power{filter:drop-shadow(0 0 6px rgba(255,255,255,0.9))}
+/* Mario sized to fit small landscape — 56px tall sprite (16x16 grid x 3.5px each) */
+#mario{position:absolute;left:14%;bottom:38px;width:56px;height:56px;z-index:6;transition:transform .15s}
+#mario.big{transform:scale(1.45);transform-origin:bottom center}
+#mario.invinc{filter:drop-shadow(0 0 6px #fbd000)}
+#mario.fire-power{filter:drop-shadow(0 0 5px rgba(255,255,255,.9))}
 
-#qblock{position:absolute;left:24%;top:24%;width:64px;height:64px;z-index:5;animation:qbounce 1.2s ease-in-out infinite}
-@keyframes qbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-#qblock.bumped{animation:qbump 0.4s ease-out}
-@keyframes qbump{0%{transform:translateY(0)}40%{transform:translateY(-30px)}100%{transform:translateY(0)}}
+#qblock{position:absolute;left:24%;top:18%;width:42px;height:42px;z-index:5;animation:qbounce 1.4s ease-in-out infinite}
+@keyframes qbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+#qblock.bumped{animation:qbump .4s ease-out}
+@keyframes qbump{0%{transform:translateY(0)}40%{transform:translateY(-22px)}100%{transform:translateY(0)}}
 
-#poster{position:absolute;left:36%;top:18%;background:#fff;border:5px solid #000;border-radius:8px;padding:14px 28px;box-shadow:5px 5px 0 #000;z-index:5;display:flex;align-items:center;justify-content:center;min-width:140px;min-height:60px}
+/* Poster — centered horizontally over scene; sized to fit */
+#poster{position:absolute;left:50%;top:14%;transform:translateX(-50%);background:#fff;border:3px solid #000;border-radius:6px;padding:8px 18px;box-shadow:4px 4px 0 #000;z-index:5;display:flex;align-items:center;justify-content:center;min-width:110px;min-height:48px;max-width:55%}
 #poster.flash-context{background:#fffbe0}
-#poster .word{font-family:'Andika',sans-serif;font-weight:700;color:#000;font-size:48px;line-height:1;letter-spacing:1px}
-#poster .sentence{font-family:'Andika',sans-serif;font-weight:400;color:#000;font-size:22px;line-height:1.2;text-align:center}
+#poster .word{font-family:‘Andika’,sans-serif;font-weight:700;color:#000;font-size:34px;line-height:1;letter-spacing:1px}
+#poster .sentence{font-family:‘Andika’,sans-serif;font-weight:700;color:#000;font-size:16px;line-height:1.2;text-align:center}
 
-.goomba{position:absolute;width:64px;height:auto;z-index:6}
-.goomba.walking{animation:goombaWalk 0.5s steps(2) infinite}
+.goomba{position:absolute;width:42px;height:42px;z-index:6}
+.goomba.walking{animation:goombaWalk .5s steps(2) infinite}
 @keyframes goombaWalk{from{transform:scaleX(1)}to{transform:scaleX(-1)}}
 
-#mic-wrap{position:absolute;right:5%;bottom:90px;z-index:7;display:flex;flex-direction:column;align-items:center;gap:8px}
-#mic-btn{width:90px;height:90px;border-radius:50%;border:5px solid #000;background:radial-gradient(circle,#fbd000 0%,#f8b800 70%,#d09000 100%);color:#000;font-size:42px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(251,208,0,0.7),5px 5px 0 #000;animation:micPulse 1.5s ease-in-out infinite;font-family:'Press Start 2P',monospace}
-#mic-btn:active{transform:translate(2px,2px);box-shadow:0 0 30px rgba(251,208,0,0.7),3px 3px 0 #000}
-#mic-btn.listening{background:radial-gradient(circle,#ff4040 0%,#c00000 70%,#700000 100%);animation:micListen 0.6s ease-in-out infinite}
-@keyframes micPulse{0%,100%{box-shadow:0 0 30px rgba(251,208,0,0.7),5px 5px 0 #000}50%{box-shadow:0 0 50px rgba(251,208,0,1),5px 5px 0 #000}}
+#mic-wrap{position:absolute;right:3%;bottom:50px;z-index:7;display:flex;flex-direction:column;align-items:center;gap:4px}
+#mic-btn{width:64px;height:64px;border-radius:50%;border:3px solid #000;background:radial-gradient(circle,#fbd000 0%,#f8b800 70%,#d09000 100%);color:#000;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(251,208,0,.7),3px 3px 0 #000;animation:micPulse 1.5s ease-in-out infinite;font-family:‘Press Start 2P’,monospace}
+#mic-btn:active{transform:translate(2px,2px);box-shadow:0 0 20px rgba(251,208,0,.7),1px 1px 0 #000}
+#mic-btn.listening{background:radial-gradient(circle,#ff4040 0%,#c00000 70%,#700000 100%);animation:micListen .55s ease-in-out infinite}
+@keyframes micPulse{0%,100%{box-shadow:0 0 20px rgba(251,208,0,.7),3px 3px 0 #000}50%{box-shadow:0 0 36px rgba(251,208,0,1),3px 3px 0 #000}}
 @keyframes micListen{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-#mic-label{font-family:'Press Start 2P',monospace;font-size:10px;background:rgba(0,0,0,0.7);padding:4px 8px;border-radius:3px;border:2px solid #fbd000;color:#fff}
-#mic-countdown{font-family:'Press Start 2P',monospace;font-size:14px;color:#fbd000;text-shadow:2px 2px 0 #000;margin-top:4px;display:none}
+#mic-label{font-family:‘Press Start 2P’,monospace;font-size:8px;background:rgba(0,0,0,.7);padding:3px 6px;border-radius:3px;border:1px solid #fbd000;color:#fff;white-space:nowrap}
+#mic-countdown{font-family:‘Press Start 2P’,monospace;font-size:11px;color:#fbd000;text-shadow:1px 1px 0 #000;display:none}
 #mic-countdown.show{display:block}
 
 #flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:9}
-#flash.flash{animation:flashOnce 0.3s}
-@keyframes flashOnce{0%{opacity:0}50%{opacity:0.8}100%{opacity:0}}
-#shake.shake{animation:shake 0.4s}
-@keyframes shake{0%,100%{transform:translate(0,0)}20%{transform:translate(-4px,2px)}40%{transform:translate(4px,-2px)}60%{transform:translate(-3px,3px)}80%{transform:translate(3px,-3px)}}
+#flash.flash{animation:flashOnce .3s}
+@keyframes flashOnce{0%{opacity:0}50%{opacity:.8}100%{opacity:0}}
 
-.coin-particle{position:absolute;width:24px;height:24px;z-index:9;animation:coinFly 1.2s ease-out forwards}
-@keyframes coinFly{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-180px) translateX(var(--dx,0)) scale(0.5) rotate(720deg)}}
+.coin-particle{position:absolute;width:18px;height:18px;z-index:9;animation:coinFly 1.2s ease-out forwards}
+@keyframes coinFly{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-140px) translateX(var(–dx,0)) scale(.5) rotate(720deg)}}
+.score-pop{position:absolute;font-family:‘Press Start 2P’,monospace;font-size:16px;color:#fbd000;text-shadow:2px 2px 0 #000;z-index:9;pointer-events:none;animation:scorePop 1.2s ease-out forwards}
+@keyframes scorePop{0%{opacity:0;transform:translateY(0) scale(.5)}30%{opacity:1;transform:translateY(-22px) scale(1.2)}100%{opacity:0;transform:translateY(-80px) scale(1)}}
 
-.score-pop{position:absolute;font-family:'Press Start 2P',monospace;font-size:24px;color:#fbd000;text-shadow:3px 3px 0 #000;z-index:9;pointer-events:none;animation:scorePop 1.2s ease-out forwards}
-@keyframes scorePop{0%{opacity:0;transform:translateY(0) scale(0.5)}30%{opacity:1;transform:translateY(-30px) scale(1.2)}100%{opacity:0;transform:translateY(-100px) scale(1)}}
+#dialog{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);background:rgba(0,0,0,.92);border:3px solid #fbd000;border-radius:8px;padding:12px 22px;font-family:‘Andika’,sans-serif;font-weight:700;font-size:16px;text-align:center;color:#fff;z-index:10;display:none;max-width:80%}
+#dialog.show{display:block;animation:dialogPop .3s}
+@keyframes dialogPop{from{transform:translate(-50%,-50%) scale(.7);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
 
-#dialog{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);background:rgba(0,0,0,0.9);border:4px solid #fbd000;border-radius:10px;padding:18px 30px;font-family:'Andika',sans-serif;font-weight:700;font-size:22px;text-align:center;color:#fff;z-index:10;display:none;max-width:80%}
-#dialog.show{display:block;animation:dialogPop 0.3s}
-@keyframes dialogPop{from{transform:translate(-50%,-50%) scale(0.7);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
-
-#menu-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.85);z-index:50;display:none;align-items:center;justify-content:center;padding:20px}
+/* –– MENU OVERLAY –– */
+#menu-overlay{position:absolute;inset:0;background:rgba(0,0,0,.88);z-index:50;display:none;align-items:center;justify-content:center;padding:14px}
 #menu-overlay.show{display:flex}
-.menu-panel{background:#000;border:4px solid #fbd000;border-radius:10px;padding:20px;max-width:90%;max-height:90%;overflow-y:auto;width:600px}
-.menu-panel h2{font-family:'Press Start 2P',monospace;font-size:18px;color:#fbd000;text-align:center;margin-bottom:14px}
-.menu-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:10px 0}
-.menu-back{background:#aaa;color:#000;border:3px solid #000;padding:8px 14px;font-family:'Press Start 2P',monospace;font-size:11px;cursor:pointer;border-radius:3px;display:block;margin:14px auto 0;box-shadow:3px 3px 0 #000}
+.menu-panel{background:#000;border:3px solid #fbd000;border-radius:8px;padding:14px;max-width:96%;max-height:96%;overflow-y:auto;width:560px}
+.menu-panel h2{font-family:‘Press Start 2P’,monospace;font-size:13px;color:#fbd000;text-align:center;margin-bottom:10px;letter-spacing:1px}
+.menu-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.menu-back{background:#aaa;color:#000;border:2px solid #000;padding:6px 12px;font-family:‘Press Start 2P’,monospace;font-size:10px;cursor:pointer;border-radius:3px;display:block;margin:10px auto 0;box-shadow:2px 2px 0 #000}
+.menu-row.column{flex-direction:column;align-items:stretch;gap:6px;max-width:300px;margin-left:auto;margin-right:auto}
+.menu-row.column .btn-secondary{font-size:10px;padding:8px 10px}
 
-.costume-card{background:#222;border:3px solid #444;border-radius:6px;padding:8px;cursor:pointer;text-align:center;width:120px}
-.costume-card.selected{border-color:#fbd000;background:#3a2c00;box-shadow:0 0 12px rgba(251,208,0,0.6)}
-.costume-card svg{width:80px;height:auto;margin:0 auto}
-.costume-card .name{font-family:'Andika',sans-serif;font-weight:700;font-size:13px;color:#fff;margin-top:4px}
+.costume-card{background:#222;border:2px solid #444;border-radius:5px;padding:6px;cursor:pointer;text-align:center;width:88px}
+.costume-card.selected{border-color:#fbd000;background:#3a2c00;box-shadow:0 0 8px rgba(251,208,0,.6)}
+.costume-card svg{width:54px;height:auto;margin:0 auto}
+.costume-thumb{width:54px;height:54px;margin:0 auto}
+.costume-card .name{font-family:‘Andika’,sans-serif;font-weight:700;font-size:11px;color:#fff;margin-top:3px}
 
-.summary-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;font-family:'Andika',sans-serif;font-weight:700;font-size:16px;color:#fff}
-.summary-stats div{background:#1a1a1a;padding:8px;border-radius:4px;text-align:center;border:2px solid #444}
-.summary-stats .num{display:block;font-size:28px;color:#fbd000;font-family:'Press Start 2P',monospace}
-.word-grid{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0;max-height:120px;overflow-y:auto;padding:4px}
-.word-pill{padding:4px 10px;border-radius:14px;font-family:'Andika',sans-serif;font-weight:700;font-size:14px;border:2px solid #000}
+.summary-stats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin:8px 0;font-family:‘Andika’,sans-serif;font-weight:700;font-size:11px;color:#fff}
+.summary-stats div{background:#1a1a1a;padding:6px;border-radius:4px;text-align:center;border:2px solid #444}
+.summary-stats .num{display:block;font-size:18px;color:#fbd000;font-family:‘Press Start 2P’,monospace;margin-bottom:2px}
+.word-grid{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:8px 0;max-height:80px;overflow-y:auto;padding:3px}
+.word-pill{padding:3px 8px;border-radius:11px;font-family:‘Andika’,sans-serif;font-weight:700;font-size:12px;border:2px solid #000}
 .word-pill.correct{background:#00a800;color:#fff}
 .word-pill.missed{background:#d82800;color:#fff}
 
-#start-listen-tap{position:absolute;inset:0;background:rgba(0,0,0,0.85);z-index:100;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;font-family:'Press Start 2P',monospace;font-size:13px;text-align:center;padding:30px}
-#start-listen-tap.hide{display:none}
-#start-listen-tap p{margin:8px 0;line-height:1.5}
-#start-listen-tap .pulse{font-size:32px;animation:bounce 0.5s ease-in-out infinite alternate;color:#fbd000;text-shadow:3px 3px 0 #d82800;margin-bottom:14px}
+/* Dictionary editor */
+.dict-list{max-height:160px;overflow-y:auto;background:#111;border:2px solid #333;border-radius:5px;padding:6px;margin:6px 0;display:flex;flex-wrap:wrap;gap:5px}
+.dict-pill{background:#222;color:#fff;font-family:‘Andika’,sans-serif;font-weight:700;font-size:12px;padding:3px 8px;border-radius:11px;border:2px solid #555;display:flex;align-items:center;gap:4px}
+.dict-pill button{background:#d82800;color:#fff;border:none;border-radius:50%;width:16px;height:16px;font-size:11px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;line-height:1}
+.dict-add{display:flex;gap:6px;margin:6px 0;justify-content:center;flex-wrap:wrap}
+.dict-add input{font-family:‘Andika’,sans-serif;font-weight:700;font-size:14px;padding:6px 8px;border:2px solid #fbd000;border-radius:4px;background:#fff;color:#000;width:180px}
+.dict-add button{background:#00a800;color:#fff;border:2px solid #000;border-radius:4px;padding:6px 12px;font-family:‘Press Start 2P’,monospace;font-size:9px;cursor:pointer;box-shadow:2px 2px 0 #000}
+.dict-add button:active{transform:translate(2px,2px);box-shadow:0 0 0 #000}
+.dict-info{font-family:‘Andika’,sans-serif;font-size:11px;color:#aaa;text-align:center;margin:4px 0}
 
-#music-toggle{position:absolute;top:8px;right:130px;background:rgba(0,0,0,0.7);color:#fff;border:2px solid #fbd000;padding:4px 8px;font-family:'Press Start 2P',monospace;font-size:10px;border-radius:3px;cursor:pointer;z-index:6}
+/* Level complete */
+#levelup-overlay{position:absolute;inset:0;background:rgba(0,0,0,.88);z-index:60;display:none;align-items:center;justify-content:center;padding:14px;flex-direction:column;color:#fff;text-align:center}
+#levelup-overlay.show{display:flex;animation:fadeIn .4s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.lu-flag{font-size:54px;animation:flagWave 1s ease-in-out infinite}
+@keyframes flagWave{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+.lu-title{font-family:‘Press Start 2P’,monospace;font-size:18px;color:#fbd000;text-shadow:3px 3px 0 #d82800;margin:10px 0 6px;letter-spacing:1px}
+.lu-sub{font-family:‘Andika’,sans-serif;font-weight:700;font-size:16px;color:#fff;margin-bottom:14px}
+.lu-next{font-family:‘Press Start 2P’,monospace;font-size:11px;color:#fbd000;margin-bottom:12px}
+
+#start-listen-tap{position:absolute;inset:0;background:rgba(0,0,0,.92);z-index:100;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;font-family:‘Press Start 2P’,monospace;font-size:12px;text-align:center;padding:20px}
+#start-listen-tap.hide{display:none}
+#start-listen-tap p{margin:6px 0;line-height:1.5}
+#start-listen-tap .pulse{font-size:24px;animation:bounce .55s ease-in-out infinite alternate;color:#fbd000;text-shadow:2px 2px 0 #d82800;margin-bottom:10px}
+
+@media (max-height:380px){
+#title{padding:0 4vw;gap:14px}
+.title-mario{width:64px;height:64px}
+.title-card h1{font-size:15px}
+.title-card p{font-size:12px}
+.btn-primary{font-size:10px;padding:6px 12px}
+.btn-secondary{font-size:8px;padding:6px 10px}
+#poster .word{font-size:28px}
+#poster .sentence{font-size:14px}
+#mario{width:48px;height:48px}
+#qblock{width:36px;height:36px}
+.goomba{width:36px;height:36px}
+#mic-btn{width:54px;height:54px;font-size:24px}
+}
 </style>
+
 </head>
 <body>
 
 <div id="rotate-prompt">
   <div>
     <div id="rotate-icon">📱</div>
-    <p>Please rotate your phone</p>
-    <p style="font-size:10px;margin-top:14px;opacity:.7">This game works in landscape mode</p>
+    <p>Rotate your phone</p>
+    <p style="font-size:9px;margin-top:10px;opacity:.7">Landscape mode required</p>
   </div>
 </div>
 
 <div id="start-listen-tap">
   <div class="pulse">★ TAP TO START ★</div>
-  <p>This unlocks the microphone and music</p>
+  <p>This unlocks the mic and music</p>
 </div>
 
 <div id="app">
 
   <div id="title">
     <div id="title-mario-container"></div>
-    <div class="title-card">
-      <h1>MARIO<br>SIGHT WORDS</h1>
-      <p>Learn to Read!</p>
-    </div>
-    <div class="title-buttons">
-      <button class="btn-primary" id="btn-start">▶ START GAME</button>
-      <button class="btn-secondary" id="btn-settings">⚙ SETTINGS</button>
+    <div class="title-card-wrap">
+      <div class="title-card">
+        <h1>MARIO<br>SIGHT WORDS</h1>
+        <p>Learn to Read!</p>
+      </div>
+      <div class="title-buttons">
+        <button class="btn-primary" id="btn-start">▶ START</button>
+        <button class="btn-secondary" id="btn-costumes">👕 LOOK</button>
+        <button class="btn-secondary" id="btn-words">📖 WORDS</button>
+      </div>
     </div>
   </div>
 
@@ -169,218 +225,380 @@ img,svg{image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-renderi
       <div id="coins-icon"></div>
       <span id="coins-text">000</span>
     </div>
-    <span id="world-label">WORLD 1-1 GRASSLAND</span>
+    <span id="world-label">WORLD 1-1</span>
+    <div id="progress-bar"></div>
+    <button id="music-toggle">♫ ON</button>
     <button id="menu-btn">MENU</button>
   </div>
-  <button id="music-toggle">♫ ON</button>
 
   <div id="stage" class="world-w0">
-    <div id="clouds-layer"></div>
-    <div id="hills-layer"></div>
-    <div id="bushes-layer"></div>
-    <div id="ground-layer"></div>
-    <div id="entities-layer">
-      <div id="qblock"></div>
-      <div id="poster"><div class="word">★</div></div>
-      <div id="mario"></div>
-    </div>
-    <div id="fx-layer"></div>
     <div id="shake">
+      <div id="clouds-layer"></div>
+      <div id="hills-layer"></div>
+      <div id="bushes-layer"></div>
+      <div id="ground-layer"></div>
+      <div id="entities-layer">
+        <div id="qblock"></div>
+        <div id="poster"><div class="word">★</div></div>
+        <div id="mario"></div>
+      </div>
+      <div id="fx-layer"></div>
       <div id="flash"></div>
     </div>
 
-    <div id="mic-wrap">
-      <button id="mic-btn">🎤</button>
-      <span id="mic-label">TAP TO SPEAK</span>
-      <div id="mic-countdown">2.0s</div>
-    </div>
+```
+<div id="mic-wrap">
+  <button id="mic-btn">🎤</button>
+  <span id="mic-label">TAP TO SPEAK</span>
+  <div id="mic-countdown">2.0s</div>
+</div>
 
-    <div id="dialog"></div>
+<div id="dialog"></div>
+```
+
   </div>
 
   <div id="menu-overlay">
     <div class="menu-panel" id="menu-content"></div>
   </div>
 
+  <div id="levelup-overlay"></div>
+
 </div>
 
 <script>
 'use strict';
 
-var SAVE_KEY = 'msw_landscape_v1';
+var SAVE_KEY = 'msw_landscape_v3';
 
-var WORDS = ['a','and','away','big','blue','can','come','down','find','for','funny','go','help','here','i','in','is','it','jump','little','look','make','me','my','not','one','play','red','run','said','see','the','three','to','two','up','we','where','yellow','you'];
+// ---- DEFAULT WORDS: 50+ Pre-K Dolch + colors + family + animals ----
+var DEFAULT_WORDS = [
+  // Pre-K Dolch
+  'a','and','away','big','blue','can','come','down','find','for','funny','go',
+  'help','here','i','in','is','it','jump','little','look','make','me','my',
+  'not','one','play','red','run','said','see','the','three','to','two','up',
+  'we','where','yellow','you',
+  // Colors / numbers / extras for variety
+  'green','black','white','sun','dog','cat','mom','dad','yes','no','hi','bye'
+];
 
 var SENTENCES = {
-  'a':'a cat 🐱','and':'cookies and milk 🍪','away':'fly away 🚀','big':'big tree 🌳',
-  'blue':'blue sky 🟦','can':'I can go!','come':'come here','down':'jump down ⬇️',
+  'a':'a cat 🐱','and':'milk and cookies 🍪','away':'fly away 🚀','big':'a big tree 🌳',
+  'blue':'blue sky 🟦','can':'I can do it!','come':'come here','down':'jump down ⬇️',
   'find':'find the toy 🎮','for':'a gift for you 🎁','funny':'so funny! 😂',
   'go':'go go go! 🏃','help':'I can help','here':'over here 👉','i':'I love you ❤️',
   'in':'in the box 📦','is':'is happy 😊','it':'is it fun?','jump':'jump high! 🦘',
-  'little':'little mouse 🐭','look':'look at me! 👀','make':'make a wish 🌟',
+  'little':'a little mouse 🐭','look':'look at me! 👀','make':'make a wish 🌟',
   'me':'me too','my':'my dog 🐶','not':'not yet','one':'one ball ⚽','play':'play time! 🎲',
-  'red':'red apple 🍎','run':'run fast 💨','said':'mom said yes','see':'I see you',
+  'red':'a red apple 🍎','run':'run fast 💨','said':'mom said yes','see':'I see you',
   'the':'the end','three':'three cats 🐱🐱🐱','to':'go to school','two':'two eyes 👀',
   'up':'jump up ⬆️','we':'we can do it!','where':'where is it?','yellow':'yellow sun ☀️',
-  'you':'I love you ❤️'
+  'you':'I love you ❤️',
+  'green':'green grass 🌿','black':'black cat 🐈‍⬛','white':'white snow ❄️','sun':'the bright sun ☀️',
+  'dog':'a happy dog 🐶','cat':'a cute cat 🐱','mom':'I love mom ❤️','dad':'I love dad ❤️',
+  'yes':'yes please!','no':'no thanks','hi':'hi friend! 👋','bye':'bye-bye! 👋'
 };
 
 var HOMOPHONES = {
-  'a':['ay','uh','eh'],'and':['an','end'],'i':['eye','ai','ay'],'the':['da','duh','tha','de','they','thee'],
+  'a':['ay','uh','eh','ah'],'and':['an','end'],'i':['eye','ai','ay'],
+  'the':['da','duh','tha','de','they','thee','ze'],
   'to':['too','two','tu'],'two':['to','too','tu'],
-  'see':['sea','si'],'one':['won','wun'],'for':['four','fore','fer'],
-  'my':['mai','mi'],'go':['guh','goh'],
-  'here':['hear'],'where':['wear','ware'],'red':['read','wred'],'blue':['blew','bloo'],
-  'you':['u','yo','yu'],'we':['wee','wii'],'me':['mi','mee'],
-  'is':['iz','his'],'in':['en','un'],'jump':['gump','dump'],
-  'run':['rin','ren'],'play':['plei'],'said':['sed'],'help':['hep'],
-  'come':['cum','kum'],'down':['daun'],'up':['uhp'],'big':['beeg'],
-  'little':['lil','litl','litle','liddle'],'look':['luk','lok'],'make':['mek','mak'],
-  'find':['fine','fin'],'away':['uway'],'funny':['funi'],
-  'three':['tree','free','tri'],'yellow':['yelo','yelow','yella'],'not':['no','nawt']
+  'see':['sea','si','c'],'one':['won','wun','wan'],'for':['four','fore','fer','far'],
+  'my':['mai','mi','may'],'go':['guh','goh','goe'],
+  'here':['hear','heer'],'where':['wear','ware','were'],'red':['read','wred','wed','rad'],
+  'blue':['blew','bloo','bloof'],
+  'you':['u','yo','yu','ya','ew'],'we':['wee','wii','vee'],'me':['mi','mee','may'],
+  'is':['iz','his','this'],'in':['en','un','een'],'jump':['gump','dump','jum'],
+  'run':['rin','ren','wrun'],'play':['plei','plae'],'said':['sed','set'],'help':['hep','elp'],
+  'come':['cum','kum','kom'],'down':['daun','don'],'up':['uhp','op'],'big':['beeg','beg'],
+  'little':['lil','litl','litle','liddle','lital'],'look':['luk','lok','loo'],
+  'make':['mek','mak','meek'],
+  'find':['fine','fin','find','fynde'],'away':['uway','aweh','away'],'funny':['funi','funee'],
+  'three':['tree','free','tri','thee'],'yellow':['yelo','yelow','yella','yel'],'not':['no','nawt','nat'],
+  'green':['grin','gren'],'black':['blak','blec'],'white':['wite','wyte'],
+  'sun':['son','sin'],'dog':['dawg','dug'],'cat':['kat','cot','cat'],
+  'mom':['mum','maam'],'dad':['daad'],'yes':['yas','jes'],'no':['noh','naw'],
+  'hi':['high','hai','hye'],'bye':['by','buy','bie']
 };
 
+// ---- OFFICIAL SMB3 NES SPRITES (ripped from Nintendo, 16x16 native PNGs) ----
+var SPRITES = {
+  'mario_idle': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAvklEQVR42qWTvQ0DIQxGHyeKKxmFMmMwRsZjjJSMQpnOKXJcTM4QpCAhmR9/2H4G/hzutETUrhPztohTdwDwV0knz5v92t6ElVAfwcS5E3p8+aoUpM1astSST1uf6XS9Dr2WDECIiRATbQ10dnin4gC2X+HWkgkxLVI4itS9ZjmLuEbhitEQ6cQaAVNAUTgqTbc2+mAb8TeFjAbzK+3aRKzhdWF2hRKAo4AzEsMI9nv6pLGMcfIXRkUcYlz9jS88fmnA4gefQQAAAABJRU5ErkJggg==',
+  'mario_walk1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA00lEQVR42oVTMRLEIAjcda5I6VNS5hl53j3DZ6T0KZbpuOJCDkRzzjiCwAoLEiIIi4yXIhz44TUKPreIuVhQA0aXwSQ4gB0XCAlA5LcB0d1qkVbLLVub8TclkNJqAQDkdUded6gOwMmZFC0j/Uu31YK87lN74CC8NgpWEskxQA/iwGw7b4Ar0HZgOb6n3qneZ5CUvP7FPlD1c/OZOhLPdwkZqGz1VssNkiBCS9TQ2ciuFNeF0fx3y5V1TWKyI/w0xjNbmjqKUNkO3Rl+pslve7SR+ABhCI8SlbGz/gAAAABJRU5ErkJggg==',
+  'mario_walk2': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAxklEQVR42oVTORKEIBDstgwMfYqhz/CpPMOQpxCazQYLCHPsThWFwhzdMw0BACIwRtpDESofrFHgc9qcGyk6CScEpHiBU5J7QEJ2aO8CpOQkbW/fZtWiywTd4b0fFwCg5ISSEzq96ru24HbZTP9HtkYVvUT7caHkhAcAqt/bxKD72x2UFuE8xu+BeL4axTjKxR1TYJqe1UGkQEWta4G0CIxcA1WGU/jVj07PFBmVOCjyOR31zT4BglplU2/j/2PyTFMZE5D4ACOAhk3LCkI9AAAAAElFTkSuQmCC',
+  'mario_jump': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAzElEQVR42o1Tuw3EIAx9jlJQZpSUjJExbjzGSMkolHS+InwcbI6zZAls+fueCcxQQqSNzKR8zLRbwdnrnK4Ephia7SDi7Z9gAMj+0eO8VGtdAa6aYuAUQ3tLX/blzYxNVk8xtBbHStUnRwCADQtJMRhti6lfKFiLmgUXVEjBaCR5ofG54G4rwYCAu5+tj38Z3BMIcqySWGM0yCpc2XeoJISWf4pCrSaXeJwXNNEKgRo5FiqrP0QSy5vR+JfsVtvTSxRH9YZRGodzXXXwBbUBsMwFm6NDAAAAAElFTkSuQmCC',
+  'mario_celebrate': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA0UlEQVR42o1TsRHDIAz891GkZJSUjOHxMgZjpGQUSjqlCMhYKI515zsOJP+/pCcAQASnIM1FDxGaPIQliZSW3HI8SLE/2e4WA0BLKzuqhP5QSwYAxOf+86xyyM6AlJFwJ2rJCrgtDwZx3A9kCxQGnWhYKFUn4nNXCTyN0fTBLZzHSep8AUBqyVJLFgDu11I/iyhouBzZvANvoL0yKoA47UNwKY6CdJyv46CkdGcpi6xJgttE/Aek74XvaOSqH1YOFzcaPyz6ZzMte+DZ2VrY2PkDxaOOjJcxLuoAAAAASUVORK5CYII=',
+  'luigi_idle': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAxklEQVR42qVTMQ7DIAw8IrYufIKdp7B16BP6rqjKxlPY+wl+4A6JI7s4CVIsIdmAD/vOADfN7R6R2HVk3iZy4g4AwPeQjl7fp5k/M7AA0hWcJCuguOhc0QLxarVQq2X35Zls18vSWy0AgJAyQsrgGIDyw9qKA4DpqtxWC0LKgypsJKnXrGQixyr0MhogCowVMGUUKoS4vszxHBc9B5tNR/qrRI6NAfMj48ogQyRaBColTjkQ9n588M/H2Gc6GOeOxCsZR3/jD5zIcOhLwg7iAAAAAElFTkSuQmCC',
+  'luigi_walk1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA3klEQVR42oVTuQ2EMBCcsa4AN0FOKWToRF1XAgGZS3FOE04u3gtgYf1xlizt45l9TYigOmRtFGHjHV4t8LLPlXm1pIaMWQYdcEU2bAcJCUDkvoDoTTFIiuGSrc+8NyWQkmIAAPhxgh8nqA4gkz0pWob7l26KAX6cuv6qB1W0FlibSLYJSpKMzI7zGuMJtBPwwxFZbeuw3UEMidPmlRFLoOrLPmeZZk38fN/5rI1s9RSDITnnb+de7kMpG5tpYmv/i5OVdW6isyv8tMY9n+s+FKF224Kv6NUidX7bo4/EDwMPqhu3/EEOAAAAAElFTkSuQmCC',
+  'luigi_walk2': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAy0lEQVR42oVTuRGEMAzcZSiAJsgphYyA+hyQUQo5TZBcrAvAxtZzpxkP2NazK60JABCBMdIeilD5oI8C13MxV4kUnYQNAlK8wCbJuL1IyALtXYBcxy75m//Neop2DXSH9zDNAIDr2HEdOwq9x7fPwfkym95H1kcVvUTDNN/7D5CwqSYG3U/j5pcWYTvG+0A8X42iHmXnjikwTc/qIFKgola0QFoERq6BKsMp/OpHoWeK1EqsFLmei1Vf6xMgeKok9Tb+PybPNJU6AYkvTJiPBpIZLGoAAAAASUVORK5CYII=',
+  'luigi_jump': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA3ElEQVR42o1TuQ3DMAwkA3VpvIT6jOLOCDxC5skIQuBOo6j3EmpSX4pYMqknCgECEok7/kwAVcJcGwGufACbFnjdl8rsDmAMPtsmZph/wEREyT7ZWZEQAacSIWkMHjH4/Ja+dV++b4AuMnoMPrNPt1llkHw6OgmCjsTgKzJVtZpCq1E98DEVrsbYIJHyuL7I2a1BUEzA2Y1afwk+CcRyjEjKMkzqfq7Zzgr0fN9zH1JDk98xozuFFE02UYL1IsnlGOi6L8Uiieb11viXmFba3UsUR6XHKI3FuY4y+ACOjKtya0AT1gAAAABJRU5ErkJggg==',
+  'luigi_celebrate': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA3UlEQVR42o1Tuw2EMAx9D2WALEHPKHQIMRcjUNBllPQskeZqX3HEF5wcx5MiRbEdv+cPAQAiuIA0DydEaPzgKidSlmNqxm+k2E+6p8EAsBxTxY4q4TSkGAAAfhh/3lUOeTIgJTs8QYpBE3aVwWTM7zmzTeQyHW9YKNUG/DCqBF7aaOrQDCzbSWp/AUBSDJJiEADNsxzT5y6iSd1ty8oZ6HesrxlrnOGLeegsxUxz6/dL8D2+lJRuKaWSVUhoFvEviiK6ytD4pKyHlcNqG80+VPrLZarmoLXOdoXNOr8BtIaUsv7g3i0AAAAASUVORK5CYII=',
+  'qblock': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAl0lEQVR42mNkYGD4z0ABYGFgYGD4v2sVWZoZ3cIgBsA4/9f5EKcxaAtcLdwAuGaeONw6vyxCVcvAwMCEogCfZhzyTPj8B8PozscIRGQnIisgJkxY0AXwhQW6a7AagMs7uFzFgi/EifEOC74Q/78rDiX6sAEmYhMO0YGIywsEXYBN8f91PnCMy0VMpMQ5NrWMlGTns1pajADEhDfzjuvFtgAAAABJRU5ErkJggg==',
+  'goomba': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAs0lEQVR42pVTMRLEIAiEaJkX+CCrVCks8wQfkydcaWGVygflBddmuCJjJnrEIJXAsCywojIeJHbsK919ZTwCAGhpIcWpiON8xgdpV5w34N5NgEyTUvjL5Zh+Y5CpUwqA1hXFFCcegJsbrbt8tO6Zwb2rxLA+Yy9A+4zjcs0tZlCwGBeA76cfgFNeN0BxDUYHaB0o43F46/C0UEoBjn0lLZEwxXOhNYOmDmrtU+zQQetf1PYDptlrRRZFD08AAAAASUVORK5CYII=',
+  'coin': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAmElEQVR42s2SIRaAIBBEWR7Rk2z1DiSTgejhiAaTyTtQPYl9TSgsiwYKG+cxs8u8DwFRtYxWjdMcYCRxPE+S9IAIXIPYATfRsb6PrKuGQUB8zKlJXb4wwbwXISbbmJqGJbuAtknRNhVBpvbf2hW8Ky1u/5l4SR8cdEBiQASwjniREjych4wDsO4F6fJZ0zWQvlFOAiRjRPkGlD9H+6Yog0NAVE++AAAAAElFTkSuQmCC',
+};
+
+function spriteImg(key, extraStyle){
+  var src = SPRITES[key];
+  if(!src){ console.error('Missing sprite:', key); return ''; }
+  return '<img src="'+src+'" alt="" class="sprite-img" draggable="false"'+(extraStyle?' style="'+extraStyle+'"':'')+'>';
+}
+
+// ---- PALETTE (NES SMB3 NTSC reference, kept for scenery sprites) ----
 var PALETTE = {
-  '.':null,'R':'#D82800','r':'#A01000','B':'#0058F8','b':'#0030A0',
-  'S':'#FCBCB0','s':'#E89070','H':'#702800','h':'#502000',
-  'K':'#000000','W':'#FFFFFF','Y':'#FBD000','O':'#F8B800','L':'#3CBCFC',
+  '.':null,
+  'R':'#D82800','r':'#A01000',  // red (cap, shirt)
+  'B':'#0058F8','b':'#0030A0',  // blue (overalls)
+  'S':'#FCBCB0','s':'#E89070',  // skin
+  'H':'#702800','h':'#502000',  // brown (hair, boots)
+  'K':'#000000','W':'#FFFFFF',
+  'Y':'#FBD000','O':'#F8B800','L':'#3CBCFC',
   'G':'#00A800','g':'#187828','d':'#005800',
-  'T':'#F8D878','t':'#E0A858','N':'#A04000','n':'#683000','P':'#FC7460'
+  'T':'#F8D878','t':'#E0A858','N':'#A04000','n':'#683000',
+  'P':'#FC7460'
 };
 
+// ---- MARIO SPRITES ----
+// Small Mario, 16x16 grid. Modeled on SMB3 NES small Mario.
+// Layout reference (col 0..15):
+//   - Cap fills cols 4-11 on top, brim widens to 3-12 on row 2-3
+//   - Face skin in cols 5-11 (rows 3-7), with hair forming "C" around it
+//   - Eyes: single black pixels at cols 6 and 10 (symmetric on either side of nose)
+//   - Mustache: brown horizontal bar across cols 5-10 on rows 7-8
+//   - Body: red shoulders/arms cols 2-13, blue overalls panel cols 5-10, yellow buttons col 5 & 10
+//   - Boots: brown trapezoids cols 3-6 and 9-12
+
+// IDLE — facing right, both arms down
 var SPR_MARIO_IDLE = [
-    '....RRRRRRRR....','...RRRRRRRRRR...','...HHHRRRRRR....','..HHSSSSSSSSS...',
-    '..HSSSKKSSKKSS..','..HSSSKKSSKKSS..','..HSSSSSSSSSSS..','...SSHHHHHHSS...',
-    '...HHHHHHHHHH...','....HHHHHHHH....','......SSSS......','....RRRRRRRR....',
-    '...RRRRRRRRRR...','..RRRRRRRRRRRR..','..WRRYRRRRYRRW..','..WWBBBBBBBBWW..',
-    '..WWBBBBBBBBWW..','...BBBBBBBBBB...','...BBBBBBBBBB...','...BBBBBBBBBB...',
-    '....BBBBBBBB....','....BBBB.BBB....','....BBBB.BBB....','...HHHHH.HHHH...',
-    '..HHHHHHHHHHHH..','..HHHHH.HHHHHH..','..HHHH...HHHHH..'
+  '....RRRRRRRR....',  // 0  cap top
+  '...RRRRRRRRRR...',  // 1  cap
+  '..HHRRRRRRRRRR..',  // 2  hair edge + cap brim widens
+  '..HHHSSSSSSSSS..',  // 3  hair (left), face skin
+  '..HHSSSSSSSSSSH.',  // 4  hair wraps, face
+  '..SSSKSSSSKSSSH.',  // 5  EYES at col 5 and col 10 (face-skin around them, hair tail on right)
+  '..HSSSSSSSSSSSH.',  // 6  face
+  '..HSSHHHHHHHSSH.',  // 7  mustache row 1 (cols 5-11)
+  '...SHHHHHHHHHS..',  // 8  mustache row 2 + chin
+  '....RRRRRRRR....',  // 9  shirt collar
+  '...RRRRRRRRRR...',  // 10 shoulders
+  '..RRYBBBBBBYRR..',  // 11 arms (R) + overalls bib (B) + yellow buttons (Y)
+  '..SSBBBBBBBBSS..',  // 12 hands (S) on sides, overalls
+  '...BBBBBBBBBB...',  // 13 overalls
+  '...HHHH..HHHH...',  // 14 boot tops
+  '..HHHHH..HHHHH..'   // 15 boot bases
 ];
+
+// WALK1 — left leg forward
 var SPR_MARIO_WALK1 = [
-    '....RRRRRRRR....','...RRRRRRRRRR...','...HHHRRRRRR....','..HHSSSSSSSSS...',
-    '..HSSSKKSSKKSS..','..HSSSKKSSKKSS..','..HSSSSSSSSSSS..','...SSHHHHHHSS...',
-    '...HHHHHHHHHH...','....HHHHHHHH....','......SSSS......','....RRRRRRRR....',
-    '...RRRRRRRRRR...','..RRRRRRRRRRRR..','..WRRYRRRRYRRW..','..WBBBBBBBBBBW..',
-    '...BBBBBBBBBB...','...BBBBBBBBBB...','...BBBBBBBBBB...','...BBBBBBBB.....',
-    '....BBBBBBB.....','....BBBBBBB.....','....BBBBBB......','....BBBBBB......',
-    '...HHHHHHH......','..HHHHHHHHH.....','.HHHHHHHHHHH....'
+  '....RRRRRRRR....',
+  '...RRRRRRRRRR...',
+  '..HHRRRRRRRRRR..',
+  '..HHHSSSSSSSSS..',
+  '..HHSSSSSSSSSSH.',
+  '..SSSKSSSSKSSSH.',
+  '..HSSSSSSSSSSSH.',
+  '..HSSHHHHHHHSSH.',
+  '...SHHHHHHHHHS..',
+  '....RRRRRRRR....',
+  '...RRRRRRRRRR...',
+  '..RRYBBBBBBYRR..',
+  '..SSBBBBBBBBSS..',
+  '....BBBBBBBB....',
+  '...HHHH....HH...',
+  '..HHHHH....H....'
 ];
+
+// WALK2 — right leg forward
 var SPR_MARIO_WALK2 = [
-    '....RRRRRRRR....','...RRRRRRRRRR...','...HHHRRRRRR....','..HHSSSSSSSSS...',
-    '..HSSSKKSSKKSS..','..HSSSKKSSKKSS..','..HSSSSSSSSSSS..','...SSHHHHHHSS...',
-    '...HHHHHHHHHH...','....HHHHHHHH....','......SSSS......','....RRRRRRRR....',
-    '...RRRRRRRRRR...','..RRRRRRRRRRRR..','..WRRYRRRRYRRW..','..WBBBBBBBBBBW..',
-    '...BBBBBBBBBB...','...BBBBBBBBBB...','...BBBBBBBBBB...','.....BBBBBBBB...',
-    '.....BBBBBBB....','.....BBBBBBB....','......BBBBBB....','......BBBBBB....',
-    '......HHHHHHH...','.....HHHHHHHHH..','....HHHHHHHHHHH.'
+  '....RRRRRRRR....',
+  '...RRRRRRRRRR...',
+  '..HHRRRRRRRRRR..',
+  '..HHHSSSSSSSSS..',
+  '..HHSSSSSSSSSSH.',
+  '..SSSKSSSSKSSSH.',
+  '..HSSSSSSSSSSSH.',
+  '..HSSHHHHHHHSSH.',
+  '...SHHHHHHHHHS..',
+  '....RRRRRRRR....',
+  '...RRRRRRRRRR...',
+  '..RRYBBBBBBYRR..',
+  '..SSBBBBBBBBSS..',
+  '....BBBBBBBB....',
+  '...HH....HHHH...',
+  '....H....HHHHH..'
 ];
+
+// JUMP — knees up, one arm raised
 var SPR_MARIO_JUMP = [
-    '....RRRRRRRR....','...RRRRRRRRRR...','...HHHRRRRRR....','..HHSSSSSSSSS...',
-    '..HSSSKKSSKKSS..','..HSSSKKSSKKSS..','..HSSSSSSSSSSS..','...SSHHHHHHSS...',
-    '...HHHHHHHHHH...','....HHHHHHHH....','WW....SSSS....WW','WWRRRRRRRRRRRRWW',
-    '..RRRRRRRRRRRR..','..RRRRRRRRRRRR..','..RRRYRRRRYRRR..','..BBBBBBBBBBBB..',
-    '..BBBBBBBBBBBB..','..BBBBBBBBBBBB..','..BBBBBBBBBBBB..','..BBBB....BBBB..',
-    '..BBB......BBB..','..BB........BB..','.HHH........HHH.','.HHHH......HHHH.',
-    'HHHHH......HHHHH','................','................'
+  '....RRRRRRRR....',
+  '...RRRRRRRRRR...',
+  '..HHRRRRRRRRRR..',
+  '..HHHSSSSSSSSS..',
+  '..HHSSSSSSSSSSH.',
+  '..SSSKSSSSKSSSH.',
+  '..HSSSSSSSSSSSH.',
+  '..HSSHHHHHHHSSH.',
+  '...SHHHHHHHHHS..',
+  '....RRRRRRRRSS..',  // right arm raised
+  '...RRRRRRRRRSS..',
+  '..RRYBBBBBBYRR..',
+  '..SSBBBBBBBBR...',
+  '...BBBBBBBBR....',
+  '...HHHHHHHHHH...',
+  '...HHHH..HHHH...'
 ];
 
+// ---- GOOMBA (16x16) ----
 var SPR_GOOMBA = [
-    '.....HHHHHH.....','....HHHHHHHH....','...HHHHHHHHHH...','..HHKHHHHHHKHH..',
-    '..HKWWHHHHWWKH..','..HKWKHHHHKWKH..','..HHHHHHHHHHHH..','..hhhhhhhhhhhh..',
-    '..hhKKhhhhKKhh..','..hhhhhhhhhhhh..','..hhhhhhhhhhhh..','...hhhhhhhhhh...',
-    '....hSShhSShh...','...SSSSSSSSSSS..','..SSSSSSSSSSSSS.','.SSS.SSSSSS.SSS.'
+  '....HHHHHHHH....',
+  '..HHHHHHHHHHHH..',
+  '.HHHHHHHHHHHHHH.',
+  '.HHHHHHHHHHHHHH.',
+  'HHHHHHHHHHHHHHHH',
+  'HHWWHHHHHHHHWWHH',
+  'HWKKWHHHHHHWKKWH',
+  'HWKKWHHHHHHWKKWH',
+  'HHHHHHHHHHHHHHHH',
+  'HHHHKKHHHHKKHHHH',
+  'HhhhhhhhhhhhhhhH',
+  '.HhhhhhhhhhhhhH.',
+  '.HhhHHHHHHHHhhH.',
+  'TT.HHHHHHHHHH.TT',
+  'TT............TT',
+  'TTTT........TTTT'
 ];
 
-var SPR_GOOMBA_SQUISHED = [
-    '................','................','................','..hhhhhhhhhhhh..',
-    '..hKKhhhhhhKKh..','.hhhhhhhhhhhhhh.','.hSSSSSSSSSSSSh.','.SSSSSSSSSSSSSS.'
-];
-
+// ---- ?-BLOCK (16x16) ----
 var SPR_QBLOCK = [
-    'KKKKKKKKKKKKKKKK','KOOOOOOOOOOOOOOK','KOOWOOOOOOOOOOOK','KOOWOOKKKKKOOOOK',
-    'KOOOOKWWWKKOOOOK','KOOOOKWWKOOOOOOK','KOOOOOOWKOOOOOOK','KOOOOOOWKOOOOOOK',
-    'KOOOOOWKOOOOOOOK','KOOOOOKOOOOOOOOK','KOOOOOKKOOOOOOOK','KOOOOOKKOOOOOOOK',
-    'KOONOOOOOOOOOOOK','KONNNOOOOOOOOOOK','KNNNNNNNNNNNNNNK','KKKKKKKKKKKKKKKK'
+  'KKKKKKKKKKKKKKKK',
+  'KOOOOOOOOOOOOOOK',
+  'KOWWWWWWWWWWWWOK',
+  'KOWOKKKKKKKKWOOK',
+  'KOWOKKKKKKKKWOOK',
+  'KOWOOOOKKOOOWOOK',
+  'KOWOOOOKKOOOWOOK',
+  'KOWOOOKKOOOOWOOK',
+  'KOWOOOKKOOOOWOOK',
+  'KOWOOOOOOOOOWOOK',
+  'KOWOOOKKOOOOWOOK',
+  'KOWOOOKKOOOOWOOK',
+  'KOWOOOOOOOOOWOOK',
+  'KOWWWWWWWWWWWWOK',
+  'KOOOOOOOOOOOOOOK',
+  'KKKKKKKKKKKKKKKK'
 ];
 var SPR_QBLOCK_USED = [
-    'KKKKKKKKKKKKKKKK','KNNNNNNNNNNNNNNK','KNnNNNNNNNNNNNNK','KNnNNNNNNNNNNNNK',
-    'KNNNNNNNNNNNNNNK','KNNNNNNNNNNNNNNK','KNNNNNNNNNNNNNNK','KNNNNNNNNNNNNNNK',
-    'KNNNNNNNNNNNNNNK','KNNNNNNNNNNNNNNK','KNNNNNNNNNNNNNNK','KNNNNNNNNNNNNNNK',
-    'KNNNNNNNNNNNNNNK','KNNNNNNNNNNNNNNK','KNNNNNNNNNNNNNNK','KKKKKKKKKKKKKKKK'
+  'KKKKKKKKKKKKKKKK',
+  'KhhhhhhhhhhhhhhK',
+  'KhHHHHHHHHHHHHhK',
+  'KhHnnnnnnnnnnHhK',
+  'KhHnnnnnnnnnnHhK',
+  'KhHnnnnnnnnnnHhK',
+  'KhHnnnnnnnnnnHhK',
+  'KhHnnnnnnnnnnHhK',
+  'KhHnnnnnnnnnnHhK',
+  'KhHnnnnnnnnnnHhK',
+  'KhHnnnnnnnnnnHhK',
+  'KhHnnnnnnnnnnHhK',
+  'KhHnnnnnnnnnnHhK',
+  'KhHHHHHHHHHHHHhK',
+  'Khhhhhhhhhhhhhhh',
+  'KKKKKKKKKKKKKKKK'
 ];
 
+// ---- COIN (16x16) ----
 var SPR_COIN = [
-    '.....KKKKKK.....','...KKYYYYYYKK...','..KYYYOOOOYYYK..','.KYYOOWWWWOOYK..',
-    '.KYOOWYYYYWOOK..','KYOOWYYYYYWOOK.','KYOOWYYYYYWOOK.','KYOOWYYYYYWOOK.',
-    'KYOOWYYYYYWOOK.','KYOOWYYYYYWOOK.','KYOOWYYYYYWOOK.','.KYOOWYYYYWOOK..',
-    '.KYYOOWWWWOOYK..','..KYYYOOOOYYYK..','...KKYYYYYYKK...','.....KKKKKK.....'
+  '......OOOO......',
+  '....OOYYYYOO....',
+  '...OYYOOOOYYO...',
+  '..OYYYO..OYYYO..',
+  '..OYYO....OYYO..',
+  '.OYYYO....OYYYO.',
+  '.OYYYO....OYYYO.',
+  '.OYYYO....OYYYO.',
+  '.OYYYO....OYYYO.',
+  '.OYYYO....OYYYO.',
+  '..OYYO....OYYO..',
+  '..OYYYO..OYYYO..',
+  '...OYYOOOOYYO...',
+  '....OOYYYYOO....',
+  '......OOOO......',
+  '................'
 ];
 
+// ---- CLOUD ----
 var SPR_CLOUD = [
-    '....KKKKK..............','...KWWWWWKK............','..KWWWWWWWKK..KKKKK....',
-    '.KWWWWWWWWWKKWWWWWKK...','.KWWWWWWWWWWWWWWWWWWK..','KWWWWWWWWWWWWWWWWWWWWK.',
-    'KWWWWWWWWWWWWWWWWWWWWK.','.KWWWWWWWWWWWWWWWWWWK..','..KWWWWWWWWWWWWWWWK....',
-    '...KKKKKKKKKKKKKKKK....'
+  '...WWW..........',
+  '..WWWWW.WWW.....',
+  '.WWWWWWWWWWW....',
+  'WWWWWWWWWWWWW...',
+  'WWWWWWWWWWWWWW..',
+  '.WWWWWWWWWWWWW..',
+  '...WWWWWWWWWW...',
+  '......WWWWW.....'
 ];
 
+// ---- HILL ----
 var SPR_HILL = [
-    '..........KKKKK.........','........KKgggggKK.......','.......KggggggggK.......',
-    '......KggGGGGgggK.......','.....KggGGGGGGgggK......','....KggGGGGGGGGgggK.....',
-    '...KggGGGGGGGGGGgggK....','..KggGGGGGGGGGGGGgggK...','.KggGGGGGGGGGGGGGGgggK..',
-    'KggGGGGGGGGGGGGGGGGgggK.','KGGGGGGGGGGGGGGGGGGGGGK.','KKKKKKKKKKKKKKKKKKKKKKKK'
+  '............GG..............',
+  '...........GGGG.............',
+  '..........GGGGGG............',
+  '.........GGGGGGGG...........',
+  '........GGGGGGGGGG..........',
+  '.......GgggGGGGGGGG.........',
+  '......GgggggGGGGGGGG........',
+  '.....GgggggggGGGGGGGG.......',
+  '....GgggggggggGGGGGGGG......',
+  '...GgggggggggggGGGGGGGG.....',
+  '..GdddggggggggggGGGGGGGG....',
+  '.GddddddggggggggggGGGGGGG...'
 ];
 
+// ---- BUSH ----
 var SPR_BUSH = [
-    '...KKKK........KKKK....','..KGGGGK.....KGGGGGK...','.KGGGGGGKKKKKGGGGGGGKK.',
-    'KGGGGGGGGGGGGGGGGGGGGGK','KGGGGGGGGGGGGGGGGGGGGGK','KGGGGGGGGGGGGGGGGGGGGGK',
-    'KGGGGGGGGGGGGGGGGGGGGGK','KKKKKKKKKKKKKKKKKKKKKKK'
+  '......GG......GG......',
+  '....GGGGGG..GGGGGG....',
+  '..GGGGGGGGGGGGGGGGGG..',
+  '.GGggggggggggggggggGG.',
+  'GGgggggggggggggggggggG',
+  'Ggggggggggggggggggggg.'
 ];
 
+// ---- GROUND TILE ----
 var SPR_GROUND = [
-    'GGGGGGGGGGGGGGGG','gggggggggggggggg','TTtTTTTTtTTTTTtT','TtTtTTTTtTtTTTtT',
-    'TTTTTtTTTTTTTtTT','NNNNNNNNNNNNNNNN','NTTTTNNNNNTTTTNN','NTTTTNNNNNTTTTNN',
-    'NTTTTNNNNNTTTTNN','NNNNNNNNNNNNNNNN','NTTTTTNNTTTTTNNN','NTTTTTNNTTTTTNNN',
-    'NTTTTTNNTTTTTNNN','NNNNNNNNNNNNNNNN','nnnnnnnnnnnnnnnn','nnnnnnnnnnnnnnnn'
+  'TTTTTTTTTTTTTTTT',
+  'TTttTTTTttTTTTTT',
+  'TttTTTTttTTTTttT',
+  'TTTTTTTTTTTTTTTT',
+  'NNNNNNNNNNNNNNNN',
+  'NnnNNNnnNNNNNnnN',
+  'NNNNNNNNNNNNNNNN',
+  'NNnNNNNNnnNNNNnN',
+  'TTTTTTTTTTTTTTTT',
+  'TTttTTTTttTTTTTT',
+  'TttTTTTttTTTTttT',
+  'TTTTTTTTTTTTTTTT',
+  'NNNNNNNNNNNNNNNN',
+  'NnnNNNnnNNNNNnnN',
+  'NNNNNNNNNNNNNNNN',
+  'NNnNNNNNnnNNNNnN'
 ];
 
-function renderSprite(grid, palette){
-  palette = palette || PALETTE;
-  var h = grid.length, w = grid[0].length;
-  var rects = '';
-  for(var y=0;y<h;y++){
-    for(var x=0;x<w;x++){
-      var ch = grid[y][x];
-      var c = palette[ch];
-      if(c) rects += '<rect x="'+x+'" y="'+y+'" width="1" height="1" fill="'+c+'"/>';
-    }
-  }
-  return '<svg viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" preserveAspectRatio="xMidYMax meet">'+rects+'</svg>';
-}
-
-function swapPalette(overrides){
-  var p = {};
-  for(var k in PALETTE) p[k] = PALETTE[k];
-  for(var k in overrides) p[k] = overrides[k];
-  return p;
-}
-
+// ---- COSTUMES ----
+// 'spriteSet' picks which PNG sprite series to use (mario or luigi base).
+// 'filter' applies a CSS filter for hue/sat shifts to approximate other looks.
 var COSTUMES = [
-  {id:'mario', name:'Mario', palette:PALETTE},
-  {id:'luigi', name:'Luigi', palette:swapPalette({R:'#00A800', r:'#005800'})},
-  {id:'fire', name:'Fire Mario', palette:swapPalette({R:'#FFFFFF', r:'#CCCCCC', B:'#D82800', b:'#A01000'})},
-  {id:'tanooki', name:'Tanooki', palette:swapPalette({R:'#A04000', r:'#683000', B:'#A04000', b:'#683000'})},
-  {id:'frog', name:'Frog', palette:swapPalette({R:'#00A800', r:'#005800', B:'#00A800', b:'#005800'})},
-  {id:'ice', name:'Ice', palette:swapPalette({R:'#BFDBFE', r:'#7DA3D8', B:'#1d4ed8', b:'#0030A0'})},
-  {id:'wario', name:'Wario', palette:swapPalette({R:'#FBD000', r:'#a08000', B:'#7c3aed', b:'#4520A0'})},
-  {id:'shadow', name:'Shadow', palette:swapPalette({R:'#404040', r:'#202020', B:'#202020', b:'#000000', S:'#909090', s:'#606060', H:'#303030', h:'#101010'})}
+  {id:'mario',   name:'Mario',   spriteSet:'mario', filter:''},
+  {id:'luigi',   name:'Luigi',   spriteSet:'luigi', filter:''},
+  {id:'fire',    name:'Fire',    spriteSet:'mario', filter:'hue-rotate(155deg) saturate(1.4) brightness(1.15)'}, // red→white-ish, blue→red
+  {id:'tanooki', name:'Tanooki', spriteSet:'mario', filter:'sepia(.85) saturate(1.6) hue-rotate(-15deg) brightness(.9)'},
+  {id:'frog',    name:'Frog',    spriteSet:'luigi', filter:'hue-rotate(-30deg) saturate(1.3)'},
+  {id:'ice',     name:'Ice',     spriteSet:'mario', filter:'hue-rotate(165deg) saturate(.85) brightness(1.15)'},
+  {id:'wario',   name:'Wario',   spriteSet:'mario', filter:'hue-rotate(35deg) saturate(1.5)'},
+  {id:'shadow',  name:'Shadow',  spriteSet:'mario', filter:'grayscale(1) brightness(.45)'}
 ];
 
-var state = {
-  phase:'title', score:0, combo:0, bestStreak:0, worldIdx:0, costumeId:'mario',
-  musicOn:true, audioReady:false, totalCorrect:0, totalSeen:0, sessionWords:[], weights:{}
-};
-
+// ---- WORLDS ----
 var WORLDS = [
   {cls:'world-w0', label:'WORLD 1-1 GRASSLAND'},
   {cls:'world-w1', label:'WORLD 2-1 DESERT'},
@@ -388,118 +606,174 @@ var WORLDS = [
   {cls:'world-w3', label:'WORLD 4-1 CASTLE'}
 ];
 
+// ---- STATE ----
+var state = {
+  score:0, totalCorrect:0, totalSeen:0, combo:0, bestStreak:0,
+  worldIdx:0, worldProgress:0, // 0..9 inside current world
+  costumeId:'mario', musicOn:true,
+  weights:{},  // word -> weight
+  sessionWords:[],
+  customWords:null, // null = use defaults; otherwise array
+  audioReady:false,
+  phase:'idle' // idle, listening, celebrating, summary, levelup
+};
+
 var word = '';
-var marioFrame = 0;
-var marioFrameTimer = null;
-var goombaActive = null;
+var audioCtx = null;
+var musicTimer = null;
+var musicNoteIdx = 0;
+var recognition = null;
 var listenTimer = null;
 var listenInterval = null;
-var recognition = null;
-var audioCtx = null;
-var musicLoop = null;
+var marioFrameTimer = null;
+var marioFrame = 0;
+var goombaActive = false;
 
-function load(){
-  try {
-    var raw = localStorage.getItem(SAVE_KEY);
-    if(raw) {
-      var s = JSON.parse(raw);
-      state.score = s.score || 0;
-      state.bestStreak = s.bestStreak || 0;
-      state.costumeId = s.costumeId || 'mario';
-      state.musicOn = s.musicOn !== false;
-      state.weights = s.weights || {};
-    }
-  } catch(e){}
-}
+// ---- PERSISTENCE ----
 function save(){
   try {
     localStorage.setItem(SAVE_KEY, JSON.stringify({
-      score:state.score, bestStreak:state.bestStreak,
-      costumeId:state.costumeId, musicOn:state.musicOn, weights:state.weights
+      score:state.score, totalCorrect:state.totalCorrect, totalSeen:state.totalSeen,
+      bestStreak:state.bestStreak, worldIdx:state.worldIdx, worldProgress:state.worldProgress,
+      costumeId:state.costumeId, musicOn:state.musicOn,
+      weights:state.weights, customWords:state.customWords
     }));
   } catch(e){}
+}
+function load(){
+  try {
+    var raw = localStorage.getItem(SAVE_KEY);
+    if(!raw) return;
+    var s = JSON.parse(raw);
+    if(s){
+      for(var k in s) if(s.hasOwnProperty(k)) state[k] = s[k];
+    }
+  } catch(e){}
+}
+
+function getWordList(){
+  if(state.customWords && state.customWords.length>0) return state.customWords;
+  return DEFAULT_WORDS;
+}
+
+// ---- SPRITE RENDER ----
+function renderSprite(grid, palette){
+  palette = palette || PALETTE;
+  var rows = grid.length;
+  var cols = grid[0].length;
+  var svg = '<svg viewBox="0 0 '+cols+' '+rows+'" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%">';
+  for(var y=0;y<rows;y++){
+    var row = grid[y];
+    for(var x=0;x<cols;x++){
+      var c = row.charAt(x);
+      var col = palette[c];
+      if(col){
+        svg += '<rect x="'+x+'" y="'+y+'" width="1" height="1" fill="'+col+'"/>';
+      }
+    }
+  }
+  svg += '</svg>';
+  return svg;
 }
 
 function renderScenery(){
   var cl = document.getElementById('clouds-layer');
   cl.innerHTML = '';
-  [{x:5,y:0},{x:30,y:8},{x:60,y:0},{x:85,y:6}].forEach(function(pos){
+  [{x:5},{x:30},{x:55},{x:78}].forEach(function(p){
     var c = document.createElement('div');
     c.className = 'cloud-sprite';
-    c.style.left = pos.x+'%'; c.style.top = pos.y+'px';
+    c.style.left = p.x+'%'; c.style.top = (Math.random()*20)+'%';
     c.innerHTML = renderSprite(SPR_CLOUD);
     cl.appendChild(c);
   });
-  
+
   var hl = document.getElementById('hills-layer');
   hl.innerHTML = '';
-  [{x:8},{x:55},{x:78}].forEach(function(pos){
+  [{x:5},{x:55}].forEach(function(p){
     var h = document.createElement('div');
     h.className = 'hill-sprite';
-    h.style.left = pos.x+'%'; h.style.bottom = '-10px';
+    h.style.left = p.x+'%'; h.style.bottom = '0';
     h.innerHTML = renderSprite(SPR_HILL);
     hl.appendChild(h);
   });
-  
+
   var bl = document.getElementById('bushes-layer');
   bl.innerHTML = '';
-  [{x:40},{x:68},{x:90}].forEach(function(pos){
+  [{x:30},{x:62},{x:85}].forEach(function(p){
     var b = document.createElement('div');
     b.className = 'bush-sprite';
-    b.style.left = pos.x+'%'; b.style.bottom = '0';
+    b.style.left = p.x+'%'; b.style.bottom = '0';
     b.innerHTML = renderSprite(SPR_BUSH);
     bl.appendChild(b);
   });
-  
+
   var gl = document.getElementById('ground-layer');
   var tile = renderSprite(SPR_GROUND);
-  var dataUrl = 'data:image/svg+xml;utf8,' + encodeURIComponent(tile);
-  gl.style.backgroundImage = 'url("'+dataUrl+'")';
-  gl.style.backgroundSize = '60px 60px';
+  gl.style.backgroundImage = 'url("data:image/svg+xml;utf8,'+encodeURIComponent(tile)+'")';
 }
 
-function getCostumePalette(){
+function getCostume(){
   for(var i=0;i<COSTUMES.length;i++){
-    if(COSTUMES[i].id===state.costumeId) return COSTUMES[i].palette;
+    if(COSTUMES[i].id===state.costumeId) return COSTUMES[i];
   }
-  return PALETTE;
+  return COSTUMES[0];
+}
+function getCostumePalette(){ return PALETTE; } // legacy, scenery uses default palette only
+
+function marioSprite(frame, costume){
+  costume = costume || getCostume();
+  var set = costume.spriteSet || 'mario';
+  var key = set + '_' + frame; // e.g. mario_idle, luigi_walk1
+  return key;
 }
 
 function setMarioFrame(frameId){
-  var grid;
-  if(frameId===0) grid = SPR_MARIO_IDLE;
-  else if(frameId===1) grid = SPR_MARIO_WALK1;
-  else if(frameId===2) grid = SPR_MARIO_WALK2;
-  else if(frameId==='jump') grid = SPR_MARIO_JUMP;
-  else grid = SPR_MARIO_IDLE;
-  document.getElementById('mario').innerHTML = renderSprite(grid, getCostumePalette());
+  var frameName = 'idle';
+  if(frameId===1) frameName = 'walk1';
+  else if(frameId===2) frameName = 'walk2';
+  else if(frameId==='jump') frameName = 'jump';
+  else if(frameId==='celebrate') frameName = 'celebrate';
+  var costume = getCostume();
+  var el = document.getElementById('mario');
+  el.innerHTML = spriteImg(marioSprite(frameName, costume));
+  el.style.filter = costume.filter || '';
 }
 
 function startMarioWalkAnimation(){
   if(marioFrameTimer) clearInterval(marioFrameTimer);
-  marioFrame = 0;
+  marioFrame = 1;
+  setMarioFrame(1);
   marioFrameTimer = setInterval(function(){
     marioFrame = (marioFrame===1) ? 2 : 1;
     setMarioFrame(marioFrame);
-  }, 220);
+  }, 200);
 }
 function stopMarioWalkAnimation(){
-  if(marioFrameTimer) { clearInterval(marioFrameTimer); marioFrameTimer = null; }
+  if(marioFrameTimer){ clearInterval(marioFrameTimer); marioFrameTimer=null; }
   setMarioFrame(0);
 }
 
 function drawQBlock(used){
-  document.getElementById('qblock').innerHTML = renderSprite(used ? SPR_QBLOCK_USED : SPR_QBLOCK);
+  var el = document.getElementById('qblock');
+  if(used){
+    // Used state: use legacy SVG render (a faded brick look)
+    el.innerHTML = renderSprite(SPR_QBLOCK_USED);
+  } else {
+    el.innerHTML = spriteImg('qblock');
+  }
 }
 function drawCoinsIcon(){
-  document.getElementById('coins-icon').innerHTML = renderSprite(SPR_COIN);
+  document.getElementById('coins-icon').innerHTML = spriteImg('coin');
 }
 function drawTitleMario(){
   var c = document.getElementById('title-mario-container');
   c.className = 'title-mario';
-  c.innerHTML = renderSprite(SPR_MARIO_IDLE, getCostumePalette());
+  var costume = getCostume();
+  c.innerHTML = spriteImg(marioSprite('idle', costume));
+  c.style.filter = (costume.filter || '') + ' drop-shadow(3px 3px 0 #000)';
 }
 
+// ---- AUDIO ----
 function ensureAudio(){
   if(audioCtx) return audioCtx;
   try {
@@ -511,94 +785,143 @@ function ensureAudio(){
 
 function blip(freq, dur, type, vol){
   var ctx = ensureAudio(); if(!ctx) return;
-  type = type || 'square'; vol = vol || 0.15;
+  type = type || 'square';
+  vol = (vol == null) ? 0.15 : vol;
+  if(!freq || freq<=0) return;
   var osc = ctx.createOscillator();
   var gain = ctx.createGain();
   osc.type = type; osc.frequency.value = freq;
   gain.gain.setValueAtTime(vol, ctx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + dur);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
   osc.connect(gain); gain.connect(ctx.destination);
-  osc.start(); osc.stop(ctx.currentTime + dur);
+  osc.start();
+  osc.stop(ctx.currentTime + dur);
 }
 
 function playCoinSound(){
-  blip(988, 0.08, 'square', 0.18);
-  setTimeout(function(){blip(1319, 0.20, 'square', 0.18);}, 60);
+  blip(988, 0.07, 'square', 0.18);
+  setTimeout(function(){blip(1319, 0.18, 'square', 0.18);}, 55);
 }
 function playCorrectSound(){
-  blip(523, 0.1, 'square'); 
-  setTimeout(function(){blip(659, 0.1, 'square');}, 90);
-  setTimeout(function(){blip(784, 0.12, 'square');}, 180);
-  setTimeout(function(){blip(1047, 0.18, 'square');}, 270);
+  blip(523, 0.09, 'square');
+  setTimeout(function(){blip(659, 0.09, 'square');},90);
+  setTimeout(function(){blip(784, 0.10, 'square');},180);
+  setTimeout(function(){blip(1047, 0.18, 'square');},270);
 }
 function playWrongSound(){
   blip(220, 0.12, 'sawtooth', 0.12);
-  setTimeout(function(){blip(196, 0.18, 'sawtooth', 0.12);}, 100);
+  setTimeout(function(){blip(196, 0.18, 'sawtooth', 0.12);},100);
 }
 function playJumpSound(){
-  blip(523, 0.05, 'square'); 
-  setTimeout(function(){blip(784, 0.08, 'square');}, 40);
+  blip(523, 0.05, 'square');
+  setTimeout(function(){blip(784, 0.07, 'square');},35);
 }
 function playStompSound(){
-  blip(110, 0.12, 'square', 0.2);
-  setTimeout(function(){blip(82, 0.15, 'square', 0.2);}, 60);
+  blip(110, 0.10, 'square', 0.20);
+  setTimeout(function(){blip(82, 0.13, 'square', 0.20);},55);
 }
 function playPowerUp(){
   var notes = [392, 494, 587, 698, 784, 932, 1047];
   notes.forEach(function(n,i){
-    setTimeout(function(){blip(n, 0.08, 'square', 0.18);}, i*60);
+    setTimeout(function(){blip(n, 0.08, 'square', 0.18);}, i*55);
   });
 }
 function playFanfare(){
-  var melody = [659, 659, 0, 659, 0, 523, 659, 0, 784, 0,0,0, 392];
-  melody.forEach(function(n,i){
-    if(n>0) setTimeout(function(){blip(n, 0.18, 'square', 0.2);}, i*150);
+  // SMB1 stage clear / level complete fanfare-ish
+  var melody = [
+    [659,160],[784,160],[1047,160],[784,160],[659,160],[523,160],
+    [659,160],[784,320],[1047,160],[1175,160],[1397,400]
+  ];
+  var t = 0;
+  melody.forEach(function(n){
+    setTimeout(function(){blip(n[0], (n[1]-20)/1000, 'square', 0.18);}, t);
+    t += n[1];
   });
 }
 
+// ---- SMB1 OVERWORLD MELODY (the iconic Mario theme) ----
+// Notes are [Hz, durationMs]; 0 = rest. This is the famous opening bars.
+var MUSIC_MELODY = [
+  // Bar 1
+  [659,140],[659,140],[0,140],[659,140],[0,140],[523,140],[659,140],[0,140],
+  [784,140],[0,420],[392,140],[0,420],
+  // Bar 2 (sub-melody / response)
+  [523,180],[0,200],[392,180],[0,260],[330,180],[0,260],
+  [440,140],[0,140],[494,180],[0,140],[466,180],[440,200],
+  // Bar 3
+  [392,140],[659,140],[784,140],[880,180],[698,140],[784,140],[0,140],
+  [659,140],[523,140],[587,140],[494,180],
+  // Bar 4 — short transition
+  [523,180],[0,200],[392,180],[0,260],[330,180],[0,260],
+  [440,140],[0,140],[494,180],[0,140],[466,180],[440,200]
+];
+
+// Bass line (square wave low notes, optional second voice — kept simple)
+var MUSIC_BASS = [
+  [165,280],[131,280],[165,280],[131,280],
+  [196,280],[165,280],[131,280],[110,280],
+  [165,280],[131,280],[165,280],[131,280],
+  [196,280],[165,280],[131,280],[110,280]
+];
+
+var bassTimer = null;
+var bassIdx = 0;
+
 function startBgMusic(){
   if(!state.musicOn) return;
-  if(musicLoop) return;
+  if(musicTimer) return;
   var ctx = ensureAudio(); if(!ctx) return;
-  
-  var notes = [
-    [659,0.2],[659,0.2],[0,0.2],[659,0.2],[0,0.2],[523,0.2],[659,0.2],[0,0.2],
-    [784,0.4],[0,0.4],[392,0.4],[0,0.4]
-  ];
-  var idx = 0;
-  function step(){
-    if(!state.musicOn || !musicLoop) return;
-    var n = notes[idx];
-    if(n[0]>0) blip(n[0], n[1]*0.9, 'square', 0.07);
-    idx = (idx+1) % notes.length;
-    musicLoop = setTimeout(step, n[1]*1000);
+  musicNoteIdx = 0;
+  function tick(){
+    if(!state.musicOn || !musicTimer) return;
+    var n = MUSIC_MELODY[musicNoteIdx];
+    var freq = n[0], dur = n[1];
+    if(freq>0) blip(freq, (dur-15)/1000, 'square', 0.06);
+    musicNoteIdx = (musicNoteIdx + 1) % MUSIC_MELODY.length;
+    musicTimer = setTimeout(tick, dur);
   }
-  musicLoop = setTimeout(step, 100);
+  musicTimer = setTimeout(tick, 60);
+
+  bassIdx = 0;
+  function bassTick(){
+    if(!state.musicOn || !bassTimer) return;
+    var n = MUSIC_BASS[bassIdx];
+    if(n[0]>0) blip(n[0], (n[1]-30)/1000, 'triangle', 0.05);
+    bassIdx = (bassIdx + 1) % MUSIC_BASS.length;
+    bassTimer = setTimeout(bassTick, n[1]);
+  }
+  bassTimer = setTimeout(bassTick, 120);
 }
 function stopBgMusic(){
-  if(musicLoop) { clearTimeout(musicLoop); musicLoop = null; }
+  if(musicTimer){ clearTimeout(musicTimer); musicTimer = null; }
+  if(bassTimer){ clearTimeout(bassTimer); bassTimer = null; }
 }
 
+// ---- WORD POOL ----
 function pickWord(){
+  var wlist = getWordList();
   var pool = [];
-  for(var i=0;i<WORDS.length;i++){
-    var w = WORDS[i];
+  for(var i=0;i<wlist.length;i++){
+    var w = wlist[i];
     var weight = state.weights[w] || 1;
     for(var j=0;j<weight;j++) pool.push(w);
   }
-  return pool[Math.floor(Math.random()*pool.length)];
+  return pool[Math.floor(Math.random()*pool.length)] || wlist[0] || 'go';
 }
 
 function showSentence(targetWord, callback){
   var s = SENTENCES[targetWord] || targetWord;
   var poster = document.getElementById('poster');
   poster.classList.add('flash-context');
-  poster.innerHTML = '<div class="sentence">'+s+'</div>';
+  poster.innerHTML = '<div class="sentence">'+escapeHtml(s)+'</div>';
   setTimeout(function(){
     poster.classList.remove('flash-context');
-    poster.innerHTML = '<div class="word">'+targetWord+'</div>';
+    poster.innerHTML = '<div class="word">'+escapeHtml(targetWord)+'</div>';
     callback && callback();
-  }, 1700);
+  }, 1500);
+}
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
 function spawn(){
@@ -612,6 +935,7 @@ function spawn(){
   });
 }
 
+// ---- SPEECH RECOGNITION ----
 function setupRecognition(){
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR) return null;
@@ -625,15 +949,15 @@ function setupRecognition(){
 
 function startMic(){
   if(state.phase !== 'listening') return;
-  
+
   var btn = document.getElementById('mic-btn');
   var label = document.getElementById('mic-label');
   var countdown = document.getElementById('mic-countdown');
-  
+
   btn.classList.add('listening');
   btn.textContent = '🔴';
   label.textContent = 'LISTENING...';
-  
+
   countdown.classList.add('show');
   var remaining = 2.0;
   countdown.textContent = remaining.toFixed(1) + 's';
@@ -641,52 +965,58 @@ function startMic(){
     remaining = Math.max(0, remaining - 0.1);
     countdown.textContent = remaining.toFixed(1) + 's';
   }, 100);
-  
+
   recognition = setupRecognition();
   if(!recognition){
-    showDialog("This iPhone doesn't support speech recognition. Make sure you're using Safari!", 4000);
-    stopMic();
+    showDialog("This iPhone doesn't support speech recognition. Use Safari!", 4000);
+    stopMicUI();
     return;
   }
-  
-  var heardSomething = false;
-  
+
+  var resolved = false;
+
   recognition.onresult = function(ev){
-    heardSomething = true;
+    if(resolved) return;
+    resolved = true;
     var alts = [];
     if(ev.results && ev.results[0]){
       for(var i=0;i<ev.results[0].length;i++){
         alts.push(ev.results[0][i].transcript.trim().toLowerCase());
       }
     }
-    stopMic();
+    stopMicUI();
     doCheck(alts);
   };
   recognition.onerror = function(ev){
+    if(resolved) return;
+    resolved = true;
+    stopMicUI();
     if(ev.error === 'no-speech'){
-      stopMic();
-      showDialog('I didn\'t hear you. Try again! 🎤', 1600);
+      showDialog('I didn\'t hear you. Try again! 🎤', 1400);
     } else if(ev.error === 'aborted'){
-      stopMic();
+      // silent
     } else {
-      stopMic();
-      showDialog('Try again! 🎤', 1500);
+      showDialog('Try again! 🎤', 1300);
     }
   };
   recognition.onend = function(){
-    if(!heardSomething){ stopMic(); }
+    if(resolved) return;
+    resolved = true;
+    stopMicUI();
   };
-  
-  try { recognition.start(); } catch(e){ stopMic(); }
-  
+
+  try { recognition.start(); } catch(e){ resolved = true; stopMicUI(); }
+
+  // Politely STOP (not abort) at 2s — lets a pending result finalize
   listenTimer = setTimeout(function(){
-    if(recognition){
+    if(recognition && !resolved){
       try { recognition.stop(); } catch(e){}
     }
   }, 2000);
 }
 
-function stopMic(){
+// Stop just the UI feedback (not recognition itself, which finalizes async)
+function stopMicUI(){
   var btn = document.getElementById('mic-btn');
   var label = document.getElementById('mic-label');
   var countdown = document.getElementById('mic-countdown');
@@ -694,12 +1024,9 @@ function stopMic(){
   btn.textContent = '🎤';
   label.textContent = 'TAP TO SPEAK';
   countdown.classList.remove('show');
-  if(listenTimer) { clearTimeout(listenTimer); listenTimer = null; }
-  if(listenInterval) { clearInterval(listenInterval); listenInterval = null; }
-  if(recognition){
-    try { recognition.abort(); } catch(e){}
-    recognition = null;
-  }
+  if(listenTimer){ clearTimeout(listenTimer); listenTimer=null; }
+  if(listenInterval){ clearInterval(listenInterval); listenInterval=null; }
+  recognition = null;
 }
 
 function lenientMatch(target, heard){
@@ -713,8 +1040,10 @@ function lenientMatch(target, heard){
   if(target.length<=6 && levenshtein(target, heard) <= 2) return true;
   var heardWords = heard.split(/\s+/);
   for(var i=0;i<heardWords.length;i++){
-    if(heardWords[i] === target) return true;
-    for(var j=0;j<subs.length;j++) if(heardWords[i]===subs[j]) return true;
+    var hw = heardWords[i];
+    if(hw === target) return true;
+    for(var j=0;j<subs.length;j++) if(hw === subs[j]) return true;
+    if(target.length<=4 && levenshtein(target, hw) <= 1) return true;
   }
   return false;
 }
@@ -735,7 +1064,7 @@ function levenshtein(a,b){
 
 function doCheck(alts){
   for(var i=0;i<alts.length;i++){
-    if(lenientMatch(word, alts[i])) {
+    if(lenientMatch(word, alts[i])){
       correct();
       return;
     }
@@ -751,13 +1080,13 @@ function correct(){
   state.sessionWords.push({word:word, correct:true});
   state.weights[word] = 1;
   playCorrectSound();
-  
+
   document.getElementById('qblock').classList.add('bumped');
   setTimeout(function(){
     document.getElementById('qblock').classList.remove('bumped');
     drawQBlock(true);
   }, 400);
-  
+
   setTimeout(spawnGoomba, 600);
 }
 
@@ -766,104 +1095,124 @@ function miss(){
   state.weights[word] = (state.weights[word] || 1) + 1;
   state.sessionWords.push({word:word, correct:false});
   playWrongSound();
-  showDialog('Try again! The word is "'+word+'" 🎤', 1800);
+  showDialog('Try again! The word is "'+word+'" 🎤', 1700);
   setTimeout(function(){
-    document.getElementById('mic-label').textContent = 'TAP TO SPEAK';
-  }, 100);
+    if(state.phase === 'listening' || state.phase === 'celebrating'){
+      state.phase = 'listening';
+      document.getElementById('mic-label').textContent = 'TAP TO SPEAK';
+    }
+  }, 1700);
 }
 
+// ---- GOOMBA STOMP SEQUENCE ----
 function spawnGoomba(){
-  if(goombaActive) return;
+  if(goombaActive) { afterStomp(); return; }
+  goombaActive = true;
   var entLayer = document.getElementById('entities-layer');
+  var stage = document.getElementById('stage').getBoundingClientRect();
+
   var g = document.createElement('div');
   g.className = 'goomba walking';
-  g.style.right = '-80px';
-  g.style.bottom = '60px';
-  g.style.position = 'absolute';
-  g.innerHTML = renderSprite(SPR_GOOMBA);
+  g.style.right = '-50px';
+  g.style.bottom = '0';
+  g.innerHTML = spriteImg('goomba');
   entLayer.appendChild(g);
-  goombaActive = g;
-  
-  var pos = -80;
-  var stageW = document.getElementById('stage').getBoundingClientRect().width;
-  var stomptarget = stageW * 0.30;
-  
-  var moveInterval = setInterval(function(){
-    pos += 8;
-    g.style.right = pos+'px';
-    if(pos >= stomptarget){
-      clearInterval(moveInterval);
-      stompGoomba(g);
+
+  // Walk goomba in from right toward Mario
+  var pos = -50;
+  var marioLeftPx = stage.width * 0.14 + 28; // mario center
+  var targetPx = stage.width - marioLeftPx - 120; // distance from right edge to mario
+  var walkTimer = setInterval(function(){
+    pos += 4;
+    g.style.right = pos + 'px';
+    if(pos >= targetPx){
+      clearInterval(walkTimer);
+      // Mario jumps
+      marioJumpAndStomp(g);
     }
   }, 30);
 }
 
-function stompGoomba(g){
+function marioJumpAndStomp(goomba){
+  var m = document.getElementById('mario');
   setMarioFrame('jump');
   playJumpSound();
-  document.getElementById('mario').style.transition = 'bottom 0.25s ease-out, transform 0.15s';
-  document.getElementById('mario').style.bottom = '160px';
-  
+  m.style.transition = 'bottom .35s ease-out';
+  m.style.bottom = '120px';
   setTimeout(function(){
-    document.getElementById('mario').style.bottom = '60px';
+    m.style.transition = 'bottom .25s ease-in';
+    m.style.bottom = '38px';
     setTimeout(function(){
-      playStompSound();
-      g.classList.remove('walking');
-      g.innerHTML = renderSprite(SPR_GOOMBA_SQUISHED);
+      stompGoomba(goomba);
       setMarioFrame(0);
-      
-      coinPop();
-      
-      setTimeout(function(){
-        if(g && g.parentNode) g.parentNode.removeChild(g);
-        goombaActive = null;
-        state.score++;
-        updateScoreDisplay();
-        checkPowerUps();
-        if(state.score % 10 === 0){
-          applyWorld((state.score/10) % WORLDS.length);
-          playFanfare();
-          setTimeout(function(){
-            if(state.totalCorrect % 5 === 0){
-              showSummary();
-            } else {
-              setTimeout(spawn, 800);
-            }
-          }, 3000);
-        } else {
-          if(state.totalCorrect % 5 === 0){
-            setTimeout(showSummary, 1000);
-          } else {
-            setTimeout(spawn, 1200);
-          }
-        }
-        save();
-      }, 600);
+      m.style.transition = 'transform .15s';
     }, 250);
-  }, 250);
+  }, 350);
+}
+
+function stompGoomba(g){
+  if(!g) { afterStomp(); return; }
+  playStompSound();
+  g.style.transition = 'transform .25s';
+  g.style.transform = 'scaleY(0.3) translateY(20px)';
+  setTimeout(function(){
+    if(g && g.parentNode) g.parentNode.removeChild(g);
+    coinPop();
+    afterStomp();
+  }, 280);
+}
+
+function afterStomp(){
+  goombaActive = false;
+  state.score++;
+  state.worldProgress++;
+  updateScoreDisplay();
+  updateProgressBar();
+  save();
+
+  checkPowerUps();
+
+  // Level up check (every 10 correct)
+  if(state.worldProgress >= 10){
+    setTimeout(showLevelUp, 800);
+    return;
+  }
+
+  // Summary every 5 correct (mid-level)
+  if(state.totalCorrect > 0 && state.totalCorrect % 5 === 0 && state.worldProgress < 10){
+    setTimeout(showSummary, 800);
+    return;
+  }
+
+  setTimeout(function(){
+    state.phase = 'idle';
+    spawn();
+  }, 700);
 }
 
 function coinPop(){
-  var entLayer = document.getElementById('fx-layer');
-  var qblockRect = document.getElementById('qblock').getBoundingClientRect();
-  var stageRect = document.getElementById('stage').getBoundingClientRect();
-  
+  var qblock = document.getElementById('qblock');
+  var stage = document.getElementById('stage');
+  var entLayer = document.getElementById('entities-layer');
+  var qblockRect = qblock.getBoundingClientRect();
+  var stageRect = stage.getBoundingClientRect();
+
   var c = document.createElement('div');
   c.className = 'coin-particle';
-  c.style.left = (qblockRect.left - stageRect.left + 20) + 'px';
+  c.style.left = (qblockRect.left - stageRect.left + 12) + 'px';
   c.style.top = (qblockRect.top - stageRect.top) + 'px';
-  c.innerHTML = renderSprite(SPR_COIN);
+  c.innerHTML = spriteImg('coin');
   entLayer.appendChild(c);
   playCoinSound();
   setTimeout(function(){
     if(c && c.parentNode) c.parentNode.removeChild(c);
   }, 1200);
-  
+
   var sp = document.createElement('div');
   sp.className = 'score-pop';
   sp.textContent = '+1';
-  sp.style.left = (qblockRect.left - stageRect.left + 14) + 'px';
-  sp.style.top = (qblockRect.top - stageRect.top + 30) + 'px';
+  sp.style.left = (qblockRect.left - stageRect.left + 8) + 'px';
+  sp.style.top = (qblockRect.top - stageRect.top + 18) + 'px';
   entLayer.appendChild(sp);
   setTimeout(function(){
     if(sp && sp.parentNode) sp.parentNode.removeChild(sp);
@@ -874,15 +1223,15 @@ function checkPowerUps(){
   var m = document.getElementById('mario');
   if(state.combo === 3){
     m.classList.add('big');
-    showDialog('🍄 SUPER MUSHROOM! Big Mario!', 1800);
+    showDialog('🍄 SUPER MUSHROOM!', 1500);
     playPowerUp();
   } else if(state.combo === 5){
     m.classList.add('fire-power');
-    showDialog('🌸 FIRE FLOWER! Fire Mario!', 1800);
+    showDialog('🌸 FIRE FLOWER!', 1500);
     playPowerUp();
   } else if(state.combo === 10){
     m.classList.add('invinc');
-    showDialog('⭐ STAR POWER! Invincible!', 2000);
+    showDialog('⭐ STAR POWER!', 1700);
     playPowerUp();
     coinShower();
   }
@@ -891,15 +1240,15 @@ function checkPowerUps(){
 function coinShower(){
   var fx = document.getElementById('fx-layer');
   var stage = document.getElementById('stage').getBoundingClientRect();
-  for(var i=0;i<30;i++){
+  for(var i=0;i<24;i++){
     (function(idx){
       setTimeout(function(){
         var c = document.createElement('div');
         c.className = 'coin-particle';
         c.style.left = (Math.random()*stage.width) + 'px';
-        c.style.top = (50 + Math.random()*100) + 'px';
-        c.style.setProperty('--dx', ((Math.random()-0.5)*200)+'px');
-        c.innerHTML = renderSprite(SPR_COIN);
+        c.style.top = (40 + Math.random()*80) + 'px';
+        c.style.setProperty('--dx', ((Math.random()-.5)*180)+'px');
+        c.innerHTML = spriteImg('coin');
         fx.appendChild(c);
         playCoinSound();
         setTimeout(function(){
@@ -908,6 +1257,34 @@ function coinShower(){
       }, idx*40);
     })(i);
   }
+}
+
+// ---- LEVEL UP ----
+function showLevelUp(){
+  state.phase = 'levelup';
+  playFanfare();
+  state.worldProgress = 0;
+
+  var nextIdx = (state.worldIdx + 1) % WORLDS.length;
+  var nextLabel = WORLDS[nextIdx].label;
+
+  var html = '<div class="lu-flag">🏁</div>';
+  html += '<div class="lu-title">LEVEL CLEAR!</div>';
+  html += '<div class="lu-sub">You read 10 words! 🎉</div>';
+  html += '<div class="lu-next">NEXT: '+nextLabel+'</div>';
+  html += '<button class="btn-primary" id="lu-next-btn">▶ CONTINUE</button>';
+  var lu = document.getElementById('levelup-overlay');
+  lu.innerHTML = html;
+  lu.classList.add('show');
+
+  document.getElementById('lu-next-btn').onclick = function(){
+    lu.classList.remove('show');
+    state.worldIdx = nextIdx;
+    applyWorld(state.worldIdx);
+    save();
+    state.phase = 'idle';
+    setTimeout(spawn, 500);
+  };
 }
 
 function applyWorld(idx){
@@ -919,6 +1296,15 @@ function applyWorld(idx){
   document.getElementById('world-label').textContent = w.label;
   shakeStage();
   doFlash();
+}
+
+function updateProgressBar(){
+  var pb = document.getElementById('progress-bar');
+  var html = '';
+  for(var i=0;i<10;i++){
+    html += '<div class="pip'+(i<state.worldProgress?' fill':'')+'"></div>';
+  }
+  pb.innerHTML = html;
 }
 
 function shakeStage(){
@@ -938,54 +1324,70 @@ function showDialog(text, dur){
   d.classList.add('show');
   setTimeout(function(){
     d.classList.remove('show');
-  }, dur || 2000);
+  }, dur || 1800);
 }
 
 function updateScoreDisplay(){
   document.getElementById('coins-text').textContent = String(state.score).padStart(3,'0');
 }
 
+// ---- SUMMARY ----
 function showSummary(){
   state.phase = 'summary';
   var html = '<h2>★ GREAT JOB! ★</h2>';
   html += '<div class="summary-stats">';
   html += '<div><span class="num">'+state.score+'</span>COINS</div>';
-  html += '<div><span class="num">'+state.totalCorrect+'</span>WORDS READ</div>';
-  html += '<div><span class="num">'+state.bestStreak+'</span>BEST STREAK</div>';
-  html += '<div><span class="num">'+Math.round((state.totalCorrect/(state.totalSeen||1))*100)+'%</span>ACCURACY</div>';
+  html += '<div><span class="num">'+state.totalCorrect+'</span>WORDS</div>';
+  html += '<div><span class="num">'+state.bestStreak+'</span>STREAK</div>';
+  html += '<div><span class="num">'+Math.round((state.totalCorrect/(state.totalSeen||1))*100)+'%</span>SCORE</div>';
   html += '</div>';
-  
   if(state.sessionWords.length>0){
     html += '<div class="word-grid">';
-    state.sessionWords.slice(-15).forEach(function(sw){
-      html += '<span class="word-pill '+(sw.correct?'correct':'missed')+'">'+sw.word+'</span>';
+    state.sessionWords.slice(-12).forEach(function(sw){
+      html += '<span class="word-pill '+(sw.correct?'correct':'missed')+'">'+escapeHtml(sw.word)+'</span>';
     });
     html += '</div>';
   }
-  
   html += '<button class="menu-back" id="continue-btn">▶ CONTINUE</button>';
   document.getElementById('menu-content').innerHTML = html;
   document.getElementById('menu-overlay').classList.add('show');
   document.getElementById('continue-btn').onclick = function(){
     document.getElementById('menu-overlay').classList.remove('show');
     state.phase = 'idle';
-    setTimeout(spawn, 400);
+    setTimeout(spawn, 350);
   };
 }
 
+// ---- MENU ----
 function showMenu(){
   var html = '<h2>★ MENU ★</h2>';
-  html += '<div class="menu-row" style="flex-direction:column;align-items:stretch;gap:8px">';
+  html += '<div class="menu-row column">';
   html += '<button class="btn-secondary" id="menu-resume">▶ RESUME</button>';
+  html += '<button class="btn-secondary" id="menu-restart">🔄 RESTART LEVEL</button>';
   html += '<button class="btn-secondary" id="menu-costumes">👕 COSTUMES</button>';
+  html += '<button class="btn-secondary" id="menu-words">📖 WORD LIST</button>';
   html += '<button class="btn-secondary" id="menu-music">'+(state.musicOn?'🔊 MUSIC: ON':'🔇 MUSIC: OFF')+'</button>';
-  html += '<button class="btn-secondary" id="menu-reset">🗑 RESET PROGRESS</button>';
+  html += '<button class="btn-secondary" id="menu-reset">🗑 RESET ALL PROGRESS</button>';
   html += '</div>';
   document.getElementById('menu-content').innerHTML = html;
   document.getElementById('menu-overlay').classList.add('show');
-  
+
   document.getElementById('menu-resume').onclick = closeMenu;
+  document.getElementById('menu-restart').onclick = function(){
+    if(confirm('Restart this level? (current progress on this world resets)')){
+      state.worldProgress = 0;
+      state.combo = 0;
+      var m = document.getElementById('mario');
+      m.classList.remove('big','fire-power','invinc');
+      updateProgressBar();
+      save();
+      closeMenu();
+      state.phase='idle';
+      setTimeout(spawn, 300);
+    }
+  };
   document.getElementById('menu-costumes').onclick = showCostumes;
+  document.getElementById('menu-words').onclick = showWords;
   document.getElementById('menu-music').onclick = function(){
     state.musicOn = !state.musicOn;
     if(state.musicOn) startBgMusic(); else stopBgMusic();
@@ -994,20 +1396,28 @@ function showMenu(){
     showMenu();
   };
   document.getElementById('menu-reset').onclick = function(){
-    if(confirm('Reset all progress?')){
-      localStorage.removeItem(SAVE_KEY);
+    if(confirm('Reset ALL progress? (coins, streak, words)')){
+      try { localStorage.removeItem(SAVE_KEY); } catch(e){}
       location.reload();
     }
   };
 }
 function closeMenu(){
   document.getElementById('menu-overlay').classList.remove('show');
+  if(state.phase === 'summary' || state.phase === 'levelup'){
+    // already paused — let user click their continue button
+  } else if(state.phase !== 'celebrating') {
+    state.phase = 'idle';
+    if(!word) setTimeout(spawn, 200);
+  }
 }
+
 function showCostumes(){
-  var html = '<h2>👕 PICK A COSTUME ★</h2><div class="menu-row">';
+  var html = '<h2>👕 PICK A LOOK</h2><div class="menu-row">';
   COSTUMES.forEach(function(c){
     html += '<div class="costume-card '+(c.id===state.costumeId?'selected':'')+'" data-id="'+c.id+'">';
-    html += renderSprite(SPR_MARIO_IDLE, c.palette);
+    var key = (c.spriteSet || 'mario') + '_idle';
+    html += '<div class="costume-thumb"'+(c.filter?' style="filter:'+c.filter+'"':'')+'>'+spriteImg(key)+'</div>';
     html += '<div class="name">'+c.name+'</div>';
     html += '</div>';
   });
@@ -1023,9 +1433,89 @@ function showCostumes(){
       showCostumes();
     };
   });
-  document.getElementById('back-btn').onclick = showMenu;
+  document.getElementById('back-btn').onclick = function(){
+    if(document.getElementById('title').classList.contains('hide')) showMenu();
+    else closeMenu();
+  };
 }
 
+// ---- DICTIONARY MANAGER ----
+function showWords(){
+  var wlist = getWordList().slice();
+  var isCustom = !!(state.customWords && state.customWords.length>0);
+  var html = '<h2>📖 WORD LIST</h2>';
+  html += '<div class="dict-info">'+wlist.length+' words. '+
+          (isCustom?'(Custom list)':'(Default list)')+'</div>';
+  html += '<div class="dict-add">';
+  html += '<input type="text" id="new-word" placeholder="Add word..." maxlength="20" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false">';
+  html += '<button id="add-word-btn">+ ADD</button>';
+  html += '</div>';
+  html += '<div class="dict-list" id="dict-list">';
+  wlist.forEach(function(w){
+    html += '<span class="dict-pill">'+escapeHtml(w)+' <button data-w="'+escapeHtml(w)+'" class="rm-word">✕</button></span>';
+  });
+  html += '</div>';
+  html += '<div class="menu-row">';
+  html += '<button class="btn-secondary" id="reset-words-btn">🔄 RESET TO DEFAULT</button>';
+  html += '</div>';
+  html += '<button class="menu-back" id="back-btn">← BACK</button>';
+  document.getElementById('menu-content').innerHTML = html;
+
+  function commitList(list){
+    // dedupe + lowercase + trim, drop empties
+    var seen = {}; var out = [];
+    list.forEach(function(w){
+      w = String(w||'').toLowerCase().trim();
+      if(w && !seen[w] && /^[a-z'-]+$/.test(w)){ seen[w]=1; out.push(w); }
+    });
+    state.customWords = out;
+    save();
+  }
+
+  document.getElementById('add-word-btn').onclick = function(){
+    var inp = document.getElementById('new-word');
+    var v = inp.value.toLowerCase().trim();
+    if(!v) return;
+    if(!/^[a-z'-]+$/.test(v)){
+      showDialog('Use letters only', 1200); return;
+    }
+    var current = getWordList().slice();
+    if(current.indexOf(v) === -1){
+      current.push(v);
+      commitList(current);
+    }
+    inp.value = '';
+    showWords();
+  };
+  document.getElementById('new-word').addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ document.getElementById('add-word-btn').click(); }
+  });
+  document.querySelectorAll('.rm-word').forEach(function(btn){
+    btn.onclick = function(){
+      var w = btn.getAttribute('data-w');
+      var current = getWordList().slice().filter(function(x){return x !== w;});
+      if(current.length === 0){
+        showDialog('Need at least 1 word', 1200);
+        return;
+      }
+      commitList(current);
+      showWords();
+    };
+  });
+  document.getElementById('reset-words-btn').onclick = function(){
+    if(confirm('Reset word list to default?')){
+      state.customWords = null;
+      save();
+      showWords();
+    }
+  };
+  document.getElementById('back-btn').onclick = function(){
+    if(document.getElementById('title').classList.contains('hide')) showMenu();
+    else closeMenu();
+  };
+}
+
+// ---- INIT ----
 function init(){
   load();
   drawTitleMario();
@@ -1034,12 +1524,14 @@ function init(){
   setMarioFrame(0);
   renderScenery();
   updateScoreDisplay();
+  updateProgressBar();
   document.getElementById('music-toggle').textContent = state.musicOn ? '♫ ON' : '♫ OFF';
   applyWorld(state.worldIdx);
 }
 
 document.addEventListener('DOMContentLoaded', init);
 
+// Tap-to-start (audio unlock)
 document.getElementById('start-listen-tap').addEventListener('click', function(){
   ensureAudio();
   state.audioReady = true;
@@ -1052,11 +1544,12 @@ document.getElementById('btn-start').addEventListener('click', function(){
   startMarioWalkAnimation();
   setTimeout(function(){
     stopMarioWalkAnimation();
+    state.phase = 'idle';
     spawn();
-  }, 1400);
+  }, 1200);
 });
-
-document.getElementById('btn-settings').addEventListener('click', showCostumes);
+document.getElementById('btn-costumes').addEventListener('click', showCostumes);
+document.getElementById('btn-words').addEventListener('click', showWords);
 
 document.getElementById('mic-btn').addEventListener('click', function(){
   ensureAudio();
@@ -1064,7 +1557,10 @@ document.getElementById('mic-btn').addEventListener('click', function(){
   startMic();
 });
 
-document.getElementById('menu-btn').addEventListener('click', showMenu);
+document.getElementById('menu-btn').addEventListener('click', function(){
+  // close any goomba in flight before opening menu
+  showMenu();
+});
 
 document.getElementById('music-toggle').addEventListener('click', function(){
   state.musicOn = !state.musicOn;
@@ -1074,5 +1570,6 @@ document.getElementById('music-toggle').addEventListener('click', function(){
 });
 
 </script>
+
 </body>
 </html>
