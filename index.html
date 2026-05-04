@@ -107,11 +107,24 @@ button{font-family:inherit}
 
 .goomba,.enemy{position:absolute;width:42px;height:42px;z-index:6}
 .enemy-piranha{width:48px;height:80px;bottom:0}
-.goomba.walking,.enemy.walking{animation:goombaWalk .5s steps(2) infinite}
-@keyframes goombaWalk{from{transform:scaleX(1)}to{transform:scaleX(-1)}}
+/* Only goomba uses the bounce animation; koopa & piranha animate via sprite frame swaps */
+.enemy-goomba.walking{animation:goombaBounce .35s ease-in-out infinite alternate}
+@keyframes goombaBounce{from{transform:translateY(0) scaleY(1)}to{transform:translateY(-2px) scaleY(.94)}}
 
 .fireball{position:absolute;font-size:24px;z-index:7;text-shadow:0 0 8px #ff5f00,0 0 14px #ff8f00;animation:fireballSpin .15s linear infinite}
 @keyframes fireballSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+/* Item picker */
+#dialog.picker-mode{padding:10px 14px;background:rgba(0,0,0,.95);max-width:90%;width:auto}
+.picker-title{font-family:‘Press Start 2P’,monospace;font-size:11px;color:#fbd000;text-shadow:2px 2px 0 #000;margin-bottom:8px}
+.picker-row{display:flex;gap:8px;justify-content:center;align-items:stretch}
+.picker-card{background:#1a1a1a;border:3px solid #fbd000;border-radius:6px;padding:6px 4px;cursor:pointer;width:74px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:3px 3px 0 #000;transition:transform .15s, box-shadow .15s}
+.picker-card:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
+.picker-card.chosen{transform:scale(1.15);border-color:#fff;box-shadow:0 0 16px #fbd000,0 0 28px rgba(251,208,0,.6)}
+.picker-icon{width:38px;height:38px;display:flex;align-items:center;justify-content:center}
+.picker-icon img.sprite-img{width:100%;height:100%;image-rendering:pixelated}
+.picker-emoji{font-size:30px;line-height:1}
+.picker-name{font-family:‘Press Start 2P’,monospace;font-size:7px;color:#fff;text-align:center;line-height:1.2}
 
 .pickup{position:absolute;width:34px;height:34px;z-index:7;filter:drop-shadow(0 0 6px #fff) drop-shadow(2px 2px 0 #000);transition:transform .1s;will-change:transform}
 .pickup-mushroom{filter:drop-shadow(0 0 8px #ff8f00) drop-shadow(2px 2px 0 #000)}
@@ -1513,19 +1526,71 @@ function sideKick(p){
 function marioJumpAndStomp(enemy, type){
   type = type || 'goomba';
   var m = document.getElementById('mario');
+  if(!enemy || !enemy.parentNode){ afterStomp(); return; }
+
+  var stage = document.getElementById('stage').getBoundingClientRect();
+  var eRect = enemy.getBoundingClientRect();
+  var mRect = m.getBoundingClientRect();
+  // Compute target X: just to the left of enemy so Mario lands ON it
+  // We move Mario via translateX from his starting position
+  var marioCenterX = mRect.left + mRect.width / 2;
+  var enemyCenterX = eRect.left + eRect.width / 2;
+  var offsetX = enemyCenterX - marioCenterX - 8; // slight overlap on top of enemy
+
+  // Save original transform so we can restore (costume filters etc are on `style.filter`, transform is independent)
+  var prevTransition = m.style.transition;
+
   setMarioFrame('jump');
   playJumpSound();
-  m.style.transition = 'bottom .35s ease-out';
-  m.style.bottom = '85px';
+
+  // Phase 1: Mario leaps up AND across simultaneously (parabolic feel)
+  m.style.transition = 'transform .42s cubic-bezier(.2,.7,.4,1.0), bottom .42s ease-out';
+  m.style.transform = 'translateX(' + offsetX + 'px)';
+  m.style.bottom = '70px'; // arc apex
+  // Animate walk frames during the in-air movement for a "running" look
+  var f = 1;
+  var runTimer = setInterval(function(){
+    f = f === 1 ? 2 : 1;
+    setMarioFrame(f);
+  }, 90);
+
   setTimeout(function(){
-    m.style.transition = 'bottom .25s ease-in';
-    m.style.bottom = '0px';
+    clearInterval(runTimer);
+    setMarioFrame('jump');
+    // Phase 2: Mario lands ON the enemy
+    m.style.transition = 'transform .15s ease-in, bottom .22s ease-in';
+    // Land at enemy top — for short enemies like goomba (24px tall in our render),
+    // Mario's feet should be at top of enemy; we approximate by landing at
+    // eRect.height-ish above ground. For goomba/koopa: ~20px. Piranha not used here.
+    var landBottom = (type === 'koopa') ? 24 : (type === 'piranha' ? 60 : 18);
+    m.style.bottom = landBottom + 'px';
+
     setTimeout(function(){
+      // Stomp impact at the moment of landing
       stompEnemy(enemy, type);
-      setMarioFrame(0);
-      m.style.transition = 'transform .15s';
-    }, 250);
-  }, 350);
+      setMarioFrame('jump');
+
+      // Phase 3: Tiny rebound bounce after stomp
+      m.style.transition = 'bottom .14s ease-out';
+      m.style.bottom = (landBottom + 18) + 'px';
+      setTimeout(function(){
+        // Phase 4: Drop to ground and walk back to start
+        m.style.transition = 'transform .35s ease-out, bottom .25s ease-in';
+        m.style.transform = 'translateX(0px)';
+        m.style.bottom = '0px';
+        var f2 = 1;
+        var walkBack = setInterval(function(){
+          f2 = f2 === 1 ? 2 : 1;
+          setMarioFrame(f2);
+        }, 130);
+        setTimeout(function(){
+          clearInterval(walkBack);
+          setMarioFrame(0);
+          m.style.transition = prevTransition || 'transform .15s,height .25s,width .25s';
+        }, 360);
+      }, 140);
+    }, 220);
+  }, 420);
 }
 
 function stompEnemy(g, type){
@@ -1566,20 +1631,37 @@ function afterStomp(){
 
   // Level up check (every 10 correct)
   if(state.worldProgress >= 10){
-    setTimeout(showLevelUp, 800);
+    setTimeout(function(){
+      waitForPicker(showLevelUp);
+    }, 800);
     return;
   }
 
   // Summary every 5 correct (mid-level)
   if(state.totalCorrect > 0 && state.totalCorrect % 5 === 0 && state.worldProgress < 10){
-    setTimeout(showSummary, 800);
+    setTimeout(function(){
+      waitForPicker(showSummary);
+    }, 800);
     return;
   }
 
   setTimeout(function(){
-    state.phase = 'idle';
-    spawn();
+    waitForPicker(function(){
+      state.phase = 'idle';
+      spawn();
+    });
   }, 700);
+}
+
+// Block the next gameplay step until any pending item picker is dismissed.
+function waitForPicker(cb){
+  if(!itemPickerActive){ cb(); return; }
+  var iv = setInterval(function(){
+    if(!itemPickerActive){
+      clearInterval(iv);
+      cb();
+    }
+  }, 80);
 }
 
 function coinPop(){
@@ -1616,14 +1698,131 @@ function coinPop(){
 // At combo 5 → fire flower (big/small → fire)
 // At combo 7 → super star (10sec invincibility, sparkles, 1-shot enemies)
 function checkPowerUps(){
-  if(state.combo === 3 && state.powerLevel === 'small'){
-    setTimeout(function(){ spawnPickup('mushroom'); }, 100);
-  } else if(state.combo === 5){
-    setTimeout(function(){ spawnPickup('fire'); }, 100);
-  } else if(state.combo === 7){
-    setTimeout(function(){ spawnPickup('star'); }, 100);
+  // Every 3rd correct word: offer a 3-item treasure pick.
+  if(state.combo > 0 && state.combo % 3 === 0){
+    setTimeout(function(){ showItemPicker(); }, 350);
   } else if(state.combo === 10){
     coinShower();
+  }
+}
+
+// ---- ITEM PICKER ----
+var itemPickerActive = false;
+
+function buildItemPool(){
+  var pool = [];
+  if(state.powerLevel === 'small') pool.push('mushroom');
+  if(state.powerLevel !== 'fire' && state.powerLevel !== 'star') pool.push('fire');
+  pool.push('star'); pool.push('star');
+  pool.push('oneup'); pool.push('oneup');
+  pool.push('coins'); pool.push('coins'); pool.push('coins');
+  pool.push('costume');
+  return pool;
+}
+
+function pickThreeItems(){
+  var pool = buildItemPool();
+  var shuffled = pool.slice().sort(function(){ return Math.random() - 0.5; });
+  var picks = [];
+  var seen = {};
+  for(var i=0; i<shuffled.length && picks.length<3; i++){
+    if(!seen[shuffled[i]]){
+      picks.push(shuffled[i]);
+      seen[shuffled[i]] = true;
+    }
+  }
+  while(picks.length < 3) picks.push('coins');
+  return picks;
+}
+
+function showItemPicker(){
+  if(itemPickerActive) return;
+  itemPickerActive = true;
+  var dialog = document.getElementById('dialog');
+  if(!dialog){ itemPickerActive = false; return; }
+
+  var items = pickThreeItems();
+  var html = '<div class="picker-title">🎁 PICK A REWARD!</div>';
+  html += '<div class="picker-row">';
+  items.forEach(function(kind, idx){
+    html += '<button class="picker-card" data-idx="'+idx+'" data-kind="'+kind+'">';
+    html += '<div class="picker-icon">' + itemIcon(kind) + '</div>';
+    html += '<div class="picker-name">' + itemName(kind) + '</div>';
+    html += '</button>';
+  });
+  html += '</div>';
+  dialog.innerHTML = html;
+  dialog.classList.add('show');
+  dialog.classList.add('picker-mode');
+
+  Array.prototype.forEach.call(dialog.querySelectorAll('.picker-card'), function(btn){
+    btn.onclick = function(){
+      var kind = btn.getAttribute('data-kind');
+      Array.prototype.forEach.call(dialog.querySelectorAll('.picker-card'), function(b){
+        b.disabled = true;
+        if(b !== btn) b.style.opacity = '0.3';
+      });
+      btn.classList.add('chosen');
+      setTimeout(function(){
+        dialog.classList.remove('show');
+        dialog.classList.remove('picker-mode');
+        dialog.innerHTML = '';
+        applyItemReward(kind);
+        itemPickerActive = false;
+      }, 380);
+    };
+  });
+}
+
+function itemIcon(kind){
+  if(kind === 'mushroom') return spriteImg('pu_mushroom');
+  if(kind === 'fire') return spriteImg('pu_leaf');
+  if(kind === 'star') return spriteImg('pu_star');
+  if(kind === 'oneup') return '<div class="picker-emoji">🆙</div>';
+  if(kind === 'coins') return '<div class="picker-emoji">🪙</div>';
+  if(kind === 'costume') return '<div class="picker-emoji">👕</div>';
+  return '<div class="picker-emoji">❓</div>';
+}
+
+function itemName(kind){
+  if(kind === 'mushroom') return 'MUSHROOM';
+  if(kind === 'fire') return 'FIRE LEAF';
+  if(kind === 'star') return 'STAR';
+  if(kind === 'oneup') return '1-UP';
+  if(kind === 'coins') return '+5 COINS';
+  if(kind === 'costume') return 'NEW LOOK';
+  return '?';
+}
+
+function applyItemReward(kind){
+  if(kind === 'mushroom' || kind === 'fire' || kind === 'star'){
+    applyPowerUp(kind);
+  } else if(kind === 'oneup'){
+    showDialog('🆙 1-UP!', 1100);
+    playPowerUp();
+    state.score += 10;
+    coinShower();
+    save();
+  } else if(kind === 'coins'){
+    state.score += 5;
+    showDialog('+5 COINS! 🪙', 900);
+    playCoinSound();
+    coinPop();
+    setTimeout(coinPop, 100);
+    setTimeout(coinPop, 200);
+    save();
+  } else if(kind === 'costume'){
+    var current = state.costumeId;
+    var others = COSTUMES.filter(function(c){ return c.id !== current; });
+    if(others.length){
+      var pick = others[Math.floor(Math.random() * others.length)];
+      state.costumeId = pick.id;
+      showDialog('👕 ' + pick.name.toUpperCase() + '!', 1300);
+      playPowerUp();
+      drawTitleMario();
+      setMarioFrame(0);
+      save();
+    }
   }
 }
 
