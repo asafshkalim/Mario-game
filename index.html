@@ -902,11 +902,46 @@ function blip(freq, dur, type, vol){
 }
 
 // ---- HTML5 AUDIO (real SMB3 sounds, embedded as base64) ----
-var audioPool = {}; // key -> Audio element pool for fast replay
+var audioPool = {}; // key -> Audio element kept warm after gesture unlock
 var bgMusicEl = null;
+var audioUnlocked = false;
+
+function unlockAudio(){
+  // Must be called inside a user-gesture handler. Pre-creates and primes
+  // each Audio element so subsequent .play() calls work on iOS Safari.
+  if(audioUnlocked || typeof AUDIO === 'undefined') return;
+  try {
+    Object.keys(AUDIO).forEach(function(key){
+      try {
+        var a = new Audio(AUDIO[key]);
+        a.volume = 0.0001; // silent prime
+        var p = a.play();
+        if(p && typeof p.then === 'function'){
+          p.then(function(){ a.pause(); a.currentTime = 0; a.volume = 1; }).catch(function(){});
+        } else {
+          // Synchronous (older API) — pause immediately
+          a.pause(); a.currentTime = 0; a.volume = 1;
+        }
+        audioPool[key] = a;
+      } catch(e){}
+    });
+    audioUnlocked = true;
+  } catch(e){}
+}
 
 function makeAudio(key, vol){
-  if(!AUDIO[key]) return null;
+  if(typeof AUDIO === 'undefined' || !AUDIO[key]) return null;
+  // Prefer pooled element (already unlocked); reset playback head and reuse.
+  var pooled = audioPool[key];
+  if(pooled && audioUnlocked){
+    try {
+      pooled.pause();
+      pooled.currentTime = 0;
+      pooled.volume = vol == null ? 0.6 : vol;
+      return pooled;
+    } catch(e){}
+  }
+  // Fallback: fresh element (may fail on iOS without prior gesture)
   var a = new Audio(AUDIO[key]);
   a.volume = vol == null ? 0.6 : vol;
   return a;
@@ -932,7 +967,7 @@ function startBgMusic(){
     } catch(e){}
     return;
   }
-  if(!AUDIO || !AUDIO.music_loop) return;
+  if(typeof AUDIO === 'undefined' || !AUDIO.music_loop) return;
   try {
     bgMusicEl = new Audio(AUDIO.music_loop);
     bgMusicEl.loop = true;
@@ -1025,14 +1060,24 @@ function setupRecognition(){
   if(!SR) return null;
   var r = new SR();
   r.lang = 'en-US';
-  r.continuous = true;       // keep listening — kid may speak more than once
-  r.interimResults = true;   // get partial results for early matches
+  // iOS Safari has historically poor support for continuous=true and interimResults=true.
+  // We use single-shot mode (best iOS reliability) and rely on multiple alternatives + lenient match.
+  r.continuous = false;
+  r.interimResults = false;
   r.maxAlternatives = 10;
   return r;
 }
 
 function startMic(){
   if(state.phase !== 'listening') return;
+
+  // If a previous recognition is still running, clean it up first
+  if(recognition){
+    try { recognition.abort(); } catch(e){}
+    recognition = null;
+  }
+  if(listenTimer){ clearTimeout(listenTimer); listenTimer = null; }
+  if(listenInterval){ clearInterval(listenInterval); listenInterval = null; }
 
   var btn = document.getElementById('mic-btn');
   var label = document.getElementById('mic-label');
@@ -1062,35 +1107,36 @@ function startMic(){
 
   var resolved = false;
   var heardAny = false;
-  var allHeardTranscripts = []; // accumulator for debug + override
+  var allHeardTranscripts = [];
 
   recognition.onresult = function(ev){
     if(resolved) return;
-    // Check ALL results (final + interim) and ALL alternatives — match as soon as we hear it
+    resolved = true;
     var alts = [];
-    for(var ri=0; ri<ev.results.length; ri++){
-      var res = ev.results[ri];
-      for(var ai=0; ai<res.length; ai++){
-        var t = (res[ai].transcript || '').trim().toLowerCase();
+    if(ev.results && ev.results[0]){
+      for(var i=0; i<ev.results[0].length; i++){
+        var t = (ev.results[0][i].transcript || '').trim().toLowerCase();
         if(t){
           alts.push(t);
-          if(allHeardTranscripts.indexOf(t) === -1) allHeardTranscripts.push(t);
+          allHeardTranscripts.push(t);
         }
       }
     }
-    if(alts.length){ heardAny = true; }
-
-    // Try to match against the target word
-    for(var k=0;k<alts.length;k++){
+    heardAny = alts.length > 0;
+    stopMicUI();
+    // Try to match against any alternative
+    for(var k=0; k<alts.length; k++){
       if(lenientMatch(word, alts[k])){
-        resolved = true;
-        try { recognition.stop(); } catch(e){}
-        stopMicUI();
         doCheck(alts);
         return;
       }
     }
-    // No match yet — keep listening (still within the window)
+    // No match — but they said something. Show the override dialog.
+    if(heardAny){
+      showHeardOverride(alts);
+    } else {
+      showRetryDialog("I didn't hear you. Tap 🎤 again.");
+    }
   };
   recognition.onerror = function(ev){
     if(resolved) return;
@@ -1110,16 +1156,9 @@ function startMic(){
     if(resolved) return;
     resolved = true;
     stopMicUI();
-    // Window expired — run final check on everything we accumulated
+    // Window expired without onresult firing → no speech detected
     if(allHeardTranscripts.length){
-      // Try one more time with all accumulated transcripts
-      for(var k=0;k<allHeardTranscripts.length;k++){
-        if(lenientMatch(word, allHeardTranscripts[k])){
-          doCheck(allHeardTranscripts);
-          return;
-        }
-      }
-      // Heard something but no match → show what we heard with override option
+      // shouldn't happen with continuous=false, but cover anyway
       showHeardOverride(allHeardTranscripts);
     } else {
       showRetryDialog("I didn't hear you. Tap 🎤 again.");
@@ -2089,12 +2128,16 @@ document.addEventListener('DOMContentLoaded', init);
 // Tap-to-start (audio unlock)
 document.getElementById('start-listen-tap').addEventListener('click', function(){
   ensureAudio();
+  unlockAudio();
   state.audioReady = true;
   document.getElementById('start-listen-tap').classList.add('hide');
   if(state.musicOn) startBgMusic();
 });
 
 document.getElementById('btn-start').addEventListener('click', function(){
+  ensureAudio();
+  unlockAudio();
+  if(state.musicOn) startBgMusic();
   document.getElementById('title').classList.add('hide');
   startMarioWalkAnimation();
   setTimeout(function(){
@@ -2108,7 +2151,16 @@ document.getElementById('btn-words').addEventListener('click', showWords);
 
 document.getElementById('mic-btn').addEventListener('click', function(){
   ensureAudio();
-  if(state.phase !== 'listening') return;
+  unlockAudio();
+  if(state.phase === 'idle' || state.phase === 'celebrating'){
+    // We're between words — nudge into listening
+    state.phase = 'listening';
+  }
+  if(state.phase !== 'listening'){
+    // Show a hint instead of silently doing nothing
+    showDialog('Wait for the word to appear 👀', 1200);
+    return;
+  }
   startMic();
 });
 
