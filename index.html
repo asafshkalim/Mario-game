@@ -125,6 +125,8 @@ button{font-family:inherit}
 .picker-icon img.sprite-img{width:100%;height:100%;image-rendering:pixelated}
 .picker-emoji{font-size:30px;line-height:1}
 .picker-name{font-family:‘Press Start 2P’,monospace;font-size:7px;color:#fff;text-align:center;line-height:1.2}
+#dialog.shake-attn{animation:dialogShake .35s ease-in-out}
+@keyframes dialogShake{0%,100%{transform:translate(-50%,-50%)}25%{transform:translate(calc(-50% - 6px),-50%)}50%{transform:translate(calc(-50% + 6px),-50%)}75%{transform:translate(calc(-50% - 4px),-50%)}}
 
 .pickup{position:absolute;width:34px;height:34px;z-index:7;filter:drop-shadow(0 0 6px #fff) drop-shadow(2px 2px 0 #000);transition:transform .1s;will-change:transform}
 .pickup-mushroom{filter:drop-shadow(0 0 8px #ff8f00) drop-shadow(2px 2px 0 #000)}
@@ -1528,16 +1530,16 @@ function marioJumpAndStomp(enemy, type){
   var m = document.getElementById('mario');
   if(!enemy || !enemy.parentNode){ afterStomp(); return; }
 
-  var stage = document.getElementById('stage').getBoundingClientRect();
   var eRect = enemy.getBoundingClientRect();
   var mRect = m.getBoundingClientRect();
-  // Compute target X: just to the left of enemy so Mario lands ON it
-  // We move Mario via translateX from his starting position
-  var marioCenterX = mRect.left + mRect.width / 2;
-  var enemyCenterX = eRect.left + eRect.width / 2;
-  var offsetX = enemyCenterX - marioCenterX - 8; // slight overlap on top of enemy
+  // Position Mario so he lands on the LEFT half of the enemy, leaving the enemy's
+  // right half visible. We aim Mario's right edge at the enemy's center.
+  var marioRightX = mRect.left + mRect.width;
+  var enemyLeftQuarterX = eRect.left + eRect.width * 0.35;  // a bit left of center
+  var offsetX = enemyLeftQuarterX - marioRightX;
+  // Don't overshoot — leave a tiny gap so Mario isn't drawn beyond the enemy
+  if(offsetX < 0) offsetX = 0;  // safety: never move backwards
 
-  // Save original transform so we can restore (costume filters etc are on `style.filter`, transform is independent)
   var prevTransition = m.style.transition;
 
   setMarioFrame('jump');
@@ -1559,9 +1561,6 @@ function marioJumpAndStomp(enemy, type){
     setMarioFrame('jump');
     // Phase 2: Mario lands ON the enemy
     m.style.transition = 'transform .15s ease-in, bottom .22s ease-in';
-    // Land at enemy top — for short enemies like goomba (24px tall in our render),
-    // Mario's feet should be at top of enemy; we approximate by landing at
-    // eRect.height-ish above ground. For goomba/koopa: ~20px. Piranha not used here.
     var landBottom = (type === 'koopa') ? 24 : (type === 'piranha' ? 60 : 18);
     m.style.bottom = landBottom + 'px';
 
@@ -2089,6 +2088,13 @@ function showSummary(){
 
 // ---- MENU ----
 function showMenu(){
+  // If the item picker is open, dismiss it cleanly — otherwise itemPickerActive
+  // would stay true forever and block the next word from spawning.
+  if(itemPickerActive){
+    var d = document.getElementById('dialog');
+    if(d){ d.classList.remove('show'); d.classList.remove('picker-mode'); d.innerHTML = ''; }
+    itemPickerActive = false;
+  }
   var stickerCount = Object.keys(state.stickers || {}).length;
   var html = '<h2>★ MENU ★</h2>';
   html += '<div class="menu-row column">';
@@ -2351,12 +2357,20 @@ document.getElementById('btn-words').addEventListener('click', showWords);
 document.getElementById('mic-btn').addEventListener('click', function(){
   ensureAudio();
   unlockAudio();
-  if(state.phase === 'idle' || state.phase === 'celebrating'){
-    // We're between words — nudge into listening
+  // Don't allow mic during item picker — kid should pick a card first
+  if(itemPickerActive){
+    // Briefly highlight the picker dialog to show what's blocking
+    var d = document.getElementById('dialog');
+    if(d) {
+      d.classList.add('shake-attn');
+      setTimeout(function(){ d.classList.remove('shake-attn'); }, 400);
+    }
+    return;
+  }
+  if((state.phase === 'idle' || state.phase === 'celebrating') && word){
     state.phase = 'listening';
   }
   if(state.phase !== 'listening'){
-    // Show a hint instead of silently doing nothing
     showDialog('Wait for the word to appear 👀', 1200);
     return;
   }
