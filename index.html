@@ -1530,66 +1530,41 @@ function marioJumpAndStomp(enemy, type){
   var m = document.getElementById('mario');
   if(!enemy || !enemy.parentNode){ afterStomp(); return; }
 
-  var eRect = enemy.getBoundingClientRect();
-  var mRect = m.getBoundingClientRect();
-  // Position Mario so he lands on the LEFT half of the enemy, leaving the enemy's
-  // right half visible. We aim Mario's right edge at the enemy's center.
-  var marioRightX = mRect.left + mRect.width;
-  var enemyLeftQuarterX = eRect.left + eRect.width * 0.35;  // a bit left of center
-  var offsetX = enemyLeftQuarterX - marioRightX;
-  // Don't overshoot — leave a tiny gap so Mario isn't drawn beyond the enemy
-  if(offsetX < 0) offsetX = 0;  // safety: never move backwards
-
-  var prevTransition = m.style.transition;
-
   setMarioFrame('jump');
   playJumpSound();
 
-  // Phase 1: Mario leaps up AND across simultaneously (parabolic feel)
-  m.style.transition = 'transform .42s cubic-bezier(.2,.7,.4,1.0), bottom .42s ease-out';
-  m.style.transform = 'translateX(' + offsetX + 'px)';
-  m.style.bottom = '70px'; // arc apex
-  // Animate walk frames during the in-air movement for a "running" look
-  var f = 1;
-  var runTimer = setInterval(function(){
-    f = f === 1 ? 2 : 1;
-    setMarioFrame(f);
-  }, 90);
+  // Phase 1: Mario hops up vertically (proven simple animation)
+  m.style.transition = 'bottom .35s ease-out';
+  m.style.bottom = '85px';
+
+  // Phase 1b: While Mario is in the air, the enemy slides toward Mario's
+  // landing spot so they meet on impact. We compute the enemy's current
+  // 'right' value and animate it inward.
+  var stage = document.getElementById('stage').getBoundingClientRect();
+  var marioCenterX = stage.width * 0.14 + 28;            // mario's screen-x center
+  var enemyWidth = enemy.offsetWidth || 42;
+  // Target: enemy center sits ~30px to the right of mario's center
+  // → enemy `right` = stage.width - (marioCenterX + 30) - enemyWidth/2
+  var targetRight = stage.width - marioCenterX - 30 - enemyWidth/2;
+  // Read current right (set inline by walkTimer in pixels)
+  var currentRight = parseFloat(enemy.style.right) || 0;
+  // Only slide enemy if it's not already at/past target
+  if(currentRight < targetRight){
+    enemy.style.transition = 'right .35s ease-in';
+    enemy.style.right = targetRight + 'px';
+  }
 
   setTimeout(function(){
-    clearInterval(runTimer);
-    setMarioFrame('jump');
-    // Phase 2: Mario lands ON the enemy
-    m.style.transition = 'transform .15s ease-in, bottom .22s ease-in';
-    var landBottom = (type === 'koopa') ? 24 : (type === 'piranha' ? 60 : 18);
-    m.style.bottom = landBottom + 'px';
-
+    // Phase 2: Mario lands on enemy
+    m.style.transition = 'bottom .25s ease-in';
+    m.style.bottom = '0px';
     setTimeout(function(){
       // Stomp impact at the moment of landing
       stompEnemy(enemy, type);
-      setMarioFrame('jump');
-
-      // Phase 3: Tiny rebound bounce after stomp
-      m.style.transition = 'bottom .14s ease-out';
-      m.style.bottom = (landBottom + 18) + 'px';
-      setTimeout(function(){
-        // Phase 4: Drop to ground and walk back to start
-        m.style.transition = 'transform .35s ease-out, bottom .25s ease-in';
-        m.style.transform = 'translateX(0px)';
-        m.style.bottom = '0px';
-        var f2 = 1;
-        var walkBack = setInterval(function(){
-          f2 = f2 === 1 ? 2 : 1;
-          setMarioFrame(f2);
-        }, 130);
-        setTimeout(function(){
-          clearInterval(walkBack);
-          setMarioFrame(0);
-          m.style.transition = prevTransition || 'transform .15s,height .25s,width .25s';
-        }, 360);
-      }, 140);
-    }, 220);
-  }, 420);
+      setMarioFrame(0);
+      m.style.transition = 'transform .15s, height .25s, width .25s';
+    }, 250);
+  }, 350);
 }
 
 function stompEnemy(g, type){
@@ -2357,19 +2332,28 @@ document.getElementById('btn-words').addEventListener('click', showWords);
 document.getElementById('mic-btn').addEventListener('click', function(){
   ensureAudio();
   unlockAudio();
-  // Don't allow mic during item picker — kid should pick a card first
-  if(itemPickerActive){
-    // Briefly highlight the picker dialog to show what's blocking
+
+  // Self-heal: if itemPickerActive flag is stuck but no picker cards visible,
+  // clear it. This prevents the mic from being silently blocked.
+  if(itemPickerActive && !document.querySelector('.picker-card')){
+    itemPickerActive = false;
+  }
+
+  // If a picker is genuinely visible, just shake it and bail
+  if(itemPickerActive && document.querySelector('.picker-card')){
     var d = document.getElementById('dialog');
-    if(d) {
+    if(d){
       d.classList.add('shake-attn');
       setTimeout(function(){ d.classList.remove('shake-attn'); }, 400);
     }
     return;
   }
+
+  // Auto-promote phase to listening if we have a word ready
   if((state.phase === 'idle' || state.phase === 'celebrating') && word){
     state.phase = 'listening';
   }
+
   if(state.phase !== 'listening'){
     showDialog('Wait for the word to appear 👀', 1200);
     return;
