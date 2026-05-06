@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -15,47 +14,47 @@
 html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Andika',system-ui,sans-serif;color:#fff;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
 body{height:100dvh}
 img,svg{image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-rendering:crisp-edges;display:block}
-img.sprite-img{width:100%;height:100%;-webkit-user-drag:none;user-select:none;pointer-events:none}
+img.sprite-img{width:100%;height:100%;-webkit-user-drag:none;user-select:none;pointer-events:none;object-fit:contain;display:block}
 button{font-family:inherit}
 
-#rotate-prompt{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:9999;color:#fff;text-align:center;padding:20px;font-family:‘Press Start 2P’,monospace;font-size:13px;line-height:1.6}
+#rotate-prompt{position:fixed;inset:0;background:#000;display:none;align-items:center;justify-content:center;z-index:9999;color:#fff;text-align:center;padding:20px;font-family:'Press Start 2P',monospace;font-size:13px;line-height:1.6}
 @media (orientation:portrait){
-#rotate-prompt{display:flex}
-#app{display:none !important}
-#start-listen-tap{display:none !important}
+  #rotate-prompt{display:flex}
+  #app{display:none !important}
+  #start-listen-tap{display:none !important}
 }
 #rotate-icon{font-size:64px;margin-bottom:18px;animation:rotateBounce 1s ease-in-out infinite alternate}
 @keyframes rotateBounce{from{transform:rotate(0deg)}to{transform:rotate(90deg)}}
 
 #app{position:fixed;inset:0;display:flex;flex-direction:column;background:#5c94fc}
 
-/* –– TITLE SCREEN –– */
+/* ---- TITLE SCREEN ---- */
 #title{position:absolute;inset:0;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:20px;background:linear-gradient(180deg,#5c94fc 0%,#5c94fc 78%,#00a800 78%,#00a800 100%);z-index:30;padding:0 6vw}
 #title.hide{display:none}
 .title-mario{width:80px;height:80px;animation:bounce .55s ease-in-out infinite alternate;filter:drop-shadow(3px 3px 0 #000);flex:0 0 auto}
 @keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-10px)}}
 .title-card-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;flex:0 1 auto}
 .title-card{background:#000;border:3px solid #fbd000;border-radius:6px;padding:10px 22px;text-align:center;box-shadow:4px 4px 0 #d82800,8px 8px 0 #fbd000}
-.title-card h1{font-family:‘Press Start 2P’,monospace;font-size:18px;color:#fbd000;text-shadow:2px 2px 0 #d82800;letter-spacing:2px;line-height:1.3}
-.title-card p{font-family:‘Andika’,sans-serif;font-weight:700;font-size:14px;color:#fff;margin-top:6px}
+.title-card h1{font-family:'Press Start 2P',monospace;font-size:18px;color:#fbd000;text-shadow:2px 2px 0 #d82800;letter-spacing:2px;line-height:1.3}
+.title-card p{font-family:'Andika',sans-serif;font-weight:700;font-size:14px;color:#fff;margin-top:6px}
 .title-buttons{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
-.btn-primary{background:#fbd000;color:#000;border:2px solid #000;border-radius:5px;padding:8px 16px;font-family:‘Press Start 2P’,monospace;font-size:11px;cursor:pointer;box-shadow:3px 3px 0 #000;font-weight:bold}
+.btn-primary{background:#fbd000;color:#000;border:2px solid #000;border-radius:5px;padding:8px 16px;font-family:'Press Start 2P',monospace;font-size:11px;cursor:pointer;box-shadow:3px 3px 0 #000;font-weight:bold}
 .btn-primary:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
-.btn-secondary{background:#aaa;color:#000;border:2px solid #000;border-radius:5px;padding:7px 12px;font-family:‘Press Start 2P’,monospace;font-size:9px;cursor:pointer;box-shadow:2px 2px 0 #000}
+.btn-secondary{background:#aaa;color:#000;border:2px solid #000;border-radius:5px;padding:7px 12px;font-family:'Press Start 2P',monospace;font-size:9px;cursor:pointer;box-shadow:2px 2px 0 #000}
 .btn-secondary:active{transform:translate(2px,2px);box-shadow:0 0 0 #000}
 
-/* –– HUD –– */
-#hud{position:absolute;top:0;left:0;right:0;height:32px;background:rgba(0,0,0,.72);color:#fff;font-family:‘Press Start 2P’,monospace;font-size:9px;display:flex;align-items:center;justify-content:space-between;padding:0 8px;z-index:5;border-bottom:2px solid #fbd000;gap:8px}
+/* ---- HUD ---- */
+#hud{position:absolute;top:0;left:0;right:0;height:32px;background:rgba(0,0,0,.72);color:#fff;font-family:'Press Start 2P',monospace;font-size:9px;display:flex;align-items:center;justify-content:space-between;padding:0 8px;z-index:5;border-bottom:2px solid #fbd000;gap:8px}
 #coins-hud{display:flex;align-items:center;gap:5px;flex:0 0 auto}
 #coins-icon{width:14px;height:14px}
 #world-label{color:#fbd000;flex:1 1 auto;text-align:center;font-size:9px;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #progress-bar{display:flex;align-items:center;gap:3px;flex:0 0 auto;font-size:8px;color:#fff}
 #progress-bar .pip{width:8px;height:8px;background:#444;border:1px solid #000;border-radius:1px}
 #progress-bar .pip.fill{background:#fbd000;box-shadow:0 0 4px #fbd000}
-#menu-btn{background:#fbd000;color:#000;border:2px solid #000;padding:3px 7px;font-family:‘Press Start 2P’,monospace;font-size:9px;border-radius:3px;cursor:pointer;flex:0 0 auto}
-#music-toggle{background:rgba(0,0,0,.7);color:#fff;border:2px solid #fbd000;padding:3px 6px;font-family:‘Press Start 2P’,monospace;font-size:8px;border-radius:3px;cursor:pointer;flex:0 0 auto}
+#menu-btn{background:#fbd000;color:#000;border:2px solid #000;padding:3px 7px;font-family:'Press Start 2P',monospace;font-size:9px;border-radius:3px;cursor:pointer;flex:0 0 auto}
+#music-toggle{background:rgba(0,0,0,.7);color:#fff;border:2px solid #fbd000;padding:3px 6px;font-family:'Press Start 2P',monospace;font-size:8px;border-radius:3px;cursor:pointer;flex:0 0 auto}
 
-/* –– STAGE –– */
+/* ---- STAGE ---- */
 #stage{position:absolute;top:32px;left:0;right:0;bottom:0;overflow:hidden;background:#5c94fc}
 #stage.world-w0{background:linear-gradient(180deg,#5c94fc 0%,#5c94fc 100%)}
 #stage.world-w1{background:linear-gradient(180deg,#fcae66 0%,#fbd000 100%)}
@@ -86,12 +85,12 @@ button{font-family:inherit}
 #mario.fire-power{filter:drop-shadow(0 0 5px rgba(255,255,255,.9))}
 #mario.star-power{animation:starFlash .12s steps(1) infinite}
 @keyframes starFlash{
-0%{filter:hue-rotate(0deg) saturate(1.5) drop-shadow(0 0 8px #fbd000)}
-20%{filter:hue-rotate(72deg) saturate(1.5) drop-shadow(0 0 8px #ff5fbf)}
-40%{filter:hue-rotate(144deg) saturate(1.5) drop-shadow(0 0 8px #5fffd0)}
-60%{filter:hue-rotate(216deg) saturate(1.5) drop-shadow(0 0 8px #5f8fff)}
-80%{filter:hue-rotate(288deg) saturate(1.5) drop-shadow(0 0 8px #ff8f5f)}
-100%{filter:hue-rotate(360deg) saturate(1.5) drop-shadow(0 0 8px #fbd000)}
+  0%{filter:hue-rotate(0deg) saturate(1.5) drop-shadow(0 0 8px #fbd000)}
+  20%{filter:hue-rotate(72deg) saturate(1.5) drop-shadow(0 0 8px #ff5fbf)}
+  40%{filter:hue-rotate(144deg) saturate(1.5) drop-shadow(0 0 8px #5fffd0)}
+  60%{filter:hue-rotate(216deg) saturate(1.5) drop-shadow(0 0 8px #5f8fff)}
+  80%{filter:hue-rotate(288deg) saturate(1.5) drop-shadow(0 0 8px #ff8f5f)}
+  100%{filter:hue-rotate(360deg) saturate(1.5) drop-shadow(0 0 8px #fbd000)}
 }
 
 #qblock{position:absolute;left:24%;top:18%;width:42px;height:42px;z-index:5;animation:qbounce 1.4s ease-in-out infinite}
@@ -102,11 +101,15 @@ button{font-family:inherit}
 /* Poster — centered horizontally over scene; sized to fit */
 #poster{position:absolute;left:50%;top:14%;transform:translateX(-50%);background:#fff;border:3px solid #000;border-radius:6px;padding:8px 18px;box-shadow:4px 4px 0 #000;z-index:5;display:flex;align-items:center;justify-content:center;min-width:110px;min-height:48px;max-width:55%}
 #poster.flash-context{background:#fffbe0}
-#poster .word{font-family:‘Andika’,sans-serif;font-weight:700;color:#000;font-size:34px;line-height:1;letter-spacing:1px}
-#poster .sentence{font-family:‘Andika’,sans-serif;font-weight:700;color:#000;font-size:16px;line-height:1.2;text-align:center}
+#poster .word{font-family:'Andika',sans-serif;font-weight:700;color:#000;font-size:34px;line-height:1;letter-spacing:1px}
+#poster .sentence{font-family:'Andika',sans-serif;font-weight:700;color:#000;font-size:16px;line-height:1.2;text-align:center}
 
+/* Enemy containers: sized to roughly match each native sprite's aspect ratio
+   (Goomba 16x16 → 42x42; Koopa 16x24 → 32x48; Piranha 18x30 → 38x60).
+   This prevents horizontal stretching/clipping that would distort the right side. */
 .goomba,.enemy{position:absolute;width:42px;height:42px;z-index:6}
-.enemy-piranha{width:48px;height:80px;bottom:0}
+.enemy-koopa{width:32px;height:48px}
+.enemy-piranha{width:38px;height:60px;bottom:0}
 /* Only goomba uses the bounce animation; koopa & piranha animate via sprite frame swaps */
 .enemy-goomba.walking{animation:goombaBounce .35s ease-in-out infinite alternate}
 @keyframes goombaBounce{from{transform:translateY(0) scaleY(1)}to{transform:translateY(-2px) scaleY(.94)}}
@@ -116,7 +119,7 @@ button{font-family:inherit}
 
 /* Item picker */
 #dialog.picker-mode{padding:10px 14px;background:rgba(0,0,0,.95);max-width:90%;width:auto}
-.picker-title{font-family:‘Press Start 2P’,monospace;font-size:11px;color:#fbd000;text-shadow:2px 2px 0 #000;margin-bottom:8px}
+.picker-title{font-family:'Press Start 2P',monospace;font-size:11px;color:#fbd000;text-shadow:2px 2px 0 #000;margin-bottom:8px}
 .picker-row{display:flex;gap:8px;justify-content:center;align-items:stretch}
 .picker-card{background:#1a1a1a;border:3px solid #fbd000;border-radius:6px;padding:6px 4px;cursor:pointer;width:74px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:3px 3px 0 #000;transition:transform .15s, box-shadow .15s}
 .picker-card:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #000}
@@ -124,7 +127,7 @@ button{font-family:inherit}
 .picker-icon{width:38px;height:38px;display:flex;align-items:center;justify-content:center}
 .picker-icon img.sprite-img{width:100%;height:100%;image-rendering:pixelated}
 .picker-emoji{font-size:30px;line-height:1}
-.picker-name{font-family:‘Press Start 2P’,monospace;font-size:7px;color:#fff;text-align:center;line-height:1.2}
+.picker-name{font-family:'Press Start 2P',monospace;font-size:7px;color:#fff;text-align:center;line-height:1.2}
 #dialog.shake-attn{animation:dialogShake .35s ease-in-out}
 @keyframes dialogShake{0%,100%{transform:translate(-50%,-50%)}25%{transform:translate(calc(-50% - 6px),-50%)}50%{transform:translate(calc(-50% + 6px),-50%)}75%{transform:translate(calc(-50% - 4px),-50%)}}
 
@@ -137,19 +140,19 @@ button{font-family:inherit}
 
 .sparkle{position:absolute;font-size:18px;pointer-events:none;animation:sparkleFly .65s ease-out forwards;will-change:transform,opacity}
 @keyframes sparkleFly{
-0%{opacity:1;transform:translate(-50%,-50%) scale(.5)}
-60%{opacity:1}
-100%{opacity:0;transform:translate(calc(-50% + var(–dx, 0)),calc(-50% + var(–dy, 0))) scale(1.4)}
+  0%{opacity:1;transform:translate(-50%,-50%) scale(.5)}
+  60%{opacity:1}
+  100%{opacity:0;transform:translate(calc(-50% + var(--dx, 0)),calc(-50% + var(--dy, 0))) scale(1.4)}
 }
 
 #mic-wrap{position:absolute;right:3%;bottom:50px;z-index:7;display:flex;flex-direction:column;align-items:center;gap:4px}
-#mic-btn{width:64px;height:64px;border-radius:50%;border:3px solid #000;background:radial-gradient(circle,#fbd000 0%,#f8b800 70%,#d09000 100%);color:#000;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(251,208,0,.7),3px 3px 0 #000;animation:micPulse 1.5s ease-in-out infinite;font-family:‘Press Start 2P’,monospace}
+#mic-btn{width:64px;height:64px;border-radius:50%;border:3px solid #000;background:radial-gradient(circle,#fbd000 0%,#f8b800 70%,#d09000 100%);color:#000;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(251,208,0,.7),3px 3px 0 #000;animation:micPulse 1.5s ease-in-out infinite;font-family:'Press Start 2P',monospace}
 #mic-btn:active{transform:translate(2px,2px);box-shadow:0 0 20px rgba(251,208,0,.7),1px 1px 0 #000}
 #mic-btn.listening{background:radial-gradient(circle,#ff4040 0%,#c00000 70%,#700000 100%);animation:micListen .55s ease-in-out infinite}
 @keyframes micPulse{0%,100%{box-shadow:0 0 20px rgba(251,208,0,.7),3px 3px 0 #000}50%{box-shadow:0 0 36px rgba(251,208,0,1),3px 3px 0 #000}}
 @keyframes micListen{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-#mic-label{font-family:‘Press Start 2P’,monospace;font-size:8px;background:rgba(0,0,0,.7);padding:3px 6px;border-radius:3px;border:1px solid #fbd000;color:#fff;white-space:nowrap}
-#mic-countdown{font-family:‘Press Start 2P’,monospace;font-size:18px;color:#fbd000;text-shadow:2px 2px 0 #000,0 0 8px rgba(251,208,0,.8);display:none;font-weight:bold}
+#mic-label{font-family:'Press Start 2P',monospace;font-size:8px;background:rgba(0,0,0,.7);padding:3px 6px;border-radius:3px;border:1px solid #fbd000;color:#fff;white-space:nowrap}
+#mic-countdown{font-family:'Press Start 2P',monospace;font-size:18px;color:#fbd000;text-shadow:2px 2px 0 #000,0 0 8px rgba(251,208,0,.8);display:none;font-weight:bold}
 #mic-countdown.show{display:block}
 #mic-countdown.urgent{color:#ff4040;text-shadow:2px 2px 0 #000,0 0 10px rgba(255,64,64,.9);animation:urgentPulse .25s ease-in-out infinite alternate}
 @keyframes urgentPulse{from{transform:scale(1)}to{transform:scale(1.15)}}
@@ -159,21 +162,21 @@ button{font-family:inherit}
 @keyframes flashOnce{0%{opacity:0}50%{opacity:.8}100%{opacity:0}}
 
 .coin-particle{position:absolute;width:18px;height:18px;z-index:9;animation:coinFly 1.2s ease-out forwards}
-@keyframes coinFly{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-140px) translateX(var(–dx,0)) scale(.5) rotate(720deg)}}
-.score-pop{position:absolute;font-family:‘Press Start 2P’,monospace;font-size:16px;color:#fbd000;text-shadow:2px 2px 0 #000;z-index:9;pointer-events:none;animation:scorePop 1.2s ease-out forwards}
+@keyframes coinFly{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-140px) translateX(var(--dx,0)) scale(.5) rotate(720deg)}}
+.score-pop{position:absolute;font-family:'Press Start 2P',monospace;font-size:16px;color:#fbd000;text-shadow:2px 2px 0 #000;z-index:9;pointer-events:none;animation:scorePop 1.2s ease-out forwards}
 @keyframes scorePop{0%{opacity:0;transform:translateY(0) scale(.5)}30%{opacity:1;transform:translateY(-22px) scale(1.2)}100%{opacity:0;transform:translateY(-80px) scale(1)}}
 
-#dialog{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);background:rgba(0,0,0,.92);border:3px solid #fbd000;border-radius:8px;padding:12px 22px;font-family:‘Andika’,sans-serif;font-weight:700;font-size:16px;text-align:center;color:#fff;z-index:10;display:none;max-width:80%}
+#dialog{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);background:rgba(0,0,0,.92);border:3px solid #fbd000;border-radius:8px;padding:12px 22px;font-family:'Andika',sans-serif;font-weight:700;font-size:16px;text-align:center;color:#fff;z-index:10;display:none;max-width:80%}
 #dialog.show{display:block;animation:dialogPop .3s}
 @keyframes dialogPop{from{transform:translate(-50%,-50%) scale(.7);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
 
-/* –– MENU OVERLAY –– */
+/* ---- MENU OVERLAY ---- */
 #menu-overlay{position:absolute;inset:0;background:rgba(0,0,0,.88);z-index:50;display:none;align-items:center;justify-content:center;padding:14px}
 #menu-overlay.show{display:flex}
 .menu-panel{background:#000;border:3px solid #fbd000;border-radius:8px;padding:14px;max-width:96%;max-height:96%;overflow-y:auto;width:560px}
-.menu-panel h2{font-family:‘Press Start 2P’,monospace;font-size:13px;color:#fbd000;text-align:center;margin-bottom:10px;letter-spacing:1px}
+.menu-panel h2{font-family:'Press Start 2P',monospace;font-size:13px;color:#fbd000;text-align:center;margin-bottom:10px;letter-spacing:1px}
 .menu-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:8px 0}
-.menu-back{background:#aaa;color:#000;border:2px solid #000;padding:6px 12px;font-family:‘Press Start 2P’,monospace;font-size:10px;cursor:pointer;border-radius:3px;display:block;margin:10px auto 0;box-shadow:2px 2px 0 #000}
+.menu-back{background:#aaa;color:#000;border:2px solid #000;padding:6px 12px;font-family:'Press Start 2P',monospace;font-size:10px;cursor:pointer;border-radius:3px;display:block;margin:10px auto 0;box-shadow:2px 2px 0 #000}
 .menu-row.column{flex-direction:column;align-items:stretch;gap:6px;max-width:300px;margin-left:auto;margin-right:auto}
 .menu-row.column .btn-secondary{font-size:10px;padding:8px 10px}
 
@@ -181,39 +184,39 @@ button{font-family:inherit}
 .costume-card.selected{border-color:#fbd000;background:#3a2c00;box-shadow:0 0 8px rgba(251,208,0,.6)}
 .costume-card svg{width:54px;height:auto;margin:0 auto}
 .costume-thumb{width:54px;height:54px;margin:0 auto}
-.costume-card .name{font-family:‘Andika’,sans-serif;font-weight:700;font-size:11px;color:#fff;margin-top:3px}
+.costume-card .name{font-family:'Andika',sans-serif;font-weight:700;font-size:11px;color:#fff;margin-top:3px}
 
 /* Stickers */
-.sticker-progress{font-family:‘Press Start 2P’,monospace;font-size:10px;color:#fbd000;text-align:center;margin:4px 0 8px}
-.sticker-empty{font-family:‘Andika’,sans-serif;font-size:14px;color:#fff;text-align:center;padding:20px 10px;font-weight:700}
+.sticker-progress{font-family:'Press Start 2P',monospace;font-size:10px;color:#fbd000;text-align:center;margin:4px 0 8px}
+.sticker-empty{font-family:'Andika',sans-serif;font-size:14px;color:#fff;text-align:center;padding:20px 10px;font-weight:700}
 .sticker-grid{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-height:200px;overflow-y:auto;padding:4px}
 .sticker{width:62px;height:62px;border:3px solid #000;border-radius:50%;box-shadow:2px 2px 0 #000,inset 0 -4px 0 rgba(0,0,0,.25);display:flex;flex-direction:column;align-items:center;justify-content:center;flex:0 0 auto}
 .sticker-emoji{font-size:18px;line-height:1}
-.sticker-word{font-family:‘Andika’,sans-serif;font-weight:700;font-size:10px;color:#000;text-shadow:1px 1px 0 rgba(255,255,255,.4);margin-top:2px;text-align:center;line-height:1;word-break:break-all;padding:0 2px}
-.sticker-stats{font-family:‘Press Start 2P’,monospace;font-size:10px;color:#fff;text-align:center;margin-top:10px;padding:6px;background:rgba(0,0,0,.4);border-radius:4px;border:1px solid #fbd000}
+.sticker-word{font-family:'Andika',sans-serif;font-weight:700;font-size:10px;color:#000;text-shadow:1px 1px 0 rgba(255,255,255,.4);margin-top:2px;text-align:center;line-height:1;word-break:break-all;padding:0 2px}
+.sticker-stats{font-family:'Press Start 2P',monospace;font-size:10px;color:#fff;text-align:center;margin-top:10px;padding:6px;background:rgba(0,0,0,.4);border-radius:4px;border:1px solid #fbd000}
 
 .sticker-earned{position:absolute;top:18%;left:50%;transform:translateX(-50%);background:#fbd000;border:3px solid #000;border-radius:8px;padding:8px 18px;box-shadow:4px 4px 0 #000;text-align:center;z-index:9;animation:stickerPop 1.7s ease-out forwards;pointer-events:none}
-.sticker-earned .se-line1{font-family:‘Press Start 2P’,monospace;font-size:10px;color:#000}
-.sticker-earned .se-line2{font-family:‘Andika’,sans-serif;font-weight:700;font-size:18px;color:#000;margin-top:4px;text-transform:uppercase}
+.sticker-earned .se-line1{font-family:'Press Start 2P',monospace;font-size:10px;color:#000}
+.sticker-earned .se-line2{font-family:'Andika',sans-serif;font-weight:700;font-size:18px;color:#000;margin-top:4px;text-transform:uppercase}
 @keyframes stickerPop{0%{opacity:0;transform:translateX(-50%) scale(.5) translateY(20px)}20%{opacity:1;transform:translateX(-50%) scale(1.1) translateY(0)}30%{transform:translateX(-50%) scale(1) translateY(0)}80%{opacity:1;transform:translateX(-50%) scale(1) translateY(0)}100%{opacity:0;transform:translateX(-50%) scale(1) translateY(-20px)}}
 
-.summary-stats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin:8px 0;font-family:‘Andika’,sans-serif;font-weight:700;font-size:11px;color:#fff}
+.summary-stats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin:8px 0;font-family:'Andika',sans-serif;font-weight:700;font-size:11px;color:#fff}
 .summary-stats div{background:#1a1a1a;padding:6px;border-radius:4px;text-align:center;border:2px solid #444}
-.summary-stats .num{display:block;font-size:18px;color:#fbd000;font-family:‘Press Start 2P’,monospace;margin-bottom:2px}
+.summary-stats .num{display:block;font-size:18px;color:#fbd000;font-family:'Press Start 2P',monospace;margin-bottom:2px}
 .word-grid{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:8px 0;max-height:80px;overflow-y:auto;padding:3px}
-.word-pill{padding:3px 8px;border-radius:11px;font-family:‘Andika’,sans-serif;font-weight:700;font-size:12px;border:2px solid #000}
+.word-pill{padding:3px 8px;border-radius:11px;font-family:'Andika',sans-serif;font-weight:700;font-size:12px;border:2px solid #000}
 .word-pill.correct{background:#00a800;color:#fff}
 .word-pill.missed{background:#d82800;color:#fff}
 
 /* Dictionary editor */
 .dict-list{max-height:160px;overflow-y:auto;background:#111;border:2px solid #333;border-radius:5px;padding:6px;margin:6px 0;display:flex;flex-wrap:wrap;gap:5px}
-.dict-pill{background:#222;color:#fff;font-family:‘Andika’,sans-serif;font-weight:700;font-size:12px;padding:3px 8px;border-radius:11px;border:2px solid #555;display:flex;align-items:center;gap:4px}
+.dict-pill{background:#222;color:#fff;font-family:'Andika',sans-serif;font-weight:700;font-size:12px;padding:3px 8px;border-radius:11px;border:2px solid #555;display:flex;align-items:center;gap:4px}
 .dict-pill button{background:#d82800;color:#fff;border:none;border-radius:50%;width:16px;height:16px;font-size:11px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;line-height:1}
 .dict-add{display:flex;gap:6px;margin:6px 0;justify-content:center;flex-wrap:wrap}
-.dict-add input{font-family:‘Andika’,sans-serif;font-weight:700;font-size:14px;padding:6px 8px;border:2px solid #fbd000;border-radius:4px;background:#fff;color:#000;width:180px}
-.dict-add button{background:#00a800;color:#fff;border:2px solid #000;border-radius:4px;padding:6px 12px;font-family:‘Press Start 2P’,monospace;font-size:9px;cursor:pointer;box-shadow:2px 2px 0 #000}
+.dict-add input{font-family:'Andika',sans-serif;font-weight:700;font-size:14px;padding:6px 8px;border:2px solid #fbd000;border-radius:4px;background:#fff;color:#000;width:180px}
+.dict-add button{background:#00a800;color:#fff;border:2px solid #000;border-radius:4px;padding:6px 12px;font-family:'Press Start 2P',monospace;font-size:9px;cursor:pointer;box-shadow:2px 2px 0 #000}
 .dict-add button:active{transform:translate(2px,2px);box-shadow:0 0 0 #000}
-.dict-info{font-family:‘Andika’,sans-serif;font-size:11px;color:#aaa;text-align:center;margin:4px 0}
+.dict-info{font-family:'Andika',sans-serif;font-size:11px;color:#aaa;text-align:center;margin:4px 0}
 
 /* Level complete */
 #levelup-overlay{position:absolute;inset:0;background:rgba(0,0,0,.88);z-index:60;display:none;align-items:center;justify-content:center;padding:14px;flex-direction:column;color:#fff;text-align:center}
@@ -221,31 +224,30 @@ button{font-family:inherit}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .lu-flag{font-size:54px;animation:flagWave 1s ease-in-out infinite}
 @keyframes flagWave{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
-.lu-title{font-family:‘Press Start 2P’,monospace;font-size:18px;color:#fbd000;text-shadow:3px 3px 0 #d82800;margin:10px 0 6px;letter-spacing:1px}
-.lu-sub{font-family:‘Andika’,sans-serif;font-weight:700;font-size:16px;color:#fff;margin-bottom:14px}
-.lu-next{font-family:‘Press Start 2P’,monospace;font-size:11px;color:#fbd000;margin-bottom:12px}
+.lu-title{font-family:'Press Start 2P',monospace;font-size:18px;color:#fbd000;text-shadow:3px 3px 0 #d82800;margin:10px 0 6px;letter-spacing:1px}
+.lu-sub{font-family:'Andika',sans-serif;font-weight:700;font-size:16px;color:#fff;margin-bottom:14px}
+.lu-next{font-family:'Press Start 2P',monospace;font-size:11px;color:#fbd000;margin-bottom:12px}
 
-#start-listen-tap{position:absolute;inset:0;background:rgba(0,0,0,.92);z-index:100;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;font-family:‘Press Start 2P’,monospace;font-size:12px;text-align:center;padding:20px}
+#start-listen-tap{position:absolute;inset:0;background:rgba(0,0,0,.92);z-index:100;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;font-family:'Press Start 2P',monospace;font-size:12px;text-align:center;padding:20px}
 #start-listen-tap.hide{display:none}
 #start-listen-tap p{margin:6px 0;line-height:1.5}
 #start-listen-tap .pulse{font-size:24px;animation:bounce .55s ease-in-out infinite alternate;color:#fbd000;text-shadow:2px 2px 0 #d82800;margin-bottom:10px}
 
 @media (max-height:380px){
-#title{padding:0 4vw;gap:14px}
-.title-mario{width:64px;height:64px}
-.title-card h1{font-size:15px}
-.title-card p{font-size:12px}
-.btn-primary{font-size:10px;padding:6px 12px}
-.btn-secondary{font-size:8px;padding:6px 10px}
-#poster .word{font-size:28px}
-#poster .sentence{font-size:14px}
-#mario{width:48px;height:48px}
-#qblock{width:36px;height:36px}
-.goomba{width:36px;height:36px}
-#mic-btn{width:54px;height:54px;font-size:24px}
+  #title{padding:0 4vw;gap:14px}
+  .title-mario{width:64px;height:64px}
+  .title-card h1{font-size:15px}
+  .title-card p{font-size:12px}
+  .btn-primary{font-size:10px;padding:6px 12px}
+  .btn-secondary{font-size:8px;padding:6px 10px}
+  #poster .word{font-size:28px}
+  #poster .sentence{font-size:14px}
+  #mario{width:48px;height:48px}
+  #qblock{width:36px;height:36px}
+  .goomba{width:36px;height:36px}
+  #mic-btn{width:54px;height:54px;font-size:24px}
 }
 </style>
-
 </head>
 <body>
 
@@ -305,16 +307,13 @@ button{font-family:inherit}
       <div id="flash"></div>
     </div>
 
-```
-<div id="mic-wrap">
-  <button id="mic-btn">🎤</button>
-  <span id="mic-label">TAP TO SPEAK</span>
-  <div id="mic-countdown">2.0s</div>
-</div>
+    <div id="mic-wrap">
+      <button id="mic-btn">🎤</button>
+      <span id="mic-label">TAP TO SPEAK</span>
+      <div id="mic-countdown">2.0s</div>
+    </div>
 
-<div id="dialog"></div>
-```
-
+    <div id="dialog"></div>
   </div>
 
   <div id="menu-overlay">
@@ -408,6 +407,21 @@ var SPRITES = {
   'pu_mushroom': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAxUlEQVR42qVTwQ3DMAgEq0s0I/CNu4E7dbtB469HcMe4PloSm+I0Uk+yZMEBB8acRchiLgXkIIuwtQUbqME1RQJAAKim+OVXnGxVJVuofbovNJcCVRPaYGBLfr493LtyViWfGaCmiKOoKYKIkEWIiaiTrtWe10vXgrVP92Ubou3bBns2jQn0J4Incw+Ww+/B4qdkLzkzb3ughiEaX1twfQXrZObhvZtBu99eKxYtJ4twGH2Slugl7lb50AwGnGAzMvPusYpf51yeCSgAEvMAAAAASUVORK5CYII=',
   'pu_leaf': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAmklEQVR42sWTsREEIQhFv45VWALpWoJlW4KmlmAbbqTDcug5e8GRCfPk8weAf4cpRK/Aq9ZeiIx9C7cYcNXa7a8juNOO/N1igE8Zhci4E7DFMHM+ZfiU9wpWoJLrbmWQBCWsKhiwBvEcDytl+5QnpHXkygqRcdzhFcA//dhEAF0WdwDvPldZc/0EftzCt1GGiRxeHpPcPA0ccQP2dWOWKplcZQAAAABJRU5ErkJggg==',
   'pu_star': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAqElEQVR42q2TvRHDIAyFJc5VNiAjuPYInokh3m5ZQ9qAlhQ5+4SN5PgSVYD+QN+DX/NMnuXnoxERqVT2YqYoOZfy2QDNK5LoR0uX3Ykol7I/5/QEzxHNxBrLunTd7pgClFQqKzB0jtb2TKVy2jCNgqLOG5V9iN8WsckhxiOFS4xHdFFhS+M/QvK6KzAkYG8xeYPqPhHQvFl0QjolOkq08Szr0izKu5J+AwQYYrhKnqa9AAAAAElFTkSuQmCC',
+  'fire_idle': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAcCAYAAABsxO8nAAABLUlEQVR42s2UMQ7CMAxFnSgS3eAojPQErL0AOxLnQXAM1p4Adi4TpjAUV/GvbSImIjGQJi8/398h+rcRiIioFHNB7oP42N1LkITggxiwOu3nudd5XMI8UO5DqQH1eJ3HNhBCWAWOGfYBRU+JBdG8S5Z8IqJ8velqjsNiLuIJGoQ31gCsnryaoaA5R3lHhSH1qR64Ow6TKs3serMGbkp27kNBBQjR4N1jYogcseHfgFqO1EB6Hs3eQLKT2xqOP3xgR3A1q784V/wNc7bZDmGumtYa/EM4/0ffkqZAePPZUENXp/2iD6MLAcNxc60qcSmxm62gssJ8vQlQxFzg3a1kr58X4Z9aNe8dwuc3HEZZtZbHzBtRO+WXkVoW1S1hqU8tm3Feq7Aw2wPYD9G0/A3yRMoA9JQpfQAAAABJRU5ErkJggg==',
+  'fire_walk1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAcCAYAAABsxO8nAAABOUlEQVR42p1VsY3DMAw8CgGiZdK/J0jrMRxkHgMew60nSNZJJ1dKReOskLL8bAQJwul4PFICAMgZZaROdofxlQVeiEAsoNRJvj7v234dlzoYAzEDBmkCU6D0h2w9VAKu41IHKhnVAE0wEVxYzNRJTtO8uxOHHuu4mOlyBBa4BAEAPVONrs+7yT6UB3Hod6sFVmVUCwb93B5I0/zDKpRplauVpmXa0MIkTbMJzHrtfKSXORWLURz6rYrruCC+IYc+YibMUPfxlWXzUdlb+tKRTip6BKSpai0R1NWWR1gry19baiq2jhEvRbeq2nPca9xvR2noY6mTrGCnNWLG7KPg0m2YT6d7zQueTaEqojNurQEn3i9i/STuYyLHqZW6eDpdzlaKq8Ws6mPEcfy/qmaBWT9JVWxPeOs7+gIJndLA0LD+3QAAAABJRU5ErkJggg==',
+  'fire_walk2': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAcCAYAAABsxO8nAAAA/0lEQVR42r2UQQ6EIAxFgZjIkcYTuPUYJp7HxGPM1hM4R8IVsxm0pa2tiRlWCPbBh/9x7qHmj17OZDJ1Hg3GLXtcfX42HL0A2qkn4wQmgVLncw24LY2D7PPKFsYteyjt6KWXQxAJgGCfs549owJJyxsXjoNtR+isAAQCJFBTF3JFFnAQ9f9+juNAJHIeC9LKXPEVOHDblWQWSBwH4nLiIzhZ7LDP6wFAUeFuDYI4ZxdLoJ0AUNDydRlay63Vu2mnnki/BSoQ6dpFEMxYnbcr2WJE1MBWEVGlpeWNDCgZNbiH2v+kWf30mLRgca3F3eSplXKmLWSSpsVDfUZUWeDWvn60lSzy4uDuAAAAAElFTkSuQmCC',
+  'fire_jump': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAcCAYAAABsxO8nAAAA/0lEQVR42r2VQQ6EIAxFgZjIkeQEbj2GiecxmWO49QTOco4yS1x1NgNSaAGNM6wQ00f/b6tC3LSk3wEkL62R6FBvIHH08dhQdAdopz45T2AcyBoJMeC0NAqyzysZqDeQoTS/s51AEA6AYM8jnvTIQexjwYHjwGbUcDJCiB4H/8yZrcLAOAOuonFbII/erwXi9HNgPQ7II5Xc+A32UgJwVfltJyBnbuwZW37XR6VqIcNLoJrFlj+EUN0dZ2mNBC0yZl+ZMxJUJcuZzVUtJ63a7BB0xeyitHh0uG5X4qb1P2ks5FfSVO6W2mzITy3V2fu8Fi+qktZOfXGgT01/7k/7Ae6YlHVfvo21AAAAAElFTkSuQmCC',
+  'fire_celebrate': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAcCAYAAABsxO8nAAABDUlEQVR42u1UsRHCMAx85XxHOiahJxPQMgYc8+TIGGkzAfRMQudUppKRZdkhRwmqYkt5vaS3gL/9sBEAIITM4TsK1g/tLVCOQnAlgM3lAAB47s4AgO3jmvg1YMLIdxQYAADmfkqSaF8EsxhZAPpeAhYZrWmwZBSBGMQP4zvwdIxn+c3nCEaEhpnIoE/ND2Mk0BRpKwZ+GCMLyxqdQdIuJdAtSJqtyyuB6RjukTm1pX7JJAzkpKKjPiqlSR1JvREA+D2CDpz7KRMe30nf3E9o7yBn1V5jxCy0+l2thNJTsYbS1MardVQbguPOr3lnWqxfP1pz/EtmTVAut2zV6uVWanqyIbWyS/va3NNqZ78Av8mtQEu3Hc4AAAAASUVORK5CYII=',
+  'tanooki_idle': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAeCAYAAAAhDE4sAAABIUlEQVR42s1Vuw3DIBC9QylcepSUjOExPFLGYAyXjEJJ91IANsaHgSiRctJJyD7e/R9E/yZMQKclB0OApW9qxKuzJlxOmokaTcFZQ0REXh9KzFBDaUXxWjIC7pUIXhOICM6a/Vxqu9jMSBFMW93s8QlIqlOS+bm0iz1tdZD5ufR3zVlziUCS4fbnUSQHzpp+oPxSCdi3IsyQils66Nu1OJB3gF0RSSmWgN8ZSIC7BzLtWAI7zRNzY0UKoBSVlJ76LUM2aKOM6lrsos3Tuuw1ycGkoh9AEcRrIv+SF1Mag+N/JK+cuLwOZ4nAasrxcMo5T6lX1D4f63KuAcCnp6fZtcDJV5CbLlapdtpqL8P9y5E7DV3LPUrpCBNegg3RSFUAfgPoSdtTW47pjwAAAABJRU5ErkJggg==',
+  'tanooki_walk1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAeCAYAAAAhDE4sAAABLElEQVR42s1VsZHEIAxcMQ4IXYpDynAZX9KXQRkOKYWQTB8c8Fiv80gXvWYYxoBXK7ESwH8zArPxJL0OMpO2Hjxea8m/gEQMIq4lAwA2bwi1ZOxE3FJf+DrhZjRsgiy2ufIDIHYG8fImew1DAfAxEiAjwasFS0jx0kH245xzsNySxsDHSLHBYmVXS7YDrT9JQPOtydAkSC3ZWGs96U+AJkZaiBLwGcgoRjBT+LT/tLTUHBG/Z6SwkWIc+/Ey6kiCjFyNUFuStSYS67Egu90a++pRamc/zskqXsA2WLQENNkJj/N2U1p53NqI1vE8NacWbfvWa8liDIBbeo3x3WVxX3sYG5gJRDxzId8tvFfzesthLo5heTXGuT7/1ZHiNXaF31ROxNKpq42orPr+D/wJvZhHfFU0AAAAAElFTkSuQmCC',
+  'tanooki_walk2': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAeCAYAAAAhDE4sAAAA/ElEQVR42t2VPRaDIAzHEx4DI0dx9Bgco0fqMTyGY4/SkS0dFA15gQZep7ooGn4J/3wI8LcXApHBCm8jItRMvNXj+7UBAEBEJCDCCj4C4sCISHmt37sZPSRkKqLwSPfzPiE2j4IDpiIqgCL8mEZndjRIXNJ1dyOpny9IRLrqZ0ldsBstSA1syxqLSmrDnQz1Wg9oA4nG1TT6WUGaNNJ6q8DKNz8bSV7rtR9pD65NOIUO+wE9jiaGlBwZEqJlzRdIXgHyc6tGRdh1YbVCda1BVYxalSzXXzWKS7ocBbGZA12rLqTXb0c0iW0B+d6/qudA7hse/i2nphbpRn1eH2lsiWb7uTy3AAAAAElFTkSuQmCC',
+  'tanooki_jump': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAeCAYAAAAhDE4sAAABXUlEQVR42q1WsZHEIAxcMRcQXikXuowr78ugDIcuhdCZPjDwkpCwg9cM4wHMSlqtsAkAwAxlRNzWCU+MCC9nketRAABvIp7AAicpcvL+fPVB48TaKwI5t795bmARiI6IiLt3CeLNYyAZPoC8X8OCjXQ9vkfVDFgUUd6daqqqMZNH5vvzRd7v00t3FelrPdVzgxt9isou+bBgj8sfagrA+VNQHbEmm5Z9emlOKl8pW0ZSj+ICS756aEq5kV7kfq9i441udSQjkRGO+SWbRjYRW53k/Z6nepSLdIAS/slSV7WnEcmVp6+Rmuq1RYqhdR1NNyQz5UXz2ibOQpQpEtiTm0DqaGraVZev9pLX+U9uxOhu4nMD16NwPQoD4FYAtuPcrjHeMZ+y8YICCsDUvgJqByZvEHMRkQc06cjogyO+FD9EpvzMpMgLFL++sxfqtWBetcj9ifB/FHhqDfE5+gV4WgjBZlxalQAAAABJRU5ErkJggg==',
+  'tanooki_celebrate': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAeCAYAAAAhDE4sAAABHUlEQVR42u1VOw7DIAx9RgwZc5SOOUaP12NwjIwcJWM2d0hMjTG0UadKRYqUz+Nhv/cIwH/83iAAALN6QwxmGs8yGCIEC9iXEzgg8TBBA7acAABdMiEBsOVUYYLF7o9Ut6AvD9Mjmm/3UtW+HCtvOZVnjemLrUoHgGk11dpvIjiJ7sxCxvsCBsZXwbzmtRVdCo+qKFbCihtKL3nW90Unladgrb8ydARCD2Qr2HJy3XLt122MFrAS1GKb9npkDYaZQOS79k6vapGGSIXRBrHZRosJZSE6glYBp7VOsky0385FKXq9TwOxpVpbdRy10GvRMyWM7LU5GpkQRfn5wj6zYf1+0yr746d4z0F9ALiniDup9ws5fyMtkdfi++MJTzRixBG+w/m0AAAAAElFTkSuQmCC',
+  'frog_idle': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAhCAYAAADUIPtUAAAA8ElEQVR42u1UsQ2DMBC8t+jSsAQ9o9Ah5BEyDyOgiM6juPcSbqg/BdhxzGOSlBEnIWHf+X1/jwAuXLhw4c9AAADmZId42yP5hMATQeUibw20618HMl67Ht6aHV9Jl47LADhgysTa9Sv3aWva9cU8pmY+b+2sSHCWt6a+LXJUrDoSjsuAuu3WYIH4fr89RL06DLtwQbkQM03NHJepGwDw1qBuu+PAk6lxeLw1nK6L3DbxUDEGHVylblIEV5meKmkaUzO/tSFOTMwoyycVe2uiu7xAmpPaEUIrkrtcW5U+xtCm5CZmtH6UFMP++UfETCDCE4ihjfWNGDTfAAAAAElFTkSuQmCC',
+  'frog_walk1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAhCAYAAADUIPtUAAAA+ElEQVR42u1Uuw2EMAx9ieiuYQl6RqFDiBFuHkZAJzpGoWcJGupcQz5O7BDpqpN4VRI/O8+PGODBgwd/BQUAMCY4UX5jjGLP0xg0LavMuPcQky+Me5/EdE6uS4gvuG2tIMFibhbfHmlNaCMvw+d4RZGa6RzY3Pfrk6pyioQiddu5M7sOLwhNT8yWlNxxxK9Wtx2ObXX7Y1uJwqJCuQQpxpo9nYOYcGyrMzw0mxQKyTmQS0ghwKmZm6XoCUV8VXGEuVkgvXApppNnX4iYqzk1HDlex6q0NcwSS4aW+HMNbhW6PzPTL7VLpp+0xkx/WJRVmkw/YH79ZX8Bh4OH0yk0310AAAAASUVORK5CYII=',
+  'frog_walk2': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAhCAYAAADUIPtUAAAA/klEQVR42u1Uuw2EMAx1EN01LEHPKHQIMcLNwwgI0TEKPUvQUOca4tiJnSDd6SpcJf68PNuxAR555JF/iAEAAGuJxviLtUbUxzYoOKyxw96BGnzJsHeRrUjRxYDwgWxqNwKcTPXi02OpKWmkafgYzyhgM569GPt+zTErZKSAVE2LOnemD9CiR8XWmOR81K5VTQvHtuL92FbG8BZQKkCzicUez14NOLYVC06LHf0j5xwykHQ4KggEYL+d2ZK18qKb+93UZ6oXudjD3qExB6J2LQUgzpoGFLJJnUNWhau8c7wz/aw+1wYoaRsnYY1o6bI1wlIT1ggFFZlGa+QH/+gDGmeMSOQzpTEAAAAASUVORK5CYII=',
+  'frog_jump': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAhCAYAAADUIPtUAAABDElEQVR42u1UO66DMBCctTgAl6DPUeisJ58rR6Cg4yj0vgTNq/cVsdF6TWDjpHhFRkIysB7Nzn6AL774RyAwGyPpEchMxTnBWUlC9NjWBSDibV2qEGcluf/+FJ8z6WuKEvrbiBA9+tvYoOgjZqe0zjANM8BM7h0Sia4ljWmY93OIHhMRd6+okQTNiiSJ7KN+GNuqlkmKFjg125hStsJV85T8ubqclW3rgm1dhEeGcsu09Ly5ZyRSlfyXvdFj8uhsgxo9tDURYBsDVfaCkJkqoqN0TiuXllungzOBPOtLR3Da4FY4MNNlw5nAjLSTOETPIXoGsD/6fY9Xz2X5p2EuhzRV6XhDiiVuzKIi+gMGM6tJLA31KwAAAABJRU5ErkJggg==',
+  'frog_celebrate': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAhCAYAAADUIPtUAAAA8ElEQVR42u1UsQ2DMBC8t+jSsAQ9o9Ah5BEyDyOgiM6juPcSbqg/BdhxzGOSlBEnIWHf+X1/jwAuXLhw4c9AAADmZId42yP5hMATQeUibw20618HMl67Ht6aHV9Jl47LADhgysTa9Sv3aWva9cU8pmY+b+2sSHCWt6a+LXJUrDoSjsuAuu3WYIH4fr89RL06DLtwQbkQM03NHJepGwDw1qBuu+PAk6lxeLw1nK6L3DbxUDEGHVylblIEV5meKmkaUzO/tSFOTMwoyycVe2uiu7xAmpPaEUIrkrtcW5U+xtCm5CZmtH6UFMP++UfETCDCE4ihjfWNGDTfAAAAAElFTkSuQmCC',
 };
 
 
@@ -671,14 +685,15 @@ var SPR_GROUND = [
 // 'spriteSet' picks which PNG sprite series to use (mario or luigi base).
 // 'filter' applies a CSS filter for hue/sat shifts to approximate other looks.
 var COSTUMES = [
-  {id:'mario',   name:'Mario',   spriteSet:'mario', filter:''},
-  {id:'luigi',   name:'Luigi',   spriteSet:'luigi', filter:''},
-  {id:'fire',    name:'Fire',    spriteSet:'mario', filter:'hue-rotate(155deg) saturate(1.4) brightness(1.15)'}, // red→white-ish, blue→red
-  {id:'tanooki', name:'Tanooki', spriteSet:'mario', filter:'sepia(.85) saturate(1.6) hue-rotate(-15deg) brightness(.9)'},
-  {id:'frog',    name:'Frog',    spriteSet:'luigi', filter:'hue-rotate(-30deg) saturate(1.3)'},
-  {id:'ice',     name:'Ice',     spriteSet:'mario', filter:'hue-rotate(165deg) saturate(.85) brightness(1.15)'},
-  {id:'wario',   name:'Wario',   spriteSet:'mario', filter:'hue-rotate(35deg) saturate(1.5)'},
-  {id:'shadow',  name:'Shadow',  spriteSet:'mario', filter:'grayscale(1) brightness(.45)'}
+  {id:'mario',   name:'Mario',   spriteSet:'mario',   filter:''},
+  {id:'luigi',   name:'Luigi',   spriteSet:'luigi',   filter:''},
+  {id:'fire',    name:'Fire',    spriteSet:'fire',    filter:''},
+  {id:'tanooki', name:'Tanooki', spriteSet:'tanooki', filter:''},
+  {id:'frog',    name:'Frog',    spriteSet:'frog',    filter:''},
+  // Variants without dedicated SMB3 sprite sets — overlay tints on real Mario
+  {id:'ice',     name:'Ice',     spriteSet:'mario',   filter:'hue-rotate(165deg) saturate(.85) brightness(1.15)'},
+  {id:'wario',   name:'Wario',   spriteSet:'mario',   filter:'hue-rotate(35deg) saturate(1.5)'},
+  {id:'shadow',  name:'Shadow',  spriteSet:'mario',   filter:'grayscale(1) brightness(.45)'}
 ];
 
 // ---- WORLDS ----
@@ -810,29 +825,38 @@ function getCostumePalette(){ return PALETTE; } // legacy, scenery uses default 
 
 function marioSprite(frame, costume){
   costume = costume || getCostume();
-  // Power-up overrides costume sprite-set:
-  //   small / star / fire → use small mario sprites (with filter overlay)
-  //   big                → use Big Mario sprites
-  // Costume only matters when in 'small' state for sprite-set (Mario vs Luigi base).
+  // Power-up sprite logic:
+  //   - powerLevel 'big' overrides ALL costumes → use big_* (red Mario big sprites)
+  //   - powerLevel 'fire' uses fire_* sprites (real Fire Mario from SMB3)
+  //   - otherwise use the costume's own spriteSet
   var set;
-  if(state.powerLevel === 'big' || state.powerLevel === 'fire'){
-    set = 'big'; // use big_idle, big_walk1, etc.
+  if(state.powerLevel === 'big'){
+    set = 'big';
+  } else if(state.powerLevel === 'fire'){
+    set = 'fire';
   } else {
     set = costume.spriteSet || 'mario';
   }
-  return set + '_' + frame; // big_idle / mario_idle / luigi_walk1
+  // Frog Mario doesn't have a 'celebrate' frame — fall back to idle
+  if(set === 'frog' && frame === 'celebrate') frame = 'idle';
+  return set + '_' + frame;
 }
 
 function getMarioFilter(){
-  // Combine costume filter + power-state filter
+  // Star handled via .star-power class. Costume filter only applies when no
+  // power-state has its own dedicated sprite set.
   var costume = getCostume();
-  var f = costume.filter || '';
-  // Star: rainbow flicker (handled via class instead of filter)
-  if(state.powerLevel === 'fire'){
-    // Fire Mario tint: brighten + slight white-shift
-    f = (f ? f + ' ' : '') + 'brightness(1.2) saturate(1.5) drop-shadow(0 0 5px rgba(255,200,80,.9))';
+  if(state.powerLevel === 'big' || state.powerLevel === 'fire'){
+    // Power state has its own sprites; don't apply costume filter on top
+    // (otherwise Fire Mario's white shirt would get hue-rotated by Wario filter, etc.)
+    return '';
   }
-  return f;
+  return costume.filter || '';
+}
+
+// Sprite sets that use the larger 28-30 tall canvas (use .big-power class)
+function isLargeSpriteSet(set){
+  return set === 'big' || set === 'fire' || set === 'tanooki' || set === 'frog';
 }
 
 function setMarioFrame(frameId){
@@ -842,10 +866,15 @@ function setMarioFrame(frameId){
   else if(frameId==='jump') frameName = 'jump';
   else if(frameId==='celebrate') frameName = 'celebrate';
   var el = document.getElementById('mario');
-  el.innerHTML = spriteImg(marioSprite(frameName));
+  var costume = getCostume();
+  var spriteKey = marioSprite(frameName, costume);
+  el.innerHTML = spriteImg(spriteKey);
   el.style.filter = getMarioFilter();
-  // Update Big Mario class for sizing
-  if(state.powerLevel === 'big' || state.powerLevel === 'fire'){
+
+  // Decide whether this sprite needs the larger box.
+  // Rule: any 'big' powerLevel OR any costume whose sprite set is naturally tall.
+  var setUsed = spriteKey.split('_')[0]; // 'big' | 'fire' | 'tanooki' | ...
+  if(isLargeSpriteSet(setUsed)){
     el.classList.add('big-power');
   } else {
     el.classList.remove('big-power');
@@ -1102,7 +1131,7 @@ function startMic(){
   btn.textContent = '🔴';
   label.textContent = 'LISTENING...';
 
-  var LISTEN_SECONDS = 5.0; // generous window for kids
+  var LISTEN_SECONDS = 4.0; // generous window for kids
   countdown.classList.add('show');
   var remaining = LISTEN_SECONDS;
   countdown.textContent = Math.ceil(remaining) + 's';
@@ -1447,7 +1476,7 @@ function spawnEnemy(){
   var marioLeftPx = stage.width * 0.14 + 28;
   var targetPx = stage.width - marioLeftPx - 120;
   var walkTimer = setInterval(function(){
-    pos += 4;
+    pos += 7;
     g.style.right = pos + 'px';
     if(pos >= targetPx){
       clearInterval(walkTimer);
@@ -1603,18 +1632,10 @@ function afterStomp(){
 
   checkPowerUps();
 
-  // Level up check (every 10 correct)
-  if(state.worldProgress >= 10){
+  // Level up check (every 5 correct = world complete)
+  if(state.worldProgress >= 5){
     setTimeout(function(){
       waitForPicker(showLevelUp);
-    }, 800);
-    return;
-  }
-
-  // Summary every 5 correct (mid-level)
-  if(state.totalCorrect > 0 && state.totalCorrect % 5 === 0 && state.worldProgress < 10){
-    setTimeout(function(){
-      waitForPicker(showSummary);
     }, 800);
     return;
   }
@@ -2004,7 +2025,7 @@ function applyWorld(idx){
 function updateProgressBar(){
   var pb = document.getElementById('progress-bar');
   var html = '';
-  for(var i=0;i<10;i++){
+  for(var i=0;i<5;i++){
     html += '<div class="pip'+(i<state.worldProgress?' fill':'')+'"></div>';
   }
   pb.innerHTML = html;
@@ -2374,6 +2395,5 @@ document.getElementById('music-toggle').addEventListener('click', function(){
 });
 
 </script>
-
 </body>
 </html>
