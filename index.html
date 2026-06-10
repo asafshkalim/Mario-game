@@ -190,10 +190,25 @@ button{font-family:inherit}
 }
 
 /* ---- BOSS ---- */
-/* Boom Boom is 20x20 native, Bowser is 24x24 native. Containers scale 4-5x. */
+/* Bosses are positioned at right:17% (set inline in spawnBoss) so they NEVER
+   sit behind the mic button, which occupies the bottom-right corner
+   (right:3% + 64px wide). Containers match each sprite's native aspect. */
 .boss{position:absolute;z-index:7;overflow:visible;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
 .boss-boom{width:100px;height:100px}
-.boss-bowser{width:130px;height:130px}
+.boss-larry{width:84px;height:112px}
+.boss-morton{width:92px;height:124px}
+.boss-wendy{width:76px;height:128px}
+.boss-bowser_clown{width:102px;height:154px}
+/* Bowser's Koopa Clown Car hovers — animate the inner img so it never
+   conflicts with the container's entering/hit/defeated animations. */
+.boss-bowser_clown .sprite-img{animation:clownHover 1.8s ease-in-out infinite alternate}
+@keyframes clownHover{from{transform:translateY(0)}to{transform:translateY(-14px)}}
+@media (max-height:380px){
+  .boss-larry{width:68px;height:90px}
+  .boss-morton{width:74px;height:100px}
+  .boss-wendy{width:62px;height:104px}
+  .boss-bowser_clown{width:84px;height:126px}
+}
 .boss.entering{animation:bossEnter 1s ease-out}
 .boss.hit{animation:bossHit .4s ease-out}
 .boss.defeated{animation:bossDefeat 1.4s ease-in forwards}
@@ -335,7 +350,7 @@ button{font-family:inherit}
   100%{opacity:0;transform:translate(calc(-50% + var(--dx, 0)),calc(-50% + var(--dy, 0))) scale(1.4)}
 }
 
-#mic-wrap{position:absolute;right:3%;bottom:50px;z-index:7;display:flex;flex-direction:column;align-items:center;gap:4px}
+#mic-wrap{position:absolute;right:3%;bottom:50px;z-index:9;display:flex;flex-direction:column;align-items:center;gap:4px}
 #mic-btn{width:64px;height:64px;border-radius:50%;border:3px solid #000;background:radial-gradient(circle,#fbd000 0%,#f8b800 70%,#d09000 100%);color:#000;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(251,208,0,.7),3px 3px 0 #000;animation:micPulse 1.5s ease-in-out infinite;font-family:'Press Start 2P',monospace}
 #mic-btn:active{transform:translate(2px,2px);box-shadow:0 0 20px rgba(251,208,0,.7),1px 1px 0 #000}
 #mic-btn.listening{background:radial-gradient(circle,#ff4040 0%,#c00000 70%,#700000 100%);animation:micListen .55s ease-in-out infinite}
@@ -355,6 +370,24 @@ button{font-family:inherit}
 @keyframes coinFly{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-140px) translateX(var(--dx,0)) scale(.5) rotate(720deg)}}
 .score-pop{position:absolute;font-family:'Press Start 2P',monospace;font-size:16px;color:#fbd000;text-shadow:2px 2px 0 #000;z-index:9;pointer-events:none;animation:scorePop 1.2s ease-out forwards}
 @keyframes scorePop{0%{opacity:0;transform:translateY(0) scale(.5)}30%{opacity:1;transform:translateY(-22px) scale(1.2)}100%{opacity:0;transform:translateY(-80px) scale(1)}}
+/* Combo streak pop — bigger, red-hot, shown at 3+ streak */
+.combo-pop{position:absolute;font-family:'Press Start 2P',monospace;font-size:13px;color:#fff;background:#d82800;border:3px solid #000;border-radius:6px;padding:6px 12px;box-shadow:3px 3px 0 #000;z-index:9;pointer-events:none;animation:comboPop 1.4s ease-out forwards;white-space:nowrap}
+@keyframes comboPop{0%{opacity:0;transform:translateX(-50%) scale(.4) rotate(-8deg)}20%{opacity:1;transform:translateX(-50%) scale(1.2) rotate(3deg)}35%{transform:translateX(-50%) scale(1) rotate(0)}80%{opacity:1;transform:translateX(-50%) scale(1) translateY(-10px)}100%{opacity:0;transform:translateX(-50%) scale(1.1) translateY(-40px)}}
+
+/* Authentic SMB3 spinning coin: 4 stacked frames, CSS steps animation cycles them.
+   No JS timers needed — safe to spawn dozens at once (coin showers). */
+.spincoin{position:relative;width:100%;height:100%}
+.spincoin img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;animation:spinFrame .48s steps(1) infinite}
+.spincoin img:nth-child(1){animation-delay:0s}
+.spincoin img:nth-child(2){animation-delay:.12s}
+.spincoin img:nth-child(3){animation-delay:.24s}
+.spincoin img:nth-child(4){animation-delay:.36s}
+@keyframes spinFrame{0%{opacity:1}25%{opacity:0}100%{opacity:0}}
+
+/* Tap-to-play delights: Mario and the ?-block are tappable */
+#mario,#qblock{pointer-events:auto;cursor:pointer}
+#mario.tap-hop{animation:tapHop .5s ease-out}
+@keyframes tapHop{0%{bottom:0}45%{bottom:36px}100%{bottom:0}}
 
 #dialog{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);background:rgba(0,0,0,.92);border:3px solid #fbd000;border-radius:8px;padding:12px 22px;font-family:'Andika',sans-serif;font-weight:700;font-size:16px;text-align:center;color:#fff;z-index:10;display:none;max-width:80%}
 #dialog.show{display:block;animation:dialogPop .3s}
@@ -615,6 +648,19 @@ var SPRITES = {
   'qblock': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAl0lEQVR42mNkYGD4z0ABYGFgYGD4v2sVWZoZ3cIgBsA4/9f5EKcxaAtcLdwAuGaeONw6vyxCVcvAwMCEogCfZhzyTPj8B8PozscIRGQnIisgJkxY0AXwhQW6a7AagMs7uFzFgi/EifEOC74Q/78rDiX6sAEmYhMO0YGIywsEXYBN8f91PnCMy0VMpMQ5NrWMlGTns1pajADEhDfzjuvFtgAAAABJRU5ErkJggg==',
   'goomba': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAA1UlEQVR4nLWTPQ7DIAyFH1XGnCsTE0PGHC5jBiamnCv761BwAUN+pNZSJITt58+OAX5k5sLPu/E9BwGA3pbBLnTzXmcUWWJxhiZtChkA4L7pCt87RdRqjfQWGJdPwDSXIsea6IrcnIgikqpMM+gt6K0IAjI7ImtxKCgeWIo3LhCASXiPhYQ6tjkoz7gUbTRp9g041uIuCRnjglDdpcuHXv81tR9XWupQi7X2KLbcfA2they2FsVZfUpIHMYFNcyMqC7IHJP0tn5PZ49W1RChXkAv82/2BuViWI5Hti+gAAAAAElFTkSuQmCC',
   'coin': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAXklEQVR4nGNgIBEw4hD/j0sNuob/DAwMDP/OHIULMJlYo6hjQVYMU/jmUiwDAwMDg4jeYgyrmdAFYIphbKgh/3FqIAQo0sDIZGKN4m5sfsAIJSwhhKIOWzzgjAP6AAB2IRqfNcTwbAAAAABJRU5ErkJggg==',
+// Koopaling bosses (SMB3 NES, ripped by 124scratch / Doc von S.) + SMW Clown Car Bowser + spinning coin frames
+  'larry_idle': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAcCAYAAACOGPReAAABhklEQVR42p1WO7KDQAyTmBwKbsXrQhOG10CXvVU4Uxq9gjXjXZbfc5NhE8teWRYhLoaGVgDAPtA/W9g57gBKUj1C/tnCztcClzp8vdFMxNwBGlrg9QYANNOS/vm2Sc7jVscS8PuzAn6e8TkW8YX2AFQ6O4qcht1kAKhHWIJyPg3MAxavT5KlTusRYBeWbMfryumwfHWLUx/G6efbJpwm09/oMHZKkjlXcweaKvJCAFBpaKWhFfuAXNQkedatfUbJce5A5puRb0hponPnbuhuVBT/0eoZuAfcO8/58wU2ndcjZMmStEfPw7ee8NmHDbAH9MBefixVKnHMPvBIDQCWld0DPVtbD2pAq7E8BZKsrvrokaRyCfKqEbMPMOpIoh63RYzzR6mjo+72uGwmroO7tfskIQmSVvk1YDKkU/En04+rnJtXadj8x4sPBVdMClR3LU9DC5I4UiPvdLlnOnlUZ2K/ogSzz0udRokkHmC+603H+wT7QN69eslocipOB+V/HI3l9C/OHzjdZq2o5Y1EAAAAAElFTkSuQmCC',
+  'larry_attack': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAcCAYAAACOGPReAAABdElEQVR42qVVMZKDMAzcZXiU+RXXQROGa0wXfgVvukZXxPIIx8T2napYideSdrUhKkPWUQCAy0571tA8WgBFRJyH2LOG5uMDVRU+nhg24pwBWUfg8QQADNvr+vEzXu70TRWLAN9fEfCYwjk8Yh+6A5Bc7lOkY7i9DADOQy9IOk8Fs4AsVUqSCgwgO9d0psX2ZR0lyOdSrfOhoUzlvNNhmg/fwXngnEFVhQ0lqdNKuOxvIKnA01CQYaNKjucMdgYAtWDa0Tm/ODkmgX5+I8qM4PKIgjgPsZcTAnkRv2G6ZRGEJNNHIqjKxlaaCwWIygjAdlHITGlWBQnzVJDc5hyTRNA+R0Aml11bBVL29dyVGK6RlG29yvqU4XMOLhUIdf5+5h3+Gcckse3ciIrVWgMDEP2gaHuF/6g388j9tm8EBklYrFSjf5qpAn/aPja0Xi25rsakq/7C7fZVmMbFsawvaN66GpedbG09Z4vpKLoaM05Mpbi+vy/qmHTiG+d0AAAAAElFTkSuQmCC',
+  'morton_idle': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAfCAYAAAAMeVbNAAABc0lEQVR42rVWW27DMAwji54vA+xD+EzZHdQPX1D7WJQpjuw82hkIUDsIKZOUXeDGEBHFf4yPAIuI+qcFPkPyHFWWcw7XRURzzjwCZwTegO4+OgO8A/fAEehVgkdQOVQVKaW3fXsAwDxB5wlr1SQ/khrOE7RUYJ5+F0rdSvKO/pwn7Coo9e+3kUbER+DPaNEDtus550OzV/BSQVVVklBVkOyC9yRZvu8bZaYuMu0e/24xU0VE/RjmPNK/9UJEMOoF7wF7uzgCNgk9ge8Nmk4tmE9LNEwB8wkAXq/XhoAkeSRFtAMPLiJIKa3gRkCSj0+c8R7Yz3nGSFc1LRWt3t2zpVSwVPBO1SmljZF+/mwruyOJB/dzdtLQlcknxJqyl3cO4qa949dz+/dGYo10KEOvodrNeZKlwca3wihFEUFDdj/n87R0YVCgrfFqxVH2T/+1MCO/v3gJMDifyFEMewSl7q9Hfw8Pj9w7CYp2dMnQ3o3TI/0BmgcVcPBrOq8AAAAASUVORK5CYII=',
+  'morton_attack': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAfCAYAAAAMeVbNAAABaUlEQVR42rVVW47EIAyzRz1fV4JD9EzdO8BHL5j9WKjSNDxa7UaaD5jBNg7xAC8qpST4j/oT4JSS6I8FniFZespijO5+SklijByB0wM3oLdDM8A3cA3sgT4l8GxBCAEAkHN+rfoE31dI9TilBJIQEQ/4/C0AbAe6RNxXyHYA+3oeuFii/S9CLtUjoFaiDtzAtIBZ8MXb9EDe1LIdoIhI9ZnkNHhVXc6z+RRNoy636FkiqvOWgMYOaSj0GjkcsI9VYhu0HeCsTSEESKlmQ0fv1wLWgcs5n2s3W1oBptVbS0IIl2kOIYBeh2uZRnnkw+zhCFgT1G2SQ/Cb5yUK6AWWJqjz4IWcXn9Gz3BkgxWi17chsoMxsqf3h+IOkSbwmqm59feVpA7S8D23UtNeTpOUnpBPgXsEhoyft3G6r78AbhqWPT5V/CQq2Bqg7y8+ArSCtgNkbzpbBCUpZRTLfOm3zNzoUUN1Vs+Q/gDxNA5nJkiIYQAAAABJRU5ErkJggg==',
+  'wendy_idle': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAgCAYAAADwvkPPAAABnUlEQVR42p2WwZGDMAxFvxgKgRJIGXChlGwFmaSClMIFyoASoBPtIZYjjISZ6OTY+FmyvuQQLhozs4yJiKxvShmMTcUA0M7r7mMNmW51nLOAhQalAAskY722g4m18yphgJ93dqJx7RBOAH0WH29oB8Q7dSjlLpn5eWcAHKZMu5ItDvfHY1PF8U9ADToDqnlfGt2ygZlBRBibyjxQZ9VNgCHMHbBbNpL16VajWzZyPZPsWHchGymjFQKAkD3Q401B3RibCt2yRZnI+ilMQGrDN2wFugIsDxIxAFctwqZh+JZV3/8Eo7TQ23nFdKtNoITodY2DNGL9KVgKSQ8XMBkVgLbvDxets2xZt2znuvEkI1eRekc5kAXzrJCNsjnbDYxmGmHag9BdP15k1J4WfTuv+7ZtblD6Y2Z0y+aCizMP6PGmdl7d9yANM/tGjk0V27jqsLvmKZKytERa4czMeP2ZD0yqhjLrZgBJE9CHpK98cUW0ppATczutJ+ZYo6mgw+9DmDEMtWEaBrPni2zkEDp58g6F7M2b/zUskOWRN/8PpROS4MCC9E0AAAAASUVORK5CYII=',
+  'wendy_attack': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAgCAYAAADwvkPPAAABk0lEQVR42p1V25GDMAxcMSkklBDKMD8phasgQypIKfxAGVACdKL7OOSRjfzIaSYzjoDV6rUmVBozs5yJiKx3bnKYH3cGALfuwcsaZOla77MAGw0UA1hActbPAjAxt+6SBngcOJFN0i7pnEB/D18faALCTgWlUpGZx4EB8OkyraZbfNaP58fdn/8FqIFygMqfHo1+O8DMICLMj7sZUHc12QBjMAPAfjtIni9di347qGrSo/pVWwMAPA7SQc8KANzzeWGcnTMNIrN1Bgh8Zy2pyCxIU4F8a76byzTZ1BUrHgem14eK8yW/eAuseqVqeBkNXZa4TiI9ustasprMiHj10IHicVm61vsCMCIiZtY1MgOJasT/b5e8K0QsXilhR9/cAfGKuXUPgJvK1SoydOt+TTOXTk5Rlq7NM3PrDrfuyfsgbkSWmcyULLxmBwCzYt5vR7lzzMx4/5gXTNz5MthVVchaKSrNVAwUAyZVo0r8hJUW0tfHa+KthtUyTabmi2xJEMpceYH120Epf3ID4g9St5Dl/wUVKnzvWlOw+AAAAABJRU5ErkJggg==',
+  'coin_spin1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAOCAYAAAASVl2WAAAAb0lEQVR42mNkgIJ/Z47+Z2BgYGAysYYJMcKJf2eO/n9zKZYBGYgl3WNgYGBgZGIgABiRdYvoLWZgYGBggPHFku4xsMBUiugtRpF4NU+JgYGBgYGgFYNBAdwXby7FwgIH7gPqhCQDWmQhYwYGBgYGAMdBLcDbOlmnAAAAAElFTkSuQmCC',
+  'coin_spin2': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAOCAYAAAASVl2WAAAAKklEQVR42mNgQAX//505+h9ZgImBAGBC083AwMDAgGwKSSaMZAUMFMcFAFkVEE/G+hYhAAAAAElFTkSuQmCC',
+  'coin_spin3': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAOCAYAAAASVl2WAAAALklEQVR42mNgQAKv5in9Z0ADTAwEAOUKUMC/M0f/41WAzZEETaCyIwcooAgqAAARDQ8quJDB3wAAAABJRU5ErkJggg==',
+  'coin_spin4': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAOCAYAAAASVl2WAAAALUlEQVR42mNgQAL/zhz9z8DA8B9ZjImBAGBC083w78xRBmRTiDdhhCtgoDguAIIFEE+Z6b2AAAAAAElFTkSuQmCC',
+  'bowser_clown_idle': 'data:image/png;base64,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',
+  'bowser_clown_attack': 'data:image/png;base64,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',
 // Additional SMB3 sprites for power-ups + variety enemies
   'big_idle': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAcCAYAAABoMT8aAAABBUlEQVR42qVUOw7DIAy1EQNjj9KRY/SoHCMjR8nI5g6FxPhDUgUJiUCejR/vGeDhQAAAIHJOcT4gQnEOcQVsed5OiCSDRAssgasRr8Bpc8rqNzk5EGAFdFgyORjgvZZp//X+zIQiQuDXSpsNVkBGZBiLvRaV0X0h9rwjEg0wz7YK2P/DIA8GyAq4ViIirUhTnHQSZyn32pbsc0lPAYTurfqPzMwLppBcEblmEips2dGDYaawYliWsdeiSg1PG0rwzNOyZv/4lo0GAGjMls/J98fca/mt+9NH5iyybnKlSFcHl2Oy87/DsvPjV1Aqg3tqVC3N6shp8xPcKqFlcEk27Xz3+oAIX58logjTUIt8AAAAAElFTkSuQmCC',
   'big_walk1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAcCAYAAABoMT8aAAABDklEQVR42qVVMRKEIAwkGQpKn2LJM3yqz7D0KZZ2ueIAQ1iU82ycIW6yu0nQuT8fciI3UaqDImQ/8XfAM9bHgUhsEo/AFjguAYDD1kEmJlcCA+4CTRLoQQYf+9rEpnmpGLA2LWwYnEEWfCVIAFTxqb1fD4gkg0uVjoSKlQixDWQQSnjfRsWiMcwk1+fNHCDqkAWaA1QN6W4ljA4RWCZ+6tgZ1VJlloqtR9U1/TAvJUnYLrOntJlsR9hqP/a1SEJbym9uIW0ma9PO2LZsmpfCAjH0ToQckWjnR8e5auPPOqp1Bv0d3Uh+cw+W2SASHqWqwd02NiwyOL2bcS93ogiFJKP6CPwHNLi7zl0JOa7OPu5Gushz36/vAAAAAElFTkSuQmCC',
@@ -676,6 +722,15 @@ function spriteImg(key, extraStyle){
   var src = SPRITES[key];
   if(!src){ console.error('Missing sprite:', key); return ''; }
   return '<img src="'+src+'" alt="" class="sprite-img" draggable="false"'+(extraStyle?' style="'+extraStyle+'"':'')+'>';
+}
+
+// Authentic SMB3 spinning coin — 4 frames cycled by CSS (no JS timers, so it's
+// safe to spawn dozens at once during coin showers and the bonus stage).
+function spinCoinHTML(){
+  return '<div class="spincoin">'
+    + spriteImg('coin_spin1') + spriteImg('coin_spin2')
+    + spriteImg('coin_spin3') + spriteImg('coin_spin4')
+    + '</div>';
 }
 
 // ---- PALETTE (NES SMB3 NTSC reference, kept for scenery sprites) ----
@@ -1094,19 +1149,18 @@ var COSTUMES = [
 
 // ---- WORLDS ----
 // Each world has a unique theme: scenery type, ground tile, music key, boss.
-// `theme` drives renderScenery(); `music` drives world-specific synth tracks.
-// `boss` is the end-of-world fight. Bosses are defeated by saying a full phrase
-// (e.g. "I love you") — one phrase = one victory. HP is no longer used.
-// Worlds 1-3 fight Boom Boom variants (color-tinted); world 4 fights Bowser.
+// Bosses follow the canonical SMB3 mapping: Grass Land → Larry, Desert Land →
+// Morton, Water Land → Wendy, and the final castle → Bowser (in his SMW
+// Koopa Clown Car). Each is a distinct authentic sprite — no hue filters.
 var WORLDS = [
   {cls:'world-w0', label:'WORLD 1-1 GRASSLAND', theme:'grassland', music:'overworld',
-   boss:{name:'BOOM BOOM',      sprite:'boom',   filter:''}},
+   boss:{name:'LARRY KOOPA',  sprite:'larry',  filter:''}},
   {cls:'world-w1', label:'WORLD 2-1 DESERT',    theme:'desert',    music:'desert',
-   boss:{name:'SAND BOOM BOOM', sprite:'boom',   filter:'hue-rotate(-20deg) saturate(1.3)'}},
+   boss:{name:'MORTON KOOPA', sprite:'morton', filter:''}},
   {cls:'world-w2', label:'WORLD 3-1 OCEAN',     theme:'ocean',     music:'ocean',
-   boss:{name:'SEA BOOM BOOM',  sprite:'boom',   filter:'hue-rotate(180deg)'}},
+   boss:{name:'WENDY KOOPA',  sprite:'wendy',  filter:''}},
   {cls:'world-w3', label:'WORLD 4-1 CASTLE',    theme:'castle',    music:'castle',
-   boss:{name:'BOWSER',         sprite:'bowser', filter:''}}
+   boss:{name:'BOWSER',       sprite:'bowser_clown', filter:''}}
 ];
 
 // Words per world before the boss appears.
@@ -2275,7 +2329,7 @@ function yoshiSwallowAndFly(enemy, type){
     setTimeout(function(){
       mario.classList.remove('yoshi-fly');
       setMarioFrame(0);
-      coinPop();
+      coinPop(state.combo >= 5 ? '+2' : '+1');
       // Count the kill
       if(type === 'piranha') state.enemyKills.piranha++;
       else if(type === 'koopa') state.enemyKills.koopa++;
@@ -2362,7 +2416,7 @@ function hitEnemyWithProjectile(g){
   playStompSound();
   setTimeout(function(){
     if(g.parentNode) g.parentNode.removeChild(g);
-    coinPop();
+    coinPop(state.combo >= 5 ? '+2' : '+1');
     if(type === 'piranha') state.enemyKills.piranha++;
     else if(type === 'koopa') state.enemyKills.koopa++;
     else state.enemyKills.goomba++;
@@ -2386,7 +2440,7 @@ function sideKick(p){
   playStompSound();
   setTimeout(function(){
     if(p.parentNode) p.parentNode.removeChild(p);
-    coinPop();
+    coinPop(state.combo >= 5 ? '+2' : '+1');
     state.enemyKills.piranha++;
     afterStomp();
   }, 480);
@@ -2462,7 +2516,7 @@ function stompEnemy(g, type){
   }
   setTimeout(function(){
     if(g && g.parentNode) g.parentNode.removeChild(g);
-    coinPop();
+    coinPop(state.combo >= 5 ? '+2' : '+1');
     afterStomp();
   }, 320);
 }
@@ -2472,10 +2526,13 @@ function stompGoomba(g){ stompEnemy(g, 'goomba'); }
 
 function afterStomp(){
   goombaActive = false;
-  state.score++;
+  // Streak escalation: 5+ combo earns double coins — the run feels rewarding.
+  var coinsEarned = (state.combo >= 5) ? 2 : 1;
+  state.score += coinsEarned;
   state.worldProgress++;
   updateScoreDisplay();
   updateProgressBar();
+  comboPop();
   save();
 
   checkPowerUps();
@@ -2591,8 +2648,9 @@ function spawnBoss(){
 
   bossEl = document.createElement('div');
   bossEl.className = 'boss boss-' + bossConfig.sprite + ' entering';
-  // Boss sits at right side of stage, opposite Mario
-  bossEl.style.right = '6%';
+  // Boss stands left of the mic button (mic occupies the bottom-right corner
+  // at right:3% + 64px). 17% keeps the full sprite visible on small phones.
+  bossEl.style.right = '17%';
   bossEl.style.bottom = '0';
   if(bossConfig.filter) bossEl.style.filter = bossConfig.filter;
   bossEl.innerHTML = spriteImg(bossConfig.sprite + '_idle');
@@ -2780,7 +2838,8 @@ function spawnBonusCoin(){
   var stageRect = stage.getBoundingClientRect();
   var c = document.createElement('div');
   c.className = 'bonus-coin';
-  c.textContent = '🪙';
+  c.innerHTML = spinCoinHTML();
+  c.style.width = '34px'; c.style.height = '34px';
   // Random horizontal position, random fall duration (2.5–4s)
   var leftPx = Math.random() * (stageRect.width - 30);
   c.style.left = leftPx + 'px';
@@ -2889,7 +2948,7 @@ function surpriseColorFlash(){
   setTimeout(function(){ if(f.parentNode) f.parentNode.removeChild(f); }, 850);
 }
 
-function coinPop(){
+function coinPop(bonusText){
   var qblock = document.getElementById('qblock');
   var stage = document.getElementById('stage');
   var entLayer = document.getElementById('entities-layer');
@@ -2900,7 +2959,7 @@ function coinPop(){
   c.className = 'coin-particle';
   c.style.left = (qblockRect.left - stageRect.left + 12) + 'px';
   c.style.top = (qblockRect.top - stageRect.top) + 'px';
-  c.innerHTML = spriteImg('coin');
+  c.innerHTML = spinCoinHTML();
   entLayer.appendChild(c);
   playCoinSound();
   setTimeout(function(){
@@ -2909,13 +2968,30 @@ function coinPop(){
 
   var sp = document.createElement('div');
   sp.className = 'score-pop';
-  sp.textContent = '+1';
+  sp.textContent = bonusText || '+1';
   sp.style.left = (qblockRect.left - stageRect.left + 8) + 'px';
   sp.style.top = (qblockRect.top - stageRect.top + 18) + 'px';
   entLayer.appendChild(sp);
   setTimeout(function(){
     if(sp && sp.parentNode) sp.parentNode.removeChild(sp);
   }, 1300);
+}
+
+// Streak banner — appears at 3+ combo so the kid feels the run building.
+function comboPop(){
+  if(state.combo < 3) return;
+  var stage = document.getElementById('stage');
+  var fx = document.getElementById('fx-layer');
+  if(!stage || !fx) return;
+  var stageRect = stage.getBoundingClientRect();
+  var cp = document.createElement('div');
+  cp.className = 'combo-pop';
+  cp.textContent = (state.combo >= 7 ? '🔥 SUPER COMBO x' : '⭐ COMBO x') + state.combo + '!';
+  cp.style.left = '50%';
+  cp.style.top = '8%';
+  cp.style.transform = 'translateX(-50%)';
+  fx.appendChild(cp);
+  setTimeout(function(){ if(cp.parentNode) cp.parentNode.removeChild(cp); }, 1450);
 }
 
 // ---- POWER-UP PICKUPS ----
@@ -3012,7 +3088,7 @@ function itemIcon(kind){
   if(kind === 'tanooki')  return spriteImg('tanooki_idle');// Tanooki Mario figurine
   if(kind === 'star')     return spriteImg('pu_star');
   if(kind === 'oneup')    return spriteImg('oneup');       // real green 1-Up mushroom sprite
-  if(kind === 'coins')    return '<div class="picker-emoji">🪙</div>';
+  if(kind === 'coins')    return spinCoinHTML();
   if(kind === 'costume')  return '<div class="picker-emoji">👕</div>';
   return '<div class="picker-emoji">❓</div>';
 }
@@ -3044,7 +3120,7 @@ function applyItemReward(kind){
     state.score += 5;
     showDialog('+5 COINS!', 900);
     playCoinSound();
-    coinPop();
+    coinPop(state.combo >= 5 ? '+2' : '+1');
     setTimeout(coinPop, 100);
     setTimeout(coinPop, 200);
     save();
@@ -3259,9 +3335,10 @@ function showLevelUp(){
   var nextIdx = (state.worldIdx + 1) % WORLDS.length;
   var nextLabel = WORLDS[nextIdx].label;
 
+  var beatenBoss = (WORLDS[state.worldIdx] && WORLDS[state.worldIdx].boss) ? WORLDS[state.worldIdx].boss.name : 'THE BOSS';
   var html = '<div class="lu-flag">🏁</div>';
   html += '<div class="lu-title">LEVEL CLEAR!</div>';
-  html += '<div class="lu-sub">You read 10 words! 🎉</div>';
+  html += '<div class="lu-sub">You read '+WORDS_PER_WORLD+' words and beat '+beatenBoss+'! 🎉</div>';
   html += '<div class="lu-next">NEXT: '+nextLabel+'</div>';
   html += '<button class="btn-primary" id="lu-next-btn">▶ CONTINUE</button>';
   var lu = document.getElementById('levelup-overlay');
@@ -3296,7 +3373,7 @@ function applyWorld(idx){
 function updateProgressBar(){
   var pb = document.getElementById('progress-bar');
   var html = '';
-  for(var i=0;i<5;i++){
+  for(var i=0;i<WORDS_PER_WORLD;i++){
     html += '<div class="pip'+(i<state.worldProgress?' fill':'')+'"></div>';
   }
   pb.innerHTML = html;
@@ -3696,6 +3773,41 @@ document.getElementById('mic-btn').addEventListener('click', function(){
 document.getElementById('menu-btn').addEventListener('click', function(){
   // close any goomba in flight before opening menu
   showMenu();
+});
+
+// ---- TAP DELIGHTS ----
+// Pure-fun interactions, classic Mario feel. Carefully guarded so they can
+// never interfere with combat animations or the reading loop.
+var lastMarioTap = 0;
+document.getElementById('mario').addEventListener('click', function(){
+  var now = Date.now();
+  if(now - lastMarioTap < 600) return;          // debounce
+  if(goombaActive || state.bossActive) return;  // never during combat
+  if(state.phase === 'celebrating' || state.phase === 'bonus') return;
+  lastMarioTap = now;
+  var m = document.getElementById('mario');
+  m.classList.remove('tap-hop'); void m.offsetWidth;
+  m.classList.add('tap-hop');
+  setMarioFrame('jump');
+  playJumpSound();
+  setTimeout(function(){
+    m.classList.remove('tap-hop');
+    if(!goombaActive) setMarioFrame(0);
+  }, 520);
+});
+
+var lastQblockTap = 0;
+document.getElementById('qblock').addEventListener('click', function(){
+  var now = Date.now();
+  if(now - lastQblockTap < 900) return;
+  if(state.phase === 'bonus' || state.bossActive) return;
+  lastQblockTap = now;
+  var qb = document.getElementById('qblock');
+  qb.classList.remove('bumped'); void qb.offsetWidth;
+  qb.classList.add('bumped');
+  playCoinSound();
+  burstSparkle(qb);
+  setTimeout(function(){ qb.classList.remove('bumped'); }, 420);
 });
 
 document.getElementById('music-toggle').addEventListener('click', function(){
