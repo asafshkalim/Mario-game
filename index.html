@@ -47,6 +47,10 @@ button{font-family:inherit}
 #hud{position:absolute;top:0;left:0;right:0;height:32px;background:rgba(0,0,0,.72);color:#fff;font-family:'Press Start 2P',monospace;font-size:9px;display:flex;align-items:center;justify-content:space-between;padding:0 8px;z-index:5;border-bottom:2px solid #fbd000;gap:8px}
 #coins-hud{display:flex;align-items:center;gap:5px;flex:0 0 auto}
 #coins-icon{width:14px;height:14px}
+#egg-hud{display:flex;align-items:center;flex:0 0 auto}
+#egg-icon{width:15px;height:16px}
+#egg-icon.egg-wiggle{animation:eggWiggle .5s ease-in-out}
+@keyframes eggWiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-16deg)}50%{transform:rotate(14deg)}75%{transform:rotate(-9deg)}}
 #world-label{color:#fbd000;flex:1 1 auto;text-align:center;font-size:9px;letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #progress-bar{display:flex;align-items:center;gap:3px;flex:0 0 auto;font-size:8px;color:#fff}
 #progress-bar .pip{width:8px;height:8px;background:#444;border:1px solid #000;border-radius:1px}
@@ -87,7 +91,8 @@ button{font-family:inherit}
 /* Desert scenery: pyramids replace hills, cacti replace bushes, sun replaces clouds */
 .pyramid-sprite{position:absolute;width:110px;height:auto}
 .cactus-sprite{position:absolute;width:42px;height:auto}
-.sun-sprite{position:absolute;width:74px;height:74px;border-radius:50%;background:radial-gradient(circle,#ffe070 0%,#fbd000 50%,#f88800 100%);box-shadow:0 0 30px rgba(251,208,0,.6),0 0 60px rgba(248,136,0,.3)}
+.sun-sprite{position:absolute;width:64px;height:64px;filter:drop-shadow(0 0 14px rgba(251,208,0,.8)) drop-shadow(0 0 28px rgba(248,136,0,.4));animation:sunWobble 3.2s ease-in-out infinite alternate}
+@keyframes sunWobble{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
 .dune-sprite{position:absolute;width:140px;height:32px;background:radial-gradient(ellipse at top,#fcae66 0%,#d88838 100%);border-radius:140px 140px 0 0;opacity:.85}
 /* Ocean scenery: coral, seaweed, fish */
 .coral-sprite{position:absolute;width:54px;height:auto}
@@ -101,6 +106,8 @@ button{font-family:inherit}
 @keyframes flameFlicker{from{transform:translateX(-50%) scale(.95,1)}to{transform:translateX(-50%) scale(1.05,1.1)}}
 .pillar-sprite{position:absolute;width:48px;height:auto}
 .lava-pool{position:absolute;height:14px;background:linear-gradient(180deg,#ffaa00 0%,#ff5f00 50%,#a82000 100%);border-radius:4px;box-shadow:0 -2px 12px rgba(255,140,0,.6),0 0 20px rgba(255,80,0,.4);animation:lavaGlow 1.4s ease-in-out infinite alternate}
+.lava-bubble{position:absolute;width:16px;height:16px;filter:drop-shadow(0 0 6px rgba(255,140,0,.9));animation:lavaLeap 2.6s ease-in-out infinite}
+@keyframes lavaLeap{0%,100%{transform:translateY(8px) scaleY(.6);opacity:0}8%{opacity:1}40%{transform:translateY(-70px) scaleY(1)}50%{transform:translateY(-76px) scaleY(1) rotate(180deg)}60%{transform:translateY(-70px) rotate(180deg)}92%{opacity:1}99%{transform:translateY(8px) scaleY(.6) rotate(360deg);opacity:0}}
 @keyframes lavaGlow{from{box-shadow:0 -2px 12px rgba(255,140,0,.6),0 0 20px rgba(255,80,0,.4)}to{box-shadow:0 -2px 18px rgba(255,180,40,.8),0 0 28px rgba(255,120,20,.6)}}
 
 /* Mario sized to fit small landscape — 56px tall sprite. Feet sit on top of ground (entities-layer bottom is at ground top). */
@@ -258,7 +265,18 @@ button{font-family:inherit}
   100%{transform:translate(-50%,-50%) scale(1.2);opacity:0}
 }
 
-/* ---- YOSHI MARIO ---- */
+/* ---- YOSHI EGG HATCH ---- */
+.hatch-wrap{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:80px;height:90px;display:flex;align-items:flex-end;justify-content:center;z-index:9;pointer-events:none}
+.hatch-egg{width:56px;height:62px;animation:eggShake .55s ease-in-out infinite;filter:drop-shadow(2px 3px 0 rgba(0,0,0,.4)) drop-shadow(0 0 10px rgba(255,255,255,.5))}
+.hatch-egg.hatch-frantic{animation:eggShakeHard .22s ease-in-out infinite}
+@keyframes eggShake{0%,100%{transform:rotate(0)}25%{transform:rotate(-10deg) translateY(-2px)}75%{transform:rotate(10deg) translateY(-2px)}}
+@keyframes eggShakeHard{0%,100%{transform:rotate(-14deg) translateY(-4px)}50%{transform:rotate(14deg) translateY(-4px)}}
+.hatch-yoshi{width:58px;height:66px;animation:babyPop 1.45s ease-out;filter:drop-shadow(2px 3px 0 rgba(0,0,0,.4))}
+@keyframes babyPop{0%{transform:scale(.2) translateY(20px);opacity:0}18%{transform:scale(1.25) translateY(-14px);opacity:1}32%{transform:scale(1) translateY(0)}55%{transform:translateY(-16px)}70%{transform:translateY(0)}85%{transform:translateY(-10px)}100%{transform:translateY(0)}}
+.hatch-yoshi.hatch-fly{animation:babyFly .65s ease-in forwards}
+@keyframes babyFly{from{transform:translate(0,0) scale(1);opacity:1}to{transform:translate(-38vw,-30vh) scale(.25);opacity:0}}
+
+
 /* When riding Yoshi, the mario container is taller (Mario sits on top). */
 #mario.yoshi-ride{height:90px;width:60px}
 
@@ -275,7 +293,9 @@ button{font-family:inherit}
 #bonus-overlay .bonus-timer{position:absolute;top:8%;right:8%;
   font-family:'Press Start 2P',monospace;font-size:18px;color:#fff;
   text-shadow:2px 2px 0 #000;background:#000;border:2px solid #fff;padding:4px 8px;border-radius:4px}
-.bonus-coin{position:absolute;width:28px;height:28px;cursor:pointer;z-index:51;
+/* Bonus coin: the tappable DIV is 56px (big 5yo-friendly hitbox) while the
+   visual coin sits inside with padding — the whole padded area accepts taps. */
+.bonus-coin{position:absolute;width:56px;height:56px;padding:8px;cursor:pointer;z-index:51;
   font-size:28px;line-height:28px;text-align:center;
   pointer-events:auto;animation:bonusCoinFall linear forwards;
   -webkit-tap-highlight-color:transparent;user-select:none}
@@ -411,6 +431,14 @@ button{font-family:inherit}
 /* Scrollable costume grid so every costume card stays reachable on small landscape phones */
 .costume-grid{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-height:42vh;overflow-y:auto;padding:6px;-webkit-overflow-scrolling:touch}
 
+/* Yoshi House collection cards */
+.yoshi-house-grid{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-height:46vh;overflow-y:auto;padding:6px;-webkit-overflow-scrolling:touch}
+.yoshi-card{background:#1a2c1a;border:2px solid #00a800;border-radius:6px;padding:6px 4px;width:76px;text-align:center;flex:0 0 auto}
+.yoshi-card-mystery{background:#1a1a1a;border-color:#444}
+.yoshi-card-img{width:44px;height:50px;margin:0 auto}
+.yoshi-card-name{font-family:'Press Start 2P',monospace;font-size:7px;color:#fff;margin-top:4px;line-height:1.3}
+.yoshi-card-count{font-family:'Andika',sans-serif;font-weight:700;font-size:11px;color:#fbd000;margin-top:2px}
+
 /* Stickers */
 .sticker-progress{font-family:'Press Start 2P',monospace;font-size:10px;color:#fbd000;text-align:center;margin:4px 0 8px}
 .sticker-empty{font-family:'Andika',sans-serif;font-size:14px;color:#fff;text-align:center;padding:20px 10px;font-weight:700}
@@ -447,6 +475,20 @@ button{font-family:inherit}
 #levelup-overlay{position:absolute;inset:0;background:rgba(0,0,0,.88);z-index:60;display:none;align-items:center;justify-content:center;padding:14px;flex-direction:column;color:#fff;text-align:center}
 #levelup-overlay.show{display:flex;animation:fadeIn .4s}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* CONGRATULATIONS ending */
+.congrats-sign{background:#000;border:4px solid #fbd000;border-radius:10px;padding:14px 24px;box-shadow:6px 6px 0 #d82800,0 0 30px rgba(251,208,0,.5);animation:congratsPulse 1.4s ease-in-out infinite alternate;max-width:92%}
+@keyframes congratsPulse{from{box-shadow:6px 6px 0 #d82800,0 0 22px rgba(251,208,0,.4)}to{box-shadow:6px 6px 0 #d82800,0 0 44px rgba(251,208,0,.85)}}
+.cg-title{font-family:'Press Start 2P',monospace;font-size:17px;color:#fbd000;text-shadow:2px 2px 0 #d82800;letter-spacing:1px;line-height:1.4}
+.cg-sub{font-family:'Press Start 2P',monospace;font-size:9px;color:#fff;margin-top:10px;line-height:1.7}
+.cg-mario{width:64px;height:64px;margin:12px auto;animation:bounce .55s ease-in-out infinite alternate;filter:drop-shadow(3px 3px 0 #000)}
+.cg-stats{font-family:'Andika',sans-serif;font-weight:700;font-size:13px;color:#fff;margin-bottom:12px;background:rgba(0,0,0,.5);padding:6px 14px;border-radius:6px;border:2px solid #444}
+.firework{position:absolute;pointer-events:none;animation:fireworkPop 1.4s ease-out forwards;z-index:61}
+@keyframes fireworkPop{0%{opacity:0;transform:scale(.2)}25%{opacity:1;transform:scale(1.3)}55%{transform:scale(1)}100%{opacity:0;transform:scale(1.6) translateY(-22px)}}
+@media (max-height:380px){
+  .cg-title{font-size:13px}
+  .cg-mario{width:48px;height:48px;margin:8px auto}
+}
 .lu-flag{font-size:54px;animation:flagWave 1s ease-in-out infinite}
 @keyframes flagWave{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
 .lu-title{font-family:'Press Start 2P',monospace;font-size:18px;color:#fbd000;text-shadow:3px 3px 0 #d82800;margin:10px 0 6px;letter-spacing:1px}
@@ -511,6 +553,7 @@ button{font-family:inherit}
       <div id="coins-icon"></div>
       <span id="coins-text">000</span>
     </div>
+    <div id="egg-hud" title="Yoshi egg"><div id="egg-icon"></div></div>
     <span id="world-label">WORLD 1-1</span>
     <div id="progress-bar"></div>
     <button id="music-toggle">♫ ON</button>
@@ -627,7 +670,83 @@ var BOSS_PHRASES = {
   3: ['I love mom',     'I love dad',  'we can do it','I can help you']
 };
 
-// ---- OFFICIAL SMB3 NES SPRITES (ripped from Nintendo, 16x16 native PNGs) ----
+// ---- YOSHI EGG (3 crack stages for the HUD hatch meter) ----
+var SPR_EGG0 = [
+  '...KKKKKK...',
+  '..KWWWWWWK..',
+  '.KWWGGWWWWK.',
+  '.KWWGGWWGGK.',
+  'KWWWWWWWGGWK',
+  'KWGGWWWWWWWK',
+  'KWGGWWWGGWWK',
+  'KWWWWWWGGWWK',
+  'KWWGGWWWWWWK',
+  '.KWGGWWWWWK.',
+  '.KWWWWWGGWK.',
+  '..KWWWWWWK..',
+  '...KKKKKK...'
+];
+var SPR_EGG1 = [
+  '...KKKKKK...',
+  '..KWWKWWWK..',
+  '.KWWGKWWWWK.',
+  '.KWWGKKWGGK.',
+  'KWWWWWKWGGWK',
+  'KWGGWWWWWWWK',
+  'KWGGWWWGGWWK',
+  'KWWWWWWGGWWK',
+  'KWWGGWWWWWWK',
+  '.KWGGWWWWWK.',
+  '.KWWWWWGGWK.',
+  '..KWWWWWWK..',
+  '...KKKKKK...'
+];
+var SPR_EGG2 = [
+  '...KKKKKK...',
+  '..KWWKWWWK..',
+  '.KWWGKWWKWK.',
+  '.KWKKKKWKGK.',
+  'KWWWKWKKKGWK',
+  'KWGGKWWWKWWK',
+  'KWGKWWWGKWWK',
+  'KWWKKWWGGKWK',
+  'KWWGKKWWWKWK',
+  '.KWGGKKWWKK.',
+  '.KWWWWKKGWK.',
+  '..KWWWWWWK..',
+  '...KKKKKK...'
+];
+var SPR_EGGS = [SPR_EGG0, SPR_EGG1, SPR_EGG2];
+
+
+// Every correct word cracks the HUD egg a little more; every 3rd word it
+// hatches a random-colored baby Yoshi. 8 colors to collect in the Yoshi House.
+// Weighted rarity: black Yoshi is the rare jackpot (~4%), duplicates pay coins.
+var YOSHI_COLORS = [
+  {id:'green',  name:'GREEN',  emoji:'💚', weight:20, filter:''},
+  {id:'red',    name:'RED',    emoji:'❤️', weight:16, filter:'hue-rotate(-100deg) saturate(1.5) brightness(1.05)'},
+  {id:'blue',   name:'BLUE',   emoji:'💙', weight:16, filter:'hue-rotate(180deg) saturate(1.3) brightness(1.05)'},
+  {id:'yellow', name:'YELLOW', emoji:'💛', weight:14, filter:'hue-rotate(45deg) saturate(1.6) brightness(1.1)'},
+  {id:'pink',   name:'PINK',   emoji:'💗', weight:12, filter:'hue-rotate(-80deg) saturate(.9) brightness(1.35)'},
+  {id:'purple', name:'PURPLE', emoji:'💜', weight:10, filter:'hue-rotate(150deg) saturate(1.1) brightness(.95)'},
+  {id:'orange', name:'ORANGE', emoji:'🧡', weight:8,  filter:'hue-rotate(-50deg) saturate(1.7) brightness(1.05)'},
+  {id:'black',  name:'BLACK',  emoji:'🖤', weight:4,  filter:'grayscale(1) brightness(.45) contrast(1.5)'}
+];
+var EGG_WORDS_TO_HATCH = 3;
+
+function pickYoshiColor(){
+  var total = 0, i;
+  for(i=0;i<YOSHI_COLORS.length;i++) total += YOSHI_COLORS[i].weight;
+  var roll = Math.random() * total;
+  for(i=0;i<YOSHI_COLORS.length;i++){
+    roll -= YOSHI_COLORS[i].weight;
+    if(roll <= 0) return YOSHI_COLORS[i];
+  }
+  return YOSHI_COLORS[0];
+}
+
+
+// ---- AUTHENTIC PIXEL SPRITES (ripped from fan sprite sheets, PNG base64) ----
 var SPRITES = {
   'mario_idle': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAWCAYAAADJqhx8AAABbUlEQVR4nMWUIZODMBCFv96cqKxEIpGRlchKZCQyMpKfEIlEIpFIJPIkEolEVuJyAkJJgc652xlmNtn33uxLlsB/x+WskIDdrusT7G7TEatYQ7FsKpBtfij0/U6uYg3AkP4Qcp8LjaF6zKlsc7sVuWzJaZS+xPrS66yOUh7BzYnsLSVg6yi1zBZOvynWNnk7HwCMDGaAVnbS6mO+YH3y1LUzsGv/lDuRr1WlrAC4ihiAqWvXkstdzWG9QzQysFk1MnUtVxEzaeV1ec0Lpq4lNxKArBr3c2FksPo8PECt9v7/KnJG9tpIllnoRXMorke5m4HDQcrlnViKnYBICh7BzRNZb+Eug5XcZClZ+BLIQkEWCrpa0YzPFbsKGBlYXQ6nrW+jFw26HNzg+T+Ti4cp1zyWAjN0AJSyRUU+1psDgKLXhMkNgKF+AnhrFeWzrWUOjh4JazYet5FV4xnHI9up1+7O7cne3oIT+KR+xPsF7CPty7W1/UoAAAAASUVORK5CYII=',
   'yoshi_celebrate': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAeCAYAAAAy2w7YAAABYElEQVR4nM2WQW7EIAxFv6sumJtk2SPMskfKEXIklnOELucm8c5dADEwMBMzVOqXECRS/LCNTYD/LZIw6vWTL4Y4K4LhjYA1MjYCIGP22iJhZmFmwYpiPRWSQPl8JnwfFghvaot5h3MXgEXHE5gBVOqAZGLeR83VIgFDjrm17nh10qNowEcbuSe9tR1U5ualOrmy5+gGwFGY/04U6yXOPo6UI49ujj4tEN4EbiU92hDgisq7dncwgEoVsKTQhkZN5qJOR3i7M/QNaXEK6TCD4s43QTrah2E/JTQBwsziF4hfUIbKa7fW8L0JeshHBZkC0nog7WXZ8wRI5pHPCrBqniOgxkkhydt96zqAm3ZtN8J04ioYg2S9q3k4jGrWkV8khkfFvFdFatx+9Sh+0c1+3+mAJIX+Zoc9gIDoUdT1h+HcpXinmzgPq0IXPkyeAMDtyz18ZIUA3T/VV8me+kc6V7975UNR9mic6gAAAABJRU5ErkJggg==',
@@ -916,42 +1035,45 @@ var SPR_COIN = [
   '................'
 ];
 
-// ---- CLOUD ----
+// ---- CLOUD (SMB3 style: black-outlined puffy white cloud, light-blue base shading) ----
 var SPR_CLOUD = [
-  '...WWW..........',
-  '..WWWWW.WWW.....',
-  '.WWWWWWWWWWW....',
-  'WWWWWWWWWWWWW...',
-  'WWWWWWWWWWWWWW..',
-  '.WWWWWWWWWWWWW..',
-  '...WWWWWWWWWW...',
-  '......WWWWW.....'
+  '......KKK....KKK......',
+  '....KKWWWKK.KWWWKK....',
+  '...KWWWWWWWKWWWWWWK...',
+  '..KWWWWWWWWWWWWWWWWK..',
+  '.KWWWWWWWWWWWWWWWWWWK.',
+  'KWWWWWWWWWWWWWWWWWWWWK',
+  'KWWLLWWWWWLLWWWWLLWWWK',
+  '.KLLLLWWLLLLLWWLLLLWK.',
+  '..KKLLLLLKKLLLLLLKKK..',
+  '....KKKKK..KKKKKK.....'
 ];
 
-// ---- HILL ----
+// ---- HILL (SMB3 style: black outline, diagonal light/dark stripe shading) ----
 var SPR_HILL = [
-  '............GG..............',
-  '...........GGGG.............',
-  '..........GGGGGG............',
-  '.........GGGGGGGG...........',
-  '........GGGGGGGGGG..........',
-  '.......GgggGGGGGGGG.........',
-  '......GgggggGGGGGGGG........',
-  '.....GgggggggGGGGGGGG.......',
-  '....GgggggggggGGGGGGGG......',
-  '...GgggggggggggGGGGGGGG.....',
-  '..GdddggggggggggGGGGGGGG....',
-  '.GddddddggggggggggGGGGGGG...'
+  '.............KK.............',
+  '............KGGK............',
+  '...........KGGGGK...........',
+  '..........KGgGGGgK..........',
+  '.........KGggGGGggK.........',
+  '........KGgggGGGgggK........',
+  '.......KGgggdGGGdgggK.......',
+  '......KGgggddGGGddgggK......',
+  '.....KGgggdddGGGdddgggK.....',
+  '....KGgggddddGGGddddgggK....',
+  '...KGgggdddddGGGdddddgggK...',
+  '..KGGGGGGGGGGGGGGGGGGGGGGK..'
 ];
 
-// ---- BUSH ----
+// ---- BUSH (SMB3 style: outlined dark-green bumps with light sparkle dots) ----
 var SPR_BUSH = [
-  '......GG......GG......',
-  '....GGGGGG..GGGGGG....',
-  '..GGGGGGGGGGGGGGGGGG..',
-  '.GGggggggggggggggggGG.',
-  'GGgggggggggggggggggggG',
-  'Ggggggggggggggggggggg.'
+  '......KKK......KKK......',
+  '....KKdddKK..KKdddKK....',
+  '..KKdGddddKKKKddddGdKK..',
+  '.KddddddGddddddGddddddK.',
+  'KdGddddddddddddddddddGdK',
+  'KddddddGddddddddGddddddK',
+  '.KKKKKKKKKKKKKKKKKKKKKK.'
 ];
 
 // ---- PYRAMID (desert) ----
@@ -1012,15 +1134,49 @@ var SPR_SEAWEED = [
   'GG'
 ];
 
-// ---- FISH (ocean) ----
+// ---- FISH (SMB3-style cheep-cheep: red round body, white belly, big eye, tail fin) ----
 var SPR_FISH = [
-  '...OOO..',
-  '..OOOOO.',
-  'OOOOOOOO',
-  'OOOOKOOO',
-  'OOOOOOOO',
-  '..OOOOO.',
-  '...OOO..'
+  '..........KKKK...',
+  'K........KRRRRK..',
+  'KK......KRRRRRWKK',
+  'KRK....KRRRRRWKKK',
+  'KRRKKKKRRRRRRWKWK',
+  'KRRRRRRRRRRRRWWWK',
+  'KRRKKKRRRRRRRRRK.',
+  'KRK..KRWWWWWWWK..',
+  'K.....KWWWWWWK...',
+  '.......KKKKKK....'
+];
+
+// ---- ANGRY SUN (SMB3 desert icon: spiky yellow sun, orange face, grumpy frown) ----
+var SPR_SUN = [
+  '..Y...Y..Y...Y..',
+  '.Y.Y..YYYY..Y.Y.',
+  '..Y.YYOOOOYY.Y..',
+  '...YOOOOOOOOY...',
+  'Y.YOOOOOOOOOOY.Y',
+  '.YOOKKOOOOKKOOY.',
+  'YYOOKKOOOOKKOOYY',
+  '.YOOOOOOOOOOOOY.',
+  'YYOOOOOOOOOOOOYY',
+  '.YOOOKOOOOKOOOY.',
+  'Y.YOOOKKKKOOOY.Y',
+  '...YOOOOOOOOY...',
+  '..Y.YYOOOOYY.Y..',
+  '.Y.Y..YYYY..Y.Y.',
+  '..Y...Y..Y...Y..'
+];
+
+// ---- LAVA BUBBLE (castle: bouncing fireball that leaps from lava pools) ----
+var SPR_LAVABUBBLE = [
+  '...OO...',
+  '..OYYO..',
+  '.OYWYYO.',
+  '.OYWYYO.',
+  'OYYWYYYO',
+  'OYYYYYYO',
+  '.OYYYYO.',
+  '..OOOO..'
 ];
 
 // ---- CASTLE PILLAR ----
@@ -1040,8 +1196,8 @@ var SPR_PILLAR = [
 
 // ---- GROUND TILE ----
 var SPR_GROUND = [
-  'TTTTTTTTTTTTTTTT',
-  'TTttTTTTttTTTTTT',
+  'GgGGgGGGgGGGgGGg',
+  'gGgGGgGgGGgGgGGG',
   'TttTTTTttTTTTttT',
   'TTTTTTTTTTTTTTTT',
   'NNNNNNNNNNNNNNNN',
@@ -1184,6 +1340,9 @@ var state = {
   // Boss fight tracking
   bossActive:false,
   bossHP:0,
+  // Yoshi Egg Hatchery
+  eggProgress:0,        // 0..2 — words toward the next hatch
+  yoshiHouse:{},        // color id -> count of hatched Yoshis
   // Costume unlocks (set after beating bosses)
   yoshiUnlocked:false,
   capeUnlocked:false,
@@ -1211,6 +1370,7 @@ function save(){
       costumeId:state.costumeId, musicOn:state.musicOn,
       weights:state.weights, customWords:state.customWords,
       powerLevel:state.powerLevel, stickers:state.stickers, enemyKills:state.enemyKills,
+      eggProgress:state.eggProgress, yoshiHouse:state.yoshiHouse,
       yoshiUnlocked:state.yoshiUnlocked, bossesDefeated:state.bossesDefeated,
       capeUnlocked:state.capeUnlocked, tanookiUnlocked:state.tanookiUnlocked
     }));
@@ -1231,6 +1391,8 @@ function load(){
     if(typeof state.tanookiUnlocked !== 'boolean') state.tanookiUnlocked = false;
     if(typeof state.bossActive !== 'boolean') state.bossActive = false;
     if(typeof state.bossHP !== 'number') state.bossHP = 0;
+    if(typeof state.eggProgress !== 'number' || state.eggProgress < 0 || state.eggProgress >= EGG_WORDS_TO_HATCH) state.eggProgress = Math.max(0, Math.min(EGG_WORDS_TO_HATCH-1, state.eggProgress|0));
+    if(!state.yoshiHouse || typeof state.yoshiHouse !== 'object') state.yoshiHouse = {};
   } catch(e){}
 }
 
@@ -1296,10 +1458,11 @@ function renderScenery(){
     gl.style.backgroundImage = groundUrl(SPR_GROUND);
 
   } else if(theme === 'desert'){
-    // Sky: sun + sparse heat-haze cloud
+    // Sky: SMB3 Angry Sun (pixel art, slow menacing wobble) + sparse heat-haze cloud
     var sun = document.createElement('div');
     sun.className = 'sun-sprite';
     sun.style.left = '78%'; sun.style.top = '5%';
+    sun.innerHTML = renderSprite(SPR_SUN);
     cl.appendChild(sun);
     // Optional thin cloud
     var c = document.createElement('div');
@@ -1387,13 +1550,20 @@ function renderScenery(){
       pi.innerHTML = renderSprite(SPR_PILLAR);
       hl.appendChild(pi);
     });
-    // Foreground: lava pools between pillars (glowing)
-    [{x:25,w:80},{x:62,w:100}].forEach(function(p){
+    // Foreground: lava pools between pillars (glowing) with leaping lava bubbles
+    [{x:25,w:80},{x:62,w:100}].forEach(function(p,i){
       var l = document.createElement('div');
       l.className = 'lava-pool';
       l.style.left = p.x+'%'; l.style.bottom = '0';
       l.style.width = p.w+'px';
       bl.appendChild(l);
+      var bub = document.createElement('div');
+      bub.className = 'lava-bubble';
+      bub.style.left = 'calc('+p.x+'% + '+Math.round(p.w/2 - 8)+'px)';
+      bub.style.bottom = '4px';
+      bub.style.animationDelay = (i*1.3)+'s';
+      bub.innerHTML = renderSprite(SPR_LAVABUBBLE);
+      bl.appendChild(bub);
     });
     gl.style.backgroundImage = groundUrl(SPR_GROUND_CASTLE);
   }
@@ -1528,6 +1698,16 @@ function drawQBlock(used){
 function drawCoinsIcon(){
   document.getElementById('coins-icon').innerHTML = spriteImg('coin');
 }
+function drawEggHud(wiggle){
+  var el = document.getElementById('egg-icon');
+  if(!el) return;
+  var stage = Math.max(0, Math.min(SPR_EGGS.length - 1, state.eggProgress|0));
+  el.innerHTML = renderSprite(SPR_EGGS[stage]);
+  if(wiggle){
+    el.classList.remove('egg-wiggle'); void el.offsetWidth;
+    el.classList.add('egg-wiggle');
+  }
+}
 function drawTitleMario(){
   var c = document.getElementById('title-mario-container');
   c.className = 'title-mario';
@@ -1634,44 +1814,69 @@ function playSfx(key, vol){
 
 // Note frequencies (Hz) — small lookup keeps the tracks compact.
 var NOTE = {
-  C3:130.81, D3:146.83, E3:164.81, F3:174.61, G3:196.00, A3:220.00, B3:246.94,
-  C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392.00, A4:440.00, Bb4:466.16, B4:493.88,
-  C5:523.25, D5:587.33, E5:659.25, F5:698.46, G5:783.99, A5:880.00, B5:987.77,
+  C3:130.81, D3:146.83, E3:164.81, F3:174.61, G3:196.00, A3:220.00, Bb3:233.08, B3:246.94,
+  C4:261.63, D4:293.66, Eb4:311.13, E4:329.63, F4:349.23, Fs4:369.99, G4:392.00, Gs4:415.30, A4:440.00, Bb4:466.16, B4:493.88,
+  C5:523.25, D5:587.33, E5:659.25, F5:698.46, G5:783.99, A5:880.00, B5:987.77, C6:1046.50,
   REST:0
 };
 
 // Each entry: [noteName, durationSec]. The track loops indefinitely.
+// All four loops are ORIGINAL compositions written in the SMB3 chiptune style
+// (bouncy syncopated overworld, exotic flat-2 desert, gentle 3/4 water waltz,
+// ominous low-register castle). They are not transcriptions of Nintendo music.
 var MUSIC_TRACKS = {
-  // Grassland: bouncy major-key overworld feel
+  // Grassland: bouncy, syncopated major-key hop with a cheeky turnaround
   overworld: [
-    ['E5',.18],['E5',.18],['REST',.09],['E5',.18],['REST',.09],['C5',.18],['E5',.18],['G5',.36],['REST',.18],
-    ['G4',.36],['REST',.36],
-    ['C5',.27],['G4',.18],['REST',.09],['E4',.27],['REST',.09],['A4',.18],['B4',.18],['Bb4',.09],['A4',.18],
-    ['G4',.12],['E5',.12],['G5',.12],['A5',.18],['F5',.18],['G5',.18],['REST',.09],['E5',.18],['C5',.18],['D5',.18],['B4',.36]
+    ['G4',.14],['C5',.14],['E5',.14],['G5',.28],['E5',.14],['G5',.42],['REST',.14],
+    ['A5',.14],['G5',.14],['E5',.14],['C5',.28],['D5',.14],['E5',.42],['REST',.14],
+    ['F5',.14],['E5',.14],['D5',.14],['E5',.28],['C5',.14],['A4',.28],['G4',.28],
+    ['E4',.14],['G4',.14],['C5',.56],['REST',.28]
   ],
-  // Desert: minor-key lulling phrygian-ish phrase
+  // Desert: exotic minor with a snake-charmer flat-2 lean
   desert: [
-    ['A3',.36],['B3',.18],['C4',.18],['E4',.36],['REST',.18],
-    ['D4',.36],['C4',.18],['B3',.18],['A3',.36],['REST',.18],
-    ['F4',.27],['E4',.27],['D4',.27],['C4',.27],['B3',.27],['A3',.54],
-    ['REST',.27]
+    ['A3',.3],['Bb3',.3],['A3',.3],['E4',.45],['REST',.15],
+    ['D4',.3],['C4',.3],['Bb3',.3],['A3',.6],['REST',.3],
+    ['E4',.3],['F4',.3],['E4',.3],['C4',.3],['Bb3',.3],['A3',.75],['REST',.3]
   ],
-  // Ocean: slow, watery arpeggios
+  // Ocean: gentle 3/4 waltz of rolling arpeggios — the SMB3 swimming feel
   ocean: [
-    ['C4',.45],['E4',.45],['G4',.45],['C5',.45],
-    ['B4',.45],['G4',.45],['E4',.45],['C4',.45],
-    ['F4',.45],['A4',.45],['C5',.45],['F5',.45],
-    ['E5',.45],['C5',.45],['A4',.45],['F4',.45]
+    ['C4',.4],['E4',.2],['G4',.2],['C5',.4],['G4',.2],['E4',.2],
+    ['F4',.4],['A4',.2],['C5',.2],['F5',.4],['C5',.2],['A4',.2],
+    ['G4',.4],['B4',.2],['D5',.2],['G5',.4],['D5',.2],['B4',.2],
+    ['E5',.4],['C5',.2],['G4',.2],['C5',.8],['REST',.4]
   ],
-  // Castle: ominous, low minor with chromatic descent
+  // Castle: ominous low pulse with a chromatic creep
   castle: [
-    ['A3',.27],['REST',.09],['A3',.27],['REST',.09],
-    ['G3',.27],['REST',.09],['F3',.27],['REST',.09],
-    ['E3',.27],['REST',.09],['F3',.27],['G3',.27],
-    ['A3',.45],['REST',.18],
-    ['C4',.27],['B3',.27],['A3',.27],['G3',.27],['F3',.27],['E3',.54]
+    ['E3',.3],['REST',.1],['E3',.3],['REST',.1],['G3',.3],['F3',.3],['E3',.45],['REST',.15],
+    ['A3',.3],['G3',.3],['F3',.3],['E3',.3],['D3',.45],['E3',.45],['REST',.3]
   ]
 };
+
+// One-shot victory fanfare for the CONGRATULATIONS screen — an original,
+// triumphant slow-build in the spirit of a Mario ending (soft triangle waves
+// rising into a bright final chord arpeggio). Plays once, does not loop.
+var VICTORY_FANFARE = [
+  ['C4',.22],['E4',.22],['G4',.22],['C5',.5],['REST',.12],
+  ['C5',.22],['D5',.22],['E5',.66],['REST',.18],
+  ['F5',.22],['E5',.22],['D5',.22],['E5',.22],['C5',.66],['REST',.18],
+  ['G4',.18],['A4',.18],['B4',.18],['C5',.18],['D5',.18],['E5',.18],['F5',.18],['G5',.9],['REST',.2],
+  ['E5',.3],['G5',.3],['C6',1.1]
+];
+
+function playVictoryMusic(){
+  stopBgMusic();
+  if(!audioUnlocked) return;
+  var t = 0;
+  VICTORY_FANFARE.forEach(function(step){
+    var name = step[0], dur = step[1];
+    if(name !== 'REST'){
+      (function(freq, d, at){
+        setTimeout(function(){ blip(freq, Math.min(d*1.15, 1.2), 'triangle', 0.16); }, at*1000);
+      })(NOTE[name] || 440, dur, t);
+    }
+    t += dur;
+  });
+}
 
 var musicTrackName = null;   // currently-playing track key
 var musicTokenSeq = 0;        // monotonic — invalidates pending setTimeouts after stop
@@ -2533,29 +2738,100 @@ function afterStomp(){
   updateScoreDisplay();
   updateProgressBar();
   comboPop();
+
+  // Yoshi Egg Hatchery: every completed word cracks the egg; the meter NEVER
+  // resets on a miss (a 5yo's progress is sacred). Third crack → hatch.
+  state.eggProgress = (state.eggProgress || 0) + 1;
+  var hatching = state.eggProgress >= EGG_WORDS_TO_HATCH;
+  if(hatching) state.eggProgress = 0;
+  drawEggHud(true);
   save();
 
   checkPowerUps();
 
-  // After WORDS_PER_WORLD correct words: trigger the boss fight (instead of immediate level-up).
-  // Boss fight: kid says a full phrase to defeat the boss in one shot.
-  if(state.worldProgress >= WORDS_PER_WORLD && !state.bossActive){
-    setTimeout(function(){
-      waitForPicker(startBossFight);
-    }, 800);
-    return;
-  }
-
-  // Surprise event roll — small chance after each correct answer to spawn a
-  // non-interactive visual delight (Bullet Bill, Lakitu drop, coin shower, etc.)
-  maybeSurpriseEvent();
-
-  setTimeout(function(){
-    waitForPicker(function(){
+  // Continuation after any picker + any hatch animation finishes.
+  var proceed = function(){
+    if(state.worldProgress >= WORDS_PER_WORLD && !state.bossActive){
+      startBossFight();
+    } else {
+      maybeSurpriseEvent();
       state.phase = 'idle';
       spawn();
+    }
+  };
+  setTimeout(function(){
+    waitForPicker(function(){
+      if(hatching) hatchEgg(proceed);
+      else proceed();
     });
   }, 700);
+}
+
+// ============================================================================
+// YOSHI EGG HATCH SEQUENCE
+// ============================================================================
+// Center-stage moment: the egg drops in, wobbles harder and harder, bursts in
+// a sparkle flash, and a baby Yoshi of a random color pops out. New colors get
+// a "NEW!" celebration; duplicates pay +3 coins; the rare black Yoshi triggers
+// a star-flash + coin shower jackpot. Runs ~3s, then calls `cb` to continue.
+function hatchEgg(cb){
+  var fx = document.getElementById('fx-layer');
+  var stage = document.getElementById('stage');
+  if(!fx || !stage){ cb(); return; }
+  state.phase = 'hatching';
+
+  var wrap = document.createElement('div');
+  wrap.className = 'hatch-wrap';
+  var egg = document.createElement('div');
+  egg.className = 'hatch-egg';
+  egg.innerHTML = renderSprite(SPR_EGG0);
+  wrap.appendChild(egg);
+  fx.appendChild(wrap);
+  playJumpSound();
+
+  // Wobble escalation: stage 0 → 1 → 2 with tick sounds
+  setTimeout(function(){ egg.innerHTML = renderSprite(SPR_EGG1); playStompSound(); }, 700);
+  setTimeout(function(){ egg.innerHTML = renderSprite(SPR_EGG2); playStompSound(); egg.classList.add('hatch-frantic'); }, 1300);
+
+  setTimeout(function(){
+    // POP! Egg bursts → baby Yoshi appears
+    var color = pickYoshiColor();
+    var isNew = !state.yoshiHouse[color.id];
+    state.yoshiHouse[color.id] = (state.yoshiHouse[color.id] || 0) + 1;
+
+    egg.parentNode.removeChild(egg);
+    burstSparkle(wrap);
+    var baby = document.createElement('div');
+    baby.className = 'hatch-yoshi';
+    baby.innerHTML = spriteImg('yoshi_idle');
+    if(color.filter) baby.style.filter = color.filter;
+    wrap.appendChild(baby);
+    playPowerUp();
+
+    if(color.id === 'black'){
+      // JACKPOT — rare black Yoshi
+      doFlash(); shakeStage(); coinShower();
+      state.score += 10; updateScoreDisplay();
+      showDialog('🖤 RARE BLACK YOSHI!! +10 🪙', 2200);
+    } else if(isNew){
+      showDialog(color.emoji + ' NEW! ' + color.name + ' BABY YOSHI!', 2000);
+    } else {
+      state.score += 3; updateScoreDisplay();
+      coinPop('+3');
+      showDialog(color.emoji + ' ' + color.name + ' BABY YOSHI! +3 🪙', 1800);
+    }
+    save();
+
+    // Baby hops twice, then zips off toward the HUD
+    setTimeout(function(){
+      baby.classList.add('hatch-fly');
+      setTimeout(function(){
+        if(wrap.parentNode) wrap.parentNode.removeChild(wrap);
+        state.phase = 'idle';
+        cb();
+      }, 650);
+    }, 1450);
+  }, 1900);
 }
 
 // Block the next gameplay step until any pending item picker is dismissed.
@@ -2839,9 +3115,8 @@ function spawnBonusCoin(){
   var c = document.createElement('div');
   c.className = 'bonus-coin';
   c.innerHTML = spinCoinHTML();
-  c.style.width = '34px'; c.style.height = '34px';
-  // Random horizontal position, random fall duration (2.5–4s)
-  var leftPx = Math.random() * (stageRect.width - 30);
+  // Width/height come from CSS (56px hitbox). Keep the whole hitbox on-screen.
+  var leftPx = Math.random() * Math.max(10, stageRect.width - 60);
   c.style.left = leftPx + 'px';
   c.style.top = '-30px';
   var dur = (2.5 + Math.random() * 1.5).toFixed(2);
@@ -2879,7 +3154,67 @@ function finishBonusStage(){
   if(poster) poster.style.opacity = '1';
   if(qblock) qblock.style.opacity = '1';
   save();
-  showLevelUp();
+  // Final world (Bowser's castle) just cleared → the big CONGRATULATIONS ending.
+  if(state.worldIdx === WORLDS.length - 1){
+    showCongratulations();
+  } else {
+    showLevelUp();
+  }
+}
+
+// ============================================================================
+// CONGRATULATIONS — game-complete ending after Bowser falls
+// ============================================================================
+var fireworksTimer = null;
+
+function spawnFirework(host){
+  if(!host) return;
+  var f = document.createElement('div');
+  f.className = 'firework';
+  f.textContent = ['🎆','🎇','✨','🌟'][Math.floor(Math.random()*4)];
+  f.style.left = (8 + Math.random()*84) + '%';
+  f.style.top = (5 + Math.random()*55) + '%';
+  f.style.fontSize = (26 + Math.random()*26) + 'px';
+  host.appendChild(f);
+  setTimeout(function(){ if(f.parentNode) f.parentNode.removeChild(f); }, 1400);
+}
+
+function showCongratulations(){
+  state.phase = 'gamecomplete';
+  playVictoryMusic();
+
+  var yoshiCount = 0;
+  if(state.yoshiHouse) for(var k in state.yoshiHouse) if(state.yoshiHouse.hasOwnProperty(k)) yoshiCount++;
+  var stickerCount = Object.keys(state.stickers || {}).length;
+
+  var html = '<div class="congrats-sign">';
+  html += '<div class="cg-title">★ CONGRATULATIONS! ★</div>';
+  html += '<div class="cg-sub">YOU BEAT BOWSER AND<br>SAVED THE MUSHROOM KINGDOM!</div>';
+  html += '</div>';
+  html += '<div class="cg-mario">' + spriteImg(marioSprite('celebrate', getCostume())) + '</div>';
+  html += '<div class="cg-stats">🪙 ' + state.score + ' coins &nbsp; 📖 ' + state.totalCorrect + ' words &nbsp; 🏆 ' + stickerCount + ' stickers &nbsp; 🦖 ' + yoshiCount + '/' + YOSHI_COLORS.length + ' Yoshis</div>';
+  html += '<button class="btn-primary" id="cg-again-btn">▶ PLAY AGAIN</button>';
+
+  var lu = document.getElementById('levelup-overlay');
+  lu.innerHTML = html;
+  lu.classList.add('show');
+
+  // Fireworks burst every ~400ms while the screen is up
+  if(fireworksTimer) clearInterval(fireworksTimer);
+  fireworksTimer = setInterval(function(){ spawnFirework(lu); }, 400);
+  spawnFirework(lu); spawnFirework(lu);
+
+  document.getElementById('cg-again-btn').onclick = function(){
+    if(fireworksTimer){ clearInterval(fireworksTimer); fireworksTimer = null; }
+    lu.classList.remove('show');
+    state.worldIdx = 0;
+    state.worldProgress = 0;
+    applyWorld(0);
+    updateProgressBar();
+    save();
+    state.phase = 'idle';
+    setTimeout(spawn, 500);
+  };
 }
 
 // ============================================================================
@@ -2999,8 +3334,9 @@ function comboPop(){
 // At combo 5 → fire flower (big/small → fire)
 // At combo 7 → super star (10sec invincibility, sparkles, 1-shot enemies)
 function checkPowerUps(){
-  // Every 3rd correct word: offer a 3-item treasure pick.
-  if(state.combo > 0 && state.combo % 3 === 0){
+  // Every 4th combo: offer a 3-item treasure pick. (Eggs hatch every 3rd word,
+  // so the two reward beats interleave instead of stacking on the same word.)
+  if(state.combo > 0 && state.combo % 4 === 0){
     setTimeout(function(){ showItemPicker(); }, 350);
   } else if(state.combo === 10){
     coinShower();
@@ -3440,9 +3776,11 @@ function showMenu(){
     itemPickerActive = false;
   }
   var stickerCount = Object.keys(state.stickers || {}).length;
+  var yoshiCount = Object.keys(state.yoshiHouse || {}).length;
   var html = '<h2>★ MENU ★</h2>';
   html += '<div class="menu-row column">';
   html += '<button class="btn-secondary" id="menu-resume">▶ RESUME</button>';
+  html += '<button class="btn-secondary" id="menu-yoshihouse">🥚 YOSHI HOUSE ('+yoshiCount+'/'+YOSHI_COLORS.length+')</button>';
   html += '<button class="btn-secondary" id="menu-stickers">🏆 STICKERS ('+stickerCount+')</button>';
   html += '<button class="btn-secondary" id="menu-restart">🔄 RESTART LEVEL</button>';
   html += '<button class="btn-secondary" id="menu-costumes">👕 COSTUMES</button>';
@@ -3454,6 +3792,7 @@ function showMenu(){
   document.getElementById('menu-overlay').classList.add('show');
 
   document.getElementById('menu-resume').onclick = closeMenu;
+  document.getElementById('menu-yoshihouse').onclick = showYoshiHouse;
   document.getElementById('menu-stickers').onclick = showStickers;
   document.getElementById('menu-restart').onclick = function(){
     if(confirm('Restart this level? (current progress on this world resets)')){
@@ -3501,6 +3840,39 @@ function closeMenu(){
     state.phase = 'idle';
     if(!word) setTimeout(spawn, 200);
   }
+}
+
+// ---- YOSHI HOUSE ----
+// Collection screen: one card per color. Collected → colored Yoshi + count.
+// Not yet hatched → dark mystery silhouette with "?". The gotta-collect-them-
+// all loop that keeps the eggs exciting.
+function showYoshiHouse(){
+  var house = state.yoshiHouse || {};
+  var got = Object.keys(house).length;
+  var html = '<h2>🥚 YOSHI HOUSE</h2>';
+  html += '<div class="sticker-progress">' + got + ' / ' + YOSHI_COLORS.length + ' Yoshis hatched</div>';
+  html += '<div class="yoshi-house-grid">';
+  YOSHI_COLORS.forEach(function(c){
+    var count = house[c.id] || 0;
+    if(count > 0){
+      html += '<div class="yoshi-card">';
+      html += '<div class="yoshi-card-img"' + (c.filter ? ' style="filter:' + c.filter + '"' : '') + '>' + spriteImg('yoshi_idle') + '</div>';
+      html += '<div class="yoshi-card-name">' + c.emoji + ' ' + c.name + '</div>';
+      html += '<div class="yoshi-card-count">x' + count + '</div>';
+      html += '</div>';
+    } else {
+      html += '<div class="yoshi-card yoshi-card-mystery">';
+      html += '<div class="yoshi-card-img" style="filter:brightness(0) opacity(.55)">' + spriteImg('yoshi_idle') + '</div>';
+      html += '<div class="yoshi-card-name">???</div>';
+      html += '<div class="yoshi-card-count">&nbsp;</div>';
+      html += '</div>';
+    }
+  });
+  html += '</div>';
+  html += '<div class="dict-info">Read words to crack the egg — every 3 words hatches a new baby Yoshi!</div>';
+  html += '<button class="menu-back" id="back-btn">← BACK</button>';
+  document.getElementById('menu-content').innerHTML = html;
+  document.getElementById('back-btn').onclick = showMenu;
 }
 
 // ---- STICKER BOOK ----
@@ -3703,6 +4075,7 @@ function init(){
   state.phase = 'idle';
   drawTitleMario();
   drawCoinsIcon();
+  drawEggHud(false);
   drawQBlock(false);
   setMarioFrame(0);
   renderScenery();
@@ -3783,7 +4156,8 @@ document.getElementById('mario').addEventListener('click', function(){
   var now = Date.now();
   if(now - lastMarioTap < 600) return;          // debounce
   if(goombaActive || state.bossActive) return;  // never during combat
-  if(state.phase === 'celebrating' || state.phase === 'bonus') return;
+  if(state.phase === 'celebrating' || state.phase === 'bonus' ||
+     state.phase === 'hatching' || state.phase === 'gamecomplete') return;
   lastMarioTap = now;
   var m = document.getElementById('mario');
   m.classList.remove('tap-hop'); void m.offsetWidth;
@@ -3800,7 +4174,8 @@ var lastQblockTap = 0;
 document.getElementById('qblock').addEventListener('click', function(){
   var now = Date.now();
   if(now - lastQblockTap < 900) return;
-  if(state.phase === 'bonus' || state.bossActive) return;
+  if(state.phase === 'bonus' || state.phase === 'hatching' ||
+     state.phase === 'gamecomplete' || state.bossActive) return;
   lastQblockTap = now;
   var qb = document.getElementById('qblock');
   qb.classList.remove('bumped'); void qb.offsetWidth;
